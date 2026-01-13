@@ -120,32 +120,6 @@ public class SwerveModule {
     m_drivePIDController = m_driveMotor.getClosedLoopController();
     m_turningPIDController = m_turningMotor.getClosedLoopController();
 
-    //m_drivePIDController.setP(ModuleConstants.kDriveP);
-    //m_drivePIDController.setI(ModuleConstants.kDriveI);
-    //m_drivePIDController.setD(ModuleConstants.kDriveD);
-    // m_drivePIDController.setIZone();
-    //m_drivePIDController.setFF(ModuleConstants.kDriveFF);
-    // m_drivePIDController.setOutputRange();
-
-    //m_turningPIDController.setP(ModuleConstants.kTurningP);
-    //m_turningPIDController.setI(ModuleConstants.kTurningI);
-    //m_turningPIDController.setD(ModuleConstants.kTurningD);
-    // m_turningPIDController.setIZone();
-    // m_turningPIDController.setFF();
-    // m_turningPIDController.setOutputRange();
-
-    // m_turningPIDController.setSmartMotionMaxVelocity(
-    //    ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond, 0);
-    // m_turningPIDController.setSmartMotionMinOutputVelocity(0.0, 0);
-    // m_turningPIDController.setSmartMotionMaxAccel(
-    //    ModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared, 0);
-    // m_turningPIDController.setSmartMotionAllowedClosedLoopError(0.1, 0);
-
-    // Limit the PID Controller's range to (-0.5, 0.5], with continuous wrapping
-    //m_turningPIDController.positionWrappingEnabled(true);
-    //m_turningPIDController.setPositionPIDWrappingMaxInput(0.5);
-    //m_turningPIDController.setPositionPIDWrappingMinInput(-0.5);
-
     m_turningAbsEncoder = new CANcoder(turningAbsoluteEncoderChannel);
     m_turningAbsEncoderConfig = new CANcoderConfiguration();
     m_turningAbsEncoder.getConfigurator().refresh(m_turningAbsEncoderConfig);
@@ -153,18 +127,6 @@ public class SwerveModule {
     m_driveEncoder = m_driveMotor.getEncoder();
     m_turningRelativeEncoder = m_turningMotor.getEncoder();
 
-    //m_driveEncoder.setPositionConversionFactor(ModuleConstants.kDrivePositionConversionFactor);
-    //  m_driveEncoder.setVelocityConversionFactor(ModuleConstants.kDriveVelocityConversionFactor);
-
-   // m_turningRelativeEncoder.setPositionConversionFactor(
-   //     ModuleConstants.kTurnPositionConversionFactor);
-
-    // m_driveMotor.burnFlash();
-    // m_turningMotor.burnFlash();
-    //m_turningMotor.setClosedLoopRampRate(ModuleConstants.kRampRateT);
-    //m_driveMotor.setClosedLoopRampRate(ModuleConstants.kRampRate);
-    //m_turningMotor.setOpenLoopRampRate(ModuleConstants.kRampRateT);
-    //m_driveMotor.setOpenLoopRampRate(ModuleConstants.kRampRate);
     m_driveMotor.configure(m_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_turningMotor.configure(m_turningConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 

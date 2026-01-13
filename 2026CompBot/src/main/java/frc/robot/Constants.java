@@ -15,14 +15,14 @@ import edu.wpi.first.wpilibj.TimedRobot;
  *  Availbilty of Subsystems
  *  ModuleConstants
  *  DriveConstants
- *  HandlerConstants
- *  ElevatorConstants
+ *  IntakeConstants
+ *  Shooter
  *  CANIDS
  *  OIConstants
  *  CamConstants
  *  RobotConstants
  *  PathPlannerConstants
- *  FieldConstants
+ *  
  */
 public final class Constants {
   public static final boolean DRIVE_AVAILABLE = true;
@@ -33,7 +33,7 @@ public final class Constants {
 
 
   public static final class ModuleConstants {
-    public static final int kDriveMotorCurrentLimit = 80;
+     public static final int kDriveMotorCurrentLimit = 80;
     public static final int kTurningMotorCurrentLimit = 80;
     public static final double kWheelDiameterMeters = Units.inchesToMeters(3.75);
     public static final double kDriveMotorGearRatio = 1 / 5.36;
@@ -45,22 +45,22 @@ public final class Constants {
     public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 42;
     public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 42;
     public static final double kPTurning_Comp = 0.5;
-    public static final double kDriveP = 0.1; // 2023 Competition Robot Under ongoing change   0.1
-    public static final double kDriveI = 0.0; // 2023 Competition Robot
-    public static final double kDriveD = 0.0; // 2023 Competition Robot
-    public static final double kDriveFF = 0.255; // 2023 Competition Robot      .255
+    public static final double kDriveP = 0.22; // 2025 Competition Robot
+    public static final double kDriveI = 0.0; // 2025 Competition Robot
+    public static final double kDriveD = 0.0; // 2025 Competition Robot
+    public static final double kDriveFF = 0.255; // 2025 Competition Robot
 
-    //public static final double kPTurning = 0.5;
-    public static final double kTurningP = 1.75; // 2023 Competition Robot 
-    public static final double kTurningI = 0.0; // 2023 Competition Robot
-    public static final double kTurningD = 0.0; // 2023 Competition Robot
 
-    public static final double kTurnGearRatio = 12.8; // 12.8 on project X
+    public static final double kTurningP = 2.3;//2.05; // 2025 Competition Robot   0.75
+    public static final double kTurningI = 0.0; // 2025 Competition Robot
+    public static final double kTurningD = 0.0; // 2025 Competition Robot
+
+    public static final double kTurnGearRatio = 18.75; // 2025 Competion Robot Mark 4n ratio      12.8 on project X
     public static final double kTurnPositionConversionFactor = 1.0 / kTurnGearRatio;
 
     // By default, the drive encoder in position mode measures rotations at the drive motor
     // Convert to meters at the wheel
-    public static final double kDriveGearRatio = 6.75; // 6.75 on Project X
+    public static final double kDriveGearRatio = 5.36; // 2025 Competion Robot            6.75 on Project X
     public static final double kDrivePositionConversionFactor =
       (kWheelDiameterMeters * Math.PI) / kDriveGearRatio;
 
@@ -68,8 +68,8 @@ public final class Constants {
     // Convert to meters per second at the wheel
     public static final double kDriveVelocityConversionFactor =
       kDrivePositionConversionFactor / 60.0;
-    public static final double kRampRate = 0.25;//1;
-    public static final double kRampRateT = 0.75;
+    public static final double kRampRate = 1;
+    public static final double kRampRateT = 0.75; //0.75; 
     public static final double AbsoluteSensorDiscontinuityPoint = 0.5; //1 is value between [0, 1] 0.5 is value between [-0.5, 0.5] 0 is value between [-1, 0] -CTRE Docs
   }
 
@@ -187,65 +187,29 @@ public final class Constants {
 
   }
 
-  public static class HandlerConstants{
-    public static double pivotP = 1;
-    public static double pivotI = 0;
-    public static double pivotD = 0;
-    public static final int grabSensorPort = 0;
-    public static final double pivotCurrentLimit = 30;
-    public static final double grabAlgaeSpeed = .5;
-    public static final double grabAlgaeCurrent = 30;
-    public static final double algaeHoldSpeed = .05;
-    public static final double algaeShootSpeed = -0.5;
-    public static final double outputSpeed = .5;
-    public static final double grabCoralSpeed = .3;
-    public static final double pivotEncoderConversionFactor = 1;
-
-
-    //PID positions
-    public static final double L4Position = 100;
-    public static final double L2Position = 15;
-    public static final double intake = 0;
-    public static final double algae = 180;
-    public static final double barge = -15;
-    public static final double nudgeUp = 2;
-    public static final double nudgeDown = -2;
-
-    // Soft Limits
-    public static final double forwardSoftLimit = 185;
-    public static final double reverseSoftLimit = -20;
-
-    // Test Constants
-
+  public static class IntakeConstants {
+    public static final double jointP = 0.;
+    public static final double jointI = 0.;
+    public static final double jointD = 0.;
+    public static final double JointPositionConversionFactor = 1;
+    public static final double RollerVelocityConversionFactor = 1;
   }
 
-  public final static class ElevatorConstants {
-    public static final double SOFT_LIMIT_FORWARDl = 0.;  // all encoder values look backward
-    public static final double SOFT_LIMIT_REVERSEl = -250.; //    but dumb REVRobotics API won't allow inversion
-    public static final double SOFT_LIMIT_FORWARDr = 0.;  // all encoder values look backward
-    public static final double SOFT_LIMIT_REVERSEr = -250.;
+  public static class ShooterConstants {
+    public static final double p = 0.;
+    public static final double i = 0.;
+    public static final double d = 0.;
+    public static final double velocityConversionFactor = 1;
 
-    public static double EncoderConversionFactor = 33/109.144;  // raw : inches
-    
-    //PID Target Positions
-    public static final double L1 = -5.;
-    public static final double L2 = 0;
-    public static final double L3 = 0;
-    public static final double L4 = 0;
-
-    public static final int bottomSwitchDIPort = 0;
   }
 
   public static class CANIDS {
-
-    //Handler
-    public static final int coralL = 52;
-    public static final int coralR = 53;
-
-    //Elevator
-    public static final int elevatorL = 50;
-    public static final int elevatorR = 57;
-    public static final int UNUSED_MOTOR = 0;
+    //Intake
+    public static final int roller = 1000;
+    public static final int joint = 1001;
+    public static final int wheels = 1002;
+    public static final int followerWheels = 1003;
+    
   }
 
   public static class OIConstants {
@@ -260,41 +224,14 @@ public final class Constants {
     public static final int kDriverRotAxis =             4;
     //Driver Buttons
     public static final int kResetGyro = 1;
-    public static final int kFirstButton = 2;
-    public static final int kSecondButton = 3;
-    public static final int kThirdButton = 4;
-
-    public static final int kpathfindTopCoralStation =   4;
     public static final int kDriverRobotOrientedButton = 6;
 
-    //Gamemech Buttons
-    public static final int kL1shoot =                   4;
-    public static final int kL2shoot =                   3;
-    public static final int kL3shoot =                   2;
-    public static final int kL4shoot =                   1;
-    public static final int kRePivot =                   5;
-    public static final int kNudgeUp =                   6;
-    public static final int kNudgeDown =                 7;
-    public static final int kMoveSide =                  8;
-    //public static final int kCoralOut =                  9;
 
-    //Gamemech2 Buttons
 
-    //Test Buttons
-    public static final int RestSoftLimits = 1;       //Driver
-    public static final int EnableSoftLimits = 2;     //Driver
 
     public static final double kDeadband = 0.075;
- 
-    //Test Buttons
 
-    //Driver
-
-    //GameMech1
-    public static final int Test_Elevator_RelaxSoft = 1;
-
-    //GameMech2
-
+    
   }
 
   public static class CamConstants {
