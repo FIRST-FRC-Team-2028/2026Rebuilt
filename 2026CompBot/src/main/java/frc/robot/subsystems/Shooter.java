@@ -28,7 +28,8 @@ public class Shooter extends SubsystemBase {
   private final SparkMaxConfig followerWheels_Config;
   private final RelativeEncoder wheels_Encoder;
   private final SparkClosedLoopController wheels_ClosedLoopController;
-  double speed = 200.; //
+  double speed = 200.0; //3400 target speed
+  double incrementAmount = 700.0;
   /** Creates a new Shooter. */
   public Shooter() {
     wheels = new SparkMax(CANIDS.wheels, MotorType.kBrushless);
@@ -68,6 +69,15 @@ public class Shooter extends SubsystemBase {
   }
   public void dashboardSetSpeed(){
     wheels_ClosedLoopController.setSetpoint(SmartDashboard.getNumber("Command Speed", speed), ControlType.kVelocity);
+  }
+  public void changeSpeed(double Speed, boolean increase){
+    if(increase){
+      Speed += incrementAmount; 
+    } else Speed -= incrementAmount;
+    wheels_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
+  }
+  public double getSpeed(){
+    return speed;
   }
 
 }

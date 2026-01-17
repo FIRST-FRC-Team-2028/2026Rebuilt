@@ -4,16 +4,16 @@
 
 package frc.robot.subsystems;
 
-//import org.photonvision.PhotonCamera;
-//import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
 
-/*import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.PathPlannerLogging;*/
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-//import frc.robot.Constants.PathPlannerConstants;
+import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.Constants.RobotConstants;
 
 public class Drivetrain extends SubsystemBase {
@@ -42,8 +42,7 @@ public class Drivetrain extends SubsystemBase {
   static double kMaxAngularSpeed = Constants.DriveConstants.kMaxRotationalVelocity;
   private final SwerveDriveKinematics m_kinematics = DriveConstants.kDriveKinematics;
   private boolean gamemechSwitch;
-
-  //private final AprilCamera aprilSubsystem;
+  private final AprilTags aprilSubsystem;
 
   private final SwerveModule m_frontLeft =
       new SwerveModule(
@@ -99,9 +98,9 @@ public class Drivetrain extends SubsystemBase {
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
-    /*if (Constants.CAMERA_AVAILABLE){
-      aprilSubsystem = new AprilCamera();
-    }else aprilSubsystem = null;*/
+    if (Constants.CAMERA_AVAILABLE){
+      aprilSubsystem = new AprilTags();
+    }else aprilSubsystem = null;
     resetGyro();
     for (SwerveModule module : modules) {
       module.resetDriveEncoder();
@@ -111,7 +110,7 @@ public class Drivetrain extends SubsystemBase {
     }
     
     //Pathplanner Autobuilder
-    /*try {
+    try {
       RobotConfig config = RobotConfig.fromGUISettings();
       // Configure AutoBuilder
       AutoBuilder.configure(
@@ -141,13 +140,13 @@ public class Drivetrain extends SubsystemBase {
     }catch(Exception e){
       DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
       e.printStackTrace();
-    }*/
+    }
     
   
   }
   @Override
   public void periodic() {
-    updateOdometry();
+
     updatePoseEstimator();
     //SmartDashboard.putNumber("front Left Velocity", m_frontLeft.getVelocity());
     
@@ -257,22 +256,23 @@ public class Drivetrain extends SubsystemBase {
                           m_backLeft.getPosition(),
                           m_backRight.getPosition()
     });
-    SmartDashboard.putNumber("Robot X Pos", m_poseEstimator.getEstimatedPosition().getX());
-    SmartDashboard.putNumber("Robot Y Pos", m_poseEstimator.getEstimatedPosition().getY());
-    SmartDashboard.putNumber("Robot Degrees Rotation", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+
     if(Constants.CAMERA_AVAILABLE){
-      /*if (aprilSubsystem.isPoseEstimated()) {
+      //if (aprilSubsystem.isPoseEstimated()) {
 
         //var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
         //var camPose = aprilTagFieldLayout.getTagPose(4).transformBy(camToTargetTrans.inverse());
         m_poseEstimator.addVisionMeasurement(
                   aprilSubsystem.getPose3d().toPose2d(), aprilSubsystem.estimatedPoseTime); 
-      }
-      SmartDashboard.putNumber("Swerve Robot X Pos", m_poseEstimator.getEstimatedPosition().getX());
-      SmartDashboard.putNumber("Swerve Robot Y Pos", m_poseEstimator.getEstimatedPosition().getY());
-      SmartDashboard.putNumber("Get Pose to Pose", aprilSubsystem.getPoseToPose(getPoseEstimatorPose(), gamemechSwitch));*/
+      //}
+      //SmartDashboard.putNumber("Swerve Robot X Pos", m_poseEstimator.getEstimatedPosition().getX());
+      //SmartDashboard.putNumber("Swerve Robot Y Pos", m_poseEstimator.getEstimatedPosition().getY());
+      //SmartDashboard.putNumber("Get Pose to Pose", aprilSubsystem.getPoseToPose(getPoseEstimatorPose(), gamemechSwitch));
           
     }
+    SmartDashboard.putNumber("Robot X Pos", m_poseEstimator.getEstimatedPosition().getX());
+    SmartDashboard.putNumber("Robot Y Pos", m_poseEstimator.getEstimatedPosition().getY());
+    SmartDashboard.putNumber("Robot Degrees Rotation", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees());
   }
 
   public SwerveModulePosition[] getModulePositions() {
@@ -313,7 +313,7 @@ public class Drivetrain extends SubsystemBase {
    * @param pathname The name of the path file in the deploy/pathplanner/paths file.
    * Will only print out "FAIL" if the file name does not exist.
   */
-  /*public Command pathfindToPath(String pathname) {
+  public Command pathfindToPath(String pathname) {
     PathPlannerPath path;
     try{
       path = PathPlannerPath.fromPathFile(pathname);
@@ -322,7 +322,7 @@ public class Drivetrain extends SubsystemBase {
       e.getStackTrace();
       return new InstantCommand(()->System.out.println("FAIL"));
     }
-  }*/
+  }
   /**Contructs and runs a path to the given pose avoiding obsticals outlinned in navgrid.json
    * @param x The x cordinate of the target position 
    * @param y The y cordinate of the target position
@@ -330,10 +330,10 @@ public class Drivetrain extends SubsystemBase {
    * @param goalEndVelocity The velocity of the robot at the end of the path. 0 is required to stop at the target pose.
    * A value > 0 may be used to keep the robot up to speed for the driver to take over.
    */
-  /*public Command pathfindToPose(double x, double y, double rotation, double goalEndVelocity) {
+  public Command pathfindToPose(double x, double y, double rotation, double goalEndVelocity) {
     Rotation2d rotation2d = new Rotation2d(rotation);
     Pose2d targetPose = new Pose2d(x, y, rotation2d);
     return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraints, goalEndVelocity);
-  }*/
+  }
 
 }

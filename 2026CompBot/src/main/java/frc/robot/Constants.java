@@ -3,11 +3,17 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-//import com.pathplanner.lib.config.PIDConstants;
-//import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.path.PathConstraints;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 
@@ -25,10 +31,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
  *  
  */
 public final class Constants {
-  public static final boolean DRIVE_AVAILABLE = true;
+  public static final boolean DRIVE_AVAILABLE = false;
   public static final boolean CAMERA_AVAILABLE = false;
   public static final boolean HANDLER_AVAILABLE = false;
   public static final boolean ELEVATOR_AVALIBLE = false;
+  public static final boolean SHOOTER_AVAILABLE = true;
 
 
 
@@ -180,10 +187,10 @@ public final class Constants {
   // Units are radians per second
   public static final double kMaxRotationalVelocity = 5.0; // 2023 Competion Robot // max 5.0
   public static final double kRotateToZero = -2;
-  /*public static final PIDConstants translationConstants = 
+  public static final PIDConstants translationConstants = 
     new PIDConstants(6.0, 1.6, 1);     //d:.475
   public static final PIDConstants rotationConstants = 
-    new PIDConstants(2.9,0.,0.);       */
+    new PIDConstants(2.9,0.,0.);       
 
   }
 
@@ -207,8 +214,8 @@ public final class Constants {
     //Intake
     public static final int roller = 1000;
     public static final int joint = 1001;
-    public static final int wheels = 1002;
-    public static final int followerWheels = 1003;
+    public static final int wheels = 50;
+    public static final int followerWheels = 51;
     
   }
 
@@ -225,8 +232,11 @@ public final class Constants {
     //Driver Buttons
     public static final int kResetGyro = 1;
     public static final int kDriverRobotOrientedButton = 6;
-
-
+    //Game Mech Buttons
+    public static final int kStartShooter = 1;
+    public static final int kInceaseShooter = 3;
+    public static final int kDescreaseShooter = 4;
+    public static final int kStopShooter = 4;
 
 
     public static final double kDeadband = 0.075;
@@ -235,6 +245,7 @@ public final class Constants {
   }
 
   public static class CamConstants {
+    public static final String camera_name = "name";
       //public static final double camera_Height_Meters = Units.inchesToMeters(7.);
       //public static final double target_Height_Meters = Units.inchesToMeters(78.);
 
@@ -246,6 +257,14 @@ public final class Constants {
       public static final double tag_Follow_D = 0.5;
       public static final double drive_Range_Meters = 1;
 
+      public static final Transform3d robot_to_camera = new Transform3d(
+                                                        0,
+                                                        0,
+                                                        0,
+                                                        new Rotation3d(0.0,0.0,0.0));
+
+      public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+      public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
   }
 
   public static final class RobotConstants {
@@ -257,17 +276,17 @@ public final class Constants {
     public static final double handlerThickness = Units.inchesToMeters(6.); //inches
   }
 
-  /*public static final class PathPlannerConstants {
+  public static final class PathPlannerConstants {
     public static final boolean isCompetition = false;
     public static final PathConstraints pathConstraints = new PathConstraints(DriveConstants.kTeleDriveMaxSpeedMetersPerSecond,
                           DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond,
                           DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond,
                           DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
-    /public static final PathConstraints pathConstraints = new PathConstraints(2,
+    /*public static final PathConstraints pathConstraints = new PathConstraints(2,
                           4,
                           3,
-                          1);
-  }*/
+                          1);*/
+  }
 
 
 }

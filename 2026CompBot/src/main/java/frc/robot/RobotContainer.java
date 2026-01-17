@@ -12,10 +12,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCommand;
+import frc.robot.subsystems.AprilTags;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 
 public class RobotContainer {
   private final Drivetrain driveSubsystem;
+  private final AprilTags aprilSubsystem;
+  private final Shooter shootingSubsystem;
 
   // Joysticks
     private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
@@ -28,6 +32,12 @@ public class RobotContainer {
     driveSubsystem = new Drivetrain();
     driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem));
     }else driveSubsystem = null;
+    if(Constants.CAMERA_AVAILABLE){
+    aprilSubsystem = new AprilTags();
+    }else aprilSubsystem = null;
+    if(Constants.SHOOTER_AVAILABLE){
+      shootingSubsystem = new Shooter();
+    } else shootingSubsystem = null;
 
     configureBindings();
   }
@@ -39,7 +49,16 @@ public class RobotContainer {
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
     }
-
+    if(Constants.SHOOTER_AVAILABLE){
+      new JoystickButton(driverJoytick, OIConstants.kStartShooter)
+        .onTrue(new InstantCommand(()->shootingSubsystem.setSpeed(200)));
+      new JoystickButton(driverJoytick, OIConstants.kInceaseShooter)
+        .onTrue(new InstantCommand(()->shootingSubsystem.changeSpeed(shootingSubsystem.getSpeed(), true)));
+      new JoystickButton(driverJoytick, OIConstants.kDescreaseShooter)
+        .onTrue(new InstantCommand(()->shootingSubsystem.changeSpeed(shootingSubsystem.getSpeed(), false)));
+      new JoystickButton(driverJoytick, OIConstants.kStopShooter)
+        .onTrue(new InstantCommand(()->shootingSubsystem.setSpeed(0.0)));
+    }
   }
 
   public Command getAutonomousCommand() {
