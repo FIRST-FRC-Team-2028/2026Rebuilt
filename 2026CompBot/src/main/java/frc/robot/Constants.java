@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
  *  
  */
 public final class Constants {
-  public static final boolean DRIVE_AVAILABLE = false;
+  public static final boolean DRIVE_AVAILABLE = true;
   public static final boolean CAMERA_AVAILABLE = false;
   public static final boolean HANDLER_AVAILABLE = false;
   public static final boolean ELEVATOR_AVALIBLE = false;
@@ -207,20 +207,25 @@ public final class Constants {
     public static final double i = 0.;
     public static final double d = 0.;
     public static final double velocityConversionFactor = 1;
-
   }
 
+  public static class CarouselConstants {
+    public static final double p = 0.;
+    public static final double i = 0.;
+    public static final double d = 0.;
+  }
   public static class CANIDS {
     //Intake
     public static final int roller = 1000;
     public static final int joint = 1001;
     public static final int wheels = 50;
     public static final int followerWheels = 51;
+    public static final int carousel = 60;
     
   }
 
   public static class OIConstants {
-    public static final int kDriverControllerPort  =     0;
+    public static final int kDriverControllerPort =      0;
     public static final int kMechControllerPort =        1; 
     public static final int kMechControllerPort2 =       2;
     //Driver Axis (Includes triggers)
@@ -230,13 +235,13 @@ public final class Constants {
     public static final int kFastControlAxis =           3;
     public static final int kDriverRotAxis =             4;
     //Driver Buttons
-    public static final int kResetGyro = 1;
+    public static final int kResetGyro =                 1;
     public static final int kDriverRobotOrientedButton = 6;
     //Game Mech Buttons
-    public static final int kStartShooter = 1;
-    public static final int kInceaseShooter = 3;
-    public static final int kDescreaseShooter = 4;
-    public static final int kStopShooter = 4;
+    public static final int kStartShooter =              1;
+    public static final int kInceaseShooter =            3;
+    public static final int kDescreaseShooter =          2;
+    public static final int kStopShooter =               4;
 
 
     public static final double kDeadband = 0.075;

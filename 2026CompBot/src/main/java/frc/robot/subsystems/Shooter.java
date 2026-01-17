@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase {
   private final RelativeEncoder wheels_Encoder;
   private final SparkClosedLoopController wheels_ClosedLoopController;
   double speed = 200.0; //3400 target speed
-  double incrementAmount = 700.0;
+  double incrementAmount = 200.0;
   /** Creates a new Shooter. */
   public Shooter() {
     wheels = new SparkMax(CANIDS.wheels, MotorType.kBrushless);
@@ -54,15 +54,8 @@ public class Shooter extends SubsystemBase {
 
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Speed (RPM)", wheels_Encoder.getVelocity());
-    SmartDashboard.putNumber("Command Speed", speed);
-    
-  }
   /**Sets the speed for the wheels using PID controller on velocity control type
-   * Speed should be in RPM
+   * @param Speed in RPM
    */
   public void setSpeed(double Speed){
     wheels_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
@@ -70,14 +63,11 @@ public class Shooter extends SubsystemBase {
   public void dashboardSetSpeed(){
     wheels_ClosedLoopController.setSetpoint(SmartDashboard.getNumber("Command Speed", speed), ControlType.kVelocity);
   }
-  public void changeSpeed(double Speed, boolean increase){
-    if(increase){
-      Speed += incrementAmount; 
-    } else Speed -= incrementAmount;
-    wheels_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
+ @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Shooter Speed (RPM)", wheels_Encoder.getVelocity());
+    SmartDashboard.putNumber("Shooter Command Speed", speed);
+    
   }
-  public double getSpeed(){
-    return speed;
-  }
-
 }

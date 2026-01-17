@@ -49,16 +49,7 @@ public class RobotContainer {
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
     }
-    if(Constants.SHOOTER_AVAILABLE){
-      new JoystickButton(driverJoytick, OIConstants.kStartShooter)
-        .onTrue(new InstantCommand(()->shootingSubsystem.setSpeed(200)));
-      new JoystickButton(driverJoytick, OIConstants.kInceaseShooter)
-        .onTrue(new InstantCommand(()->shootingSubsystem.changeSpeed(shootingSubsystem.getSpeed(), true)));
-      new JoystickButton(driverJoytick, OIConstants.kDescreaseShooter)
-        .onTrue(new InstantCommand(()->shootingSubsystem.changeSpeed(shootingSubsystem.getSpeed(), false)));
-      new JoystickButton(driverJoytick, OIConstants.kStopShooter)
-        .onTrue(new InstantCommand(()->shootingSubsystem.setSpeed(0.0)));
-    }
+
   }
 
   public Command getAutonomousCommand() {
