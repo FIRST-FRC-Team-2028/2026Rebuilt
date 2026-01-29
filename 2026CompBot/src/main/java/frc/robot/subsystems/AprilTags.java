@@ -20,6 +20,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.numbers.N8;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -35,11 +36,13 @@ public class AprilTags extends SubsystemBase {
   Optional<EstimatedRobotPose> estimatedPose;
   double estimatedPoseTime;
   Pose3d estimatedPose3d;
+  Matrix<N3,N3> camMatrix;
+  Matrix<N8,N1> distCoeffs;
 
   /** Creates a new AprilTags. */
   public AprilTags() {
     camera = new PhotonCamera(CamConstants.camera_name);
-    aprilTagFieldLayout = aprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+    aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
     poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, Constants.CamConstants.robot_to_camera);
   }
 
@@ -51,24 +54,21 @@ public class AprilTags extends SubsystemBase {
     estimatedPose = Optional.empty();
     target = cameraResult.getBestTarget();
     for (var result : camera.getAllUnreadResults()) {
-            estimatedPose = poseEstimator.estimateCoprocMultiTagPose(result);
-            if (estimatedPose.isEmpty()) {
-                estimatedPose = poseEstimator.estimateLowestAmbiguityPose(result);
-            }
+      camMatrix = camera.getCameraMatrix().orElseThrow();
+      distCoeffs = camera.getDistCoeffs().orElseThrow();
+      estimatedPose = poseEstimator.estimateRioMultiTagPose(result, camMatrix, distCoeffs);
+      if (estimatedPose.isEmpty()){
+        estimatedPose = poseEstimator.estimateLowestAmbiguityPose(result);
       }
+    }
       if(estimatedPose.isPresent()){
       EstimatedRobotPose poseEstimated = estimatedPose.get();
       estimatedPoseTime = poseEstimated.timestampSeconds;
       estimatedPose3d = poseEstimated.estimatedPose;
       }
-    }
-    //estimatedPose = poseEstimator.estimateCoprocMultiTagPose(cameraResult);
-
+  }
     
-    // This method will be called once per scheduler run
-
-
-  public Pose3d getPose3d(){
+    public Pose3d getPose3d(){
     return estimatedPose3d;
   }
 }

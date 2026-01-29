@@ -35,7 +35,8 @@ public final class Constants {
   public static final boolean CAMERA_AVAILABLE = false;
   public static final boolean HANDLER_AVAILABLE = false;
   public static final boolean ELEVATOR_AVALIBLE = false;
-  public static final boolean SHOOTER_AVAILABLE = true;
+  public static final boolean SHOOTER_AVAILABLE = false;
+  public static final boolean CAROUSEL_AVAILABLE = false;
 
 
 
@@ -200,27 +201,40 @@ public final class Constants {
     public static final double jointD = 0.;
     public static final double JointPositionConversionFactor = 1;
     public static final double RollerVelocityConversionFactor = 1;
+
+    public static final double JointPickupPosition = 90; //Degrees
+    public static final double JointUpPosition = 0; //Degrees
+    public static final double JointAgitatePosition = 75; //Degrees
+
   }
 
   public static class ShooterConstants {
-    public static final double p = 0.;
-    public static final double i = 0.;
-    public static final double d = 0.;
-    public static final double velocityConversionFactor = 1;
+    public static final double shooterP = 0.0002;
+    public static final double shooterI = 0.00000015;
+    public static final double shooterD = 0.015;
+    public static final double shooterVelocityConversionFactor = 1;
+    public static final double conveyorP = 0;
+    public static final double conveyorI = 0;
+    public static final double conveyorD = 0;
+    public static final double conveyorVelocityConversionFactor = 1;
+    public static final double feedP = 0;
+    public static final double feedI = 0;
+    public static final double feedD = 0;
+    public static final double feedVelocityConversionFactor = 1;
+
   }
 
-  public static class CarouselConstants {
-    public static final double p = 0.;
-    public static final double i = 0.;
-    public static final double d = 0.;
-  }
+
+  
   public static class CANIDS {
     //Intake
     public static final int roller = 1000;
     public static final int joint = 1001;
-    public static final int wheels = 50;
-    public static final int followerWheels = 51;
-    public static final int carousel = 60;
+    public static final int leftShooter = 50;
+    public static final int centerShooter = 51;
+    public static final int rightShooter = 52;
+    public static final int conveyor = 60;
+    public static final int feed = 61;
     
   }
 
@@ -250,7 +264,7 @@ public final class Constants {
   }
 
   public static class CamConstants {
-    public static final String camera_name = "name";
+    public static final String camera_name = "Camera_Module_v2";
       //public static final double camera_Height_Meters = Units.inchesToMeters(7.);
       //public static final double target_Height_Meters = Units.inchesToMeters(78.);
 

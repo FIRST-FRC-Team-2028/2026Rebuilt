@@ -18,6 +18,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
@@ -69,7 +70,12 @@ public class Intake extends SubsystemBase {
   }
 
   public void PositionJoint(double position){
+    position = Units.degreesToRotations(position);
     joint_Controller.setSetpoint(position, ControlType.kPosition);
   }  
+
+  public double getJointPosition() {
+    return joint_Encoder.getPosition();
+  }
 
 }
