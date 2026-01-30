@@ -22,7 +22,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
  *  ModuleConstants
  *  DriveConstants
  *  IntakeConstants
- *  Shooter
+ *  ShooterConstants
+ *  ClimberConstants
  *  CANIDS
  *  OIConstants
  *  CamConstants
@@ -33,10 +34,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 public final class Constants {
   public static final boolean DRIVE_AVAILABLE = true;
   public static final boolean CAMERA_AVAILABLE = false;
-  public static final boolean HANDLER_AVAILABLE = false;
-  public static final boolean ELEVATOR_AVALIBLE = false;
   public static final boolean SHOOTER_AVAILABLE = false;
-  public static final boolean CAROUSEL_AVAILABLE = false;
+  public static final boolean INTAKE_AVAILABLE = false;
+  public static final boolean CLIMBER_AVAILABLE = false;
 
 
 
@@ -201,6 +201,10 @@ public final class Constants {
     public static final double jointD = 0.;
     public static final double JointPositionConversionFactor = 1;
     public static final double RollerVelocityConversionFactor = 1;
+    public static final double jointForwardSoftLimit = 0;
+    public static final double jointReverseSoftLimit = 0;
+
+
 
     public static final double JointPickupPosition = 90; //Degrees
     public static final double JointUpPosition = 0; //Degrees
@@ -222,19 +226,38 @@ public final class Constants {
     public static final double feedD = 0;
     public static final double feedVelocityConversionFactor = 1;
 
+    public static final double shooterShootSpeed = 1400.; //RPM
+    public static final double feedShootSpeed = 200.; //RPM
+    public static final double conveyorShootSpeed = 300.; //RPM
+
   }
 
+  public static class ClimberConstants {
 
-  
+    public static final double p = 0;
+    public static final double i = 0;
+    public static final double d = 0;
+    public static final double forwardSoftLimit = 0;
+    public static final double reverseSoftLimit = 0;
+    public static final double positionConversionFactor = 1;
+    public static final double kRampRate = 1;
+    public static final double climbPosition = 0;
+
+  }
+
   public static class CANIDS {
     //Intake
     public static final int roller = 1000;
     public static final int joint = 1001;
+    //Shooter
     public static final int leftShooter = 50;
     public static final int centerShooter = 51;
     public static final int rightShooter = 52;
     public static final int conveyor = 60;
     public static final int feed = 61;
+    //Climber
+    public static final int climber = 70;
+    public static final int climber_follower = 71;
     
   }
 

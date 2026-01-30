@@ -11,15 +11,21 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AgitateIntake;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.Shoot;
 import frc.robot.subsystems.AprilTags;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 public class RobotContainer {
   private final Drivetrain driveSubsystem;
   private final AprilTags aprilSubsystem;
   private final Shooter shootingSubsystem;
+  private final Intake intakeSubsystem;
+  private final Climber climberSubsystem;
 
   // Joysticks
     private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
@@ -28,26 +34,39 @@ public class RobotContainer {
 
 
   public RobotContainer() {
-    if(Constants.DRIVE_AVAILABLE){
-    driveSubsystem = new Drivetrain();
-    driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem));
-    }else driveSubsystem = null;
-    if(Constants.CAMERA_AVAILABLE){
-    aprilSubsystem = new AprilTags();
-    }else aprilSubsystem = null;
-    if(Constants.SHOOTER_AVAILABLE){
+    if (Constants.DRIVE_AVAILABLE){
+      driveSubsystem = new Drivetrain();
+      driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem));
+    } else driveSubsystem = null;
+    if (Constants.CAMERA_AVAILABLE){
+      aprilSubsystem = new AprilTags();
+    } else aprilSubsystem = null;
+    if (Constants.SHOOTER_AVAILABLE){
       shootingSubsystem = new Shooter();
     } else shootingSubsystem = null;
+    if (Constants.INTAKE_AVAILABLE){
+      intakeSubsystem = new Intake();
+    } else intakeSubsystem = null;
+    if (Constants.CLIMBER_AVAILABLE){
+      climberSubsystem = new Climber();
+    } else climberSubsystem = null;
 
     configureBindings();
   }
 
+  @SuppressWarnings("unused")
   private void configureBindings() {
     CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
     if (Constants.DRIVE_AVAILABLE){
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
+    }
+
+    if (Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
+      new JoystickButton(mechJoytick1, OIConstants.kStartShooter)
+        .whileTrue(new Shoot(shootingSubsystem)
+        .alongWith(new AgitateIntake(intakeSubsystem)));
     }
 
   }

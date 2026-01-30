@@ -40,15 +40,21 @@ public class Intake extends SubsystemBase {
     joint_Config = new SparkMaxConfig();
 
     rollers_Config
-    .idleMode(IdleMode.kCoast);
+      .idleMode(IdleMode.kCoast);
     rollers_Config.encoder
-    .velocityConversionFactor(IntakeConstants.RollerVelocityConversionFactor);
+      .velocityConversionFactor(IntakeConstants.RollerVelocityConversionFactor);
+
     joint_Config
-    .idleMode(IdleMode.kCoast);
+      .idleMode(IdleMode.kCoast);
     joint_Config.encoder
-    .positionConversionFactor(IntakeConstants.JointPositionConversionFactor);
+      .positionConversionFactor(IntakeConstants.JointPositionConversionFactor);
     joint_Config.closedLoop
-    .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
+      .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
+    joint_Config.softLimit
+      .forwardSoftLimit(IntakeConstants.jointForwardSoftLimit)
+      .forwardSoftLimitEnabled(true)
+      .reverseSoftLimit(IntakeConstants.jointReverseSoftLimit)
+      .reverseSoftLimitEnabled(true);
 
     rollers.configure(rollers_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     joint.configure(joint_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -68,14 +74,14 @@ public class Intake extends SubsystemBase {
   public void rollers(double speed){
     rollers.set(speed);
   }
-
+  /**Sets the position of the Joint in degrees */
   public void PositionJoint(double position){
     position = Units.degreesToRotations(position);
     joint_Controller.setSetpoint(position, ControlType.kPosition);
   }  
-
+  /**Returns the joint position in degrees */
   public double getJointPosition() {
-    return joint_Encoder.getPosition();
+    return Units.rotationsToDegrees(joint_Encoder.getPosition());
   }
 
 }

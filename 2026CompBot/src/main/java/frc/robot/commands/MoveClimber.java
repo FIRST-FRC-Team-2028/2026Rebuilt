@@ -5,46 +5,36 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.Intake;
+import frc.robot.Constants.ClimberConstants;
+import frc.robot.subsystems.Climber;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AgitateIntake extends Command {
-  private final Intake intake;
-  double deadband = 5; //Degrees
-  double setPoint = IntakeConstants.JointPickupPosition;
-  /** Creates a new AgitateIntake. */
-  public AgitateIntake(Intake intake) {
-    this.intake = intake;
+public class MoveClimber extends Command {
+    private final Climber climber;
+    double speed;
+    double position;
+  /** Creates a new Climb. */
+  public MoveClimber(Climber climber/*, double speed, double position*/) {
+    this.climber = climber;
+    this.speed = speed;
+    this.position = position;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
-    intake.PositionJoint(setPoint);
+    climber.setClimberPosition(position);
+    //climber.setClimberSpeed(speed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    if (intake.getJointPosition()<setPoint+deadband && intake.getJointPosition()>setPoint-deadband){
-      if (setPoint == IntakeConstants.JointPickupPosition){
-        setPoint = IntakeConstants.JointAgitatePosition;
-      } else {
-        setPoint = IntakeConstants.JointPickupPosition;
-      }
-      intake.PositionJoint(setPoint);
-    }
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intake.PositionJoint(IntakeConstants.JointPickupPosition);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

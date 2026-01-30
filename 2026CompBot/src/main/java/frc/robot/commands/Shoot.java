@@ -5,11 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
   private final Shooter shooter;
+  double shootSpeedDeadband = 100;
+  boolean shooting = false;
+  double shotCount = 0;
+  double velocityIncrease = 50;
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter) {
     this.shooter = shooter;
@@ -19,16 +24,32 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed);
+    shotCount = 0;
+    shooting = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (!shooting){
+      if(shooter.getShooterVelocity()> ShooterConstants.shooterShootSpeed-shootSpeedDeadband){
+        shooter.setConveyorSpeed(ShooterConstants.conveyorShootSpeed);
+        shooter.setFeedSpeed(ShooterConstants.feedShootSpeed);
+        shooting = true;
+      }
+    }
+    /*if (shooting && shooter.getShooterVelocity() < ShooterConstants.shooterShootSpeed-shootSpeedDeadband){
+      shotCount++;
+      if (shotCount>5) shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed+velocityIncrease);
+    }*/
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+  }
 
   // Returns true when the command should end.
   @Override
