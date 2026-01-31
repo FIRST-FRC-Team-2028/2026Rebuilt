@@ -18,6 +18,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.CANIDS;
 import frc.robot.Constants.ClimberConstants;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
@@ -77,6 +79,17 @@ public class Climber extends SubsystemBase {
   /**Returns output current in amps */
   public double getClimberCurrent(){
     return climber.getOutputCurrent();
+  }
+  public void switchSoftLimits(boolean enabled, boolean setPosition){
+    climber_Config.softLimit.forwardSoftLimitEnabled(enabled);
+    climber_Config.softLimit.reverseSoftLimitEnabled(enabled);
+    climber.configure(climber_Config, ResetMode.kResetSafeParameters, null);
+    if (setPosition) climber_Encoder.setPosition(ClimberConstants.travelPosition);
+  }
+
+  /**Set the position of the climber in degrees */
+  public Command MoveClimber(double position){
+    return new InstantCommand(()->setClimberPosition(position));
   }
 
 }

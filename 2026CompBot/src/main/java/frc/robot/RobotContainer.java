@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AdvancedShoot;
@@ -82,6 +83,15 @@ public class RobotContainer {
       new JoystickButton(mechJoytick1, OIConstants.kIntake)
         .onTrue(intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed))
         .onFalse(intakeSubsystem.stopIntake());
+
+    }
+    
+    if (Constants.CLIMBER_AVAILABLE){
+      new JoystickButton(mechJoytick1, OIConstants.kClimberHook)
+        .onTrue(climberSubsystem.MoveClimber(ClimberConstants.hookPosition));
+
+      new JoystickButton(mechJoytick1, OIConstants.kClimberClimb)
+        .onTrue(climberSubsystem.MoveClimber(ClimberConstants.climbPosition));
     }
 
   }
@@ -105,6 +115,15 @@ public class RobotContainer {
     return aprilSubsystem;
   }
 
+  public Joystick getDriverJoystick(){
+    return driverJoytick;
+  }
+  public Joystick getMech1Joystick(){
+    return mechJoytick1;
+  }
+  public Joystick getMech2Joystick(){
+    return mechJoytick2;
+  }
   
 
 }
