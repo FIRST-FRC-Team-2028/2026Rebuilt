@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PathPlannerConstants;
@@ -48,7 +49,7 @@ public class Drivetrain extends SubsystemBase {
   static double kMaxAngularSpeed = Constants.DriveConstants.kMaxRotationalVelocity;
   private final SwerveDriveKinematics m_kinematics = DriveConstants.kDriveKinematics;
   private boolean gamemechSwitch;
-  private final AprilTags aprilSubsystem;
+  private AprilTags aprilSubsystem;
 
   private final SwerveModule m_frontLeft =
       new SwerveModule(
@@ -103,10 +104,10 @@ public class Drivetrain extends SubsystemBase {
         VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
   /** Creates a new Drivetrain. */
-  public Drivetrain() {
+  public Drivetrain(AprilTags aprilSubsystem) {
     if (Constants.CAMERA_AVAILABLE){
-      aprilSubsystem = new AprilTags();
-    }else aprilSubsystem = null;
+      this.aprilSubsystem = aprilSubsystem;
+    }
     resetGyro();
     for (SwerveModule module : modules) {
       module.resetDriveEncoder();

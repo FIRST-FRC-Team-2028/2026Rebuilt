@@ -39,10 +39,6 @@ public class RobotContainer {
 
 
   public RobotContainer() {
-    if (Constants.DRIVE_AVAILABLE){
-      driveSubsystem = new Drivetrain();
-      driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem));
-    } else driveSubsystem = null;
     if (Constants.CAMERA_AVAILABLE){
       aprilSubsystem = new AprilTags();
     } else aprilSubsystem = null;
@@ -55,6 +51,10 @@ public class RobotContainer {
     if (Constants.CLIMBER_AVAILABLE){
       climberSubsystem = new Climber();
     } else climberSubsystem = null;
+    if (Constants.DRIVE_AVAILABLE){
+      driveSubsystem = new Drivetrain(aprilSubsystem);
+      driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem));
+    } else driveSubsystem = null;
 
     configureBindings();
   }
@@ -72,6 +72,10 @@ public class RobotContainer {
       new JoystickButton(mechJoytick1, OIConstants.kStartShooter)
         .whileTrue(new Shoot(shootingSubsystem)
         .alongWith(new AgitateIntake(intakeSubsystem)));
+
+      new JoystickButton(driverJoytick, 1)
+        .onTrue(intakeSubsystem.runIntake(0.75))
+        .onFalse(intakeSubsystem.stopIntake());
     }
 
   }
@@ -90,6 +94,9 @@ public class RobotContainer {
   }
   public Climber getClimber(){
     return climberSubsystem;
+  }
+  public AprilTags getAprilTags(){
+    return aprilSubsystem;
   }
 
   

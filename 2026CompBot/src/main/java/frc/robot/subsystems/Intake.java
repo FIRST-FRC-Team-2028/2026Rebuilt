@@ -19,6 +19,8 @@ import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
@@ -82,6 +84,16 @@ public class Intake extends SubsystemBase {
   /**Returns the joint position in degrees */
   public double getJointPosition() {
     return Units.rotationsToDegrees(joint_Encoder.getPosition());
+  }
+
+  public Command runIntake(){
+    return new InstantCommand(()->rollers(0.5));
+  }
+   public Command runIntake(double speed){
+    return new InstantCommand(()->rollers(speed));
+  }
+  public Command stopIntake(){
+    return new InstantCommand(()->rollers.stopMotor());
   }
 
 }
