@@ -113,6 +113,104 @@ public class Shooter extends SubsystemBase {
   public void setFeedSpeed(double Speed){
     feed_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
   }
+  public void stopShooting(){
+    centerShooter.stopMotor();
+    feed.stopMotor();
+    conveyor.stopMotor();
+    }
 
 
+  //Shooter RPM Math
+    /**
+ * Computes the desired shooter wheel speed in RPM based on horizontal distance
+ * to the target.
+ *
+ * <p>This method:
+ * <ul>
+ *   <li>Clamps the input distance to a physically valid range</li>
+ *   <li>Computes the required exit velocity using projectile motion</li>
+ *   <li>Applies empirical correction for drag and compression</li>
+ *   <li>Converts linear exit velocity into wheel RPM</li>
+ * </ul>
+ *
+ * <p>Distance is assumed to be measured horizontally from the shooter to the
+ * target plane (e.g., via vision).
+ *
+ * @param distanceMeters Horizontal distance to the target in meters
+ * @return Shooter wheel speed in RPM, or {@code Double.NaN} if wheel diameter
+ *         has not yet been configured
+ */
+    public double getShooterRPM(double distanceMeters) {
+
+        // Clamp distance to something physically possible
+        double minDistance = ShooterConstants.delta_H / Math.tan(Math.toRadians(ShooterConstants.shooter_angle_deg)) + 0.05;
+        double clampedDistance = Math.max(distanceMeters, minDistance);
+
+        if (ShooterConstants.max_shooting_distance_meters > 0.0) {
+            clampedDistance = Math.min(clampedDistance, ShooterConstants.max_shooting_distance_meters);
+        }
+
+        // Calculate exit velocity (m/s)
+        double velocity = calculateExitVelocity(clampedDistance);
+
+        // Convert velocity to RPM
+        return velocityToRPM(velocity);
+    }
+
+    /**
+ * Calculates the linear exit velocity required for a projectile to reach
+ * the target from a given horizontal distance.
+ *
+ * <p>This calculation assumes:
+ * <ul>
+ *   <li>A fixed shooter angle</li>
+ *   <li>Known height difference between shooter and target</li>
+ *   <li>Ideal projectile motion with an empirical correction factor applied</li>
+ * </ul>
+ *
+ * <p>The returned velocity includes a tunable "fudge factor" to account for
+ * aerodynamic drag, wheel slip, and ball compression losses.
+ *
+ * @param distanceMeters Horizontal distance to the target in meters
+ * @return Required exit velocity in meters per second
+ */
+  private double calculateExitVelocity(double distanceMeters) {
+
+    double thetaRad = Math.toRadians(ShooterConstants.shooter_angle_deg);
+
+    double numerator = ShooterConstants.gravity * distanceMeters * distanceMeters;
+    double denominator = 2.0 * Math.pow(Math.cos(thetaRad), 2)
+                * (distanceMeters * Math.tan(thetaRad) - ShooterConstants.delta_H);
+
+    double idealVelocity = Math.sqrt(numerator / denominator);
+
+    // Apply real-world correction
+    return idealVelocity * ShooterConstants.velocity_fudge_factor;
+  }
+  /**
+ * Converts a linear exit velocity into shooter wheel RPM.
+ *
+ * <p>Uses the relationship:
+ * <pre>
+ * v = ωr
+ * </pre>
+ * where {@code v} is linear velocity and {@code r} is wheel radius.
+ *
+ * <p>If the shooter wheel diameter has not yet been configured, this method
+ * returns {@code Double.NaN} to clearly indicate a configuration error.
+ *
+ * @param velocityMetersPerSecond Linear exit velocity in meters per second
+ * @return Shooter wheel speed in RPM, or {@code Double.NaN} if wheel diameter
+ *         is undefined
+ */
+  private double velocityToRPM(double velocityMetersPerSecond) {
+    double wheelRadius = ShooterConstants.wheel_diameter_meter / 2.0;
+
+    if (wheelRadius <= 0.0) {
+        // Wheel not defined yet — return NaN so error is obvious
+         return Double.NaN;
+    }
+    // v = ωr → RPM conversion
+     return (velocityMetersPerSecond * 60.0) / (2.0 * Math.PI * wheelRadius);
+    }
 }

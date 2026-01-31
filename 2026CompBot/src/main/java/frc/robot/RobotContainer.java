@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AdvancedShoot;
 import frc.robot.commands.AgitateIntake;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.Shoot;
@@ -69,12 +71,16 @@ public class RobotContainer {
     }
 
     if (Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
-      new JoystickButton(mechJoytick1, OIConstants.kStartShooter)
+      new JoystickButton(mechJoytick1, OIConstants.kShoot)
         .whileTrue(new Shoot(shootingSubsystem)
         .alongWith(new AgitateIntake(intakeSubsystem)));
 
-      new JoystickButton(driverJoytick, 1)
-        .onTrue(intakeSubsystem.runIntake(0.75))
+      new JoystickButton(mechJoytick1, OIConstants.kAdvancedShoot)
+        .whileTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getDistanceToHub(alliance))
+        .alongWith(new AgitateIntake(intakeSubsystem)));
+
+      new JoystickButton(mechJoytick1, OIConstants.kIntake)
+        .onTrue(intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed))
         .onFalse(intakeSubsystem.stopIntake());
     }
 

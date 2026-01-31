@@ -197,6 +197,7 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
+    //Configs
     public static final double jointP = 0.;
     public static final double jointI = 0.;
     public static final double jointD = 0.;
@@ -205,12 +206,13 @@ public final class Constants {
     public static final double jointForwardSoftLimit = 0;
     public static final double jointReverseSoftLimit = 0;
 
-
-
+    //Joint Positions
     public static final double JointPickupPosition = 90; //Degrees
     public static final double JointUpPosition = 0; //Degrees
     public static final double JointAgitatePosition = 75; //Degrees
 
+    //Rollers Speed
+    public static final double IntakeSpeed = 0.75; //-1 to 1
   }
 
   public static class ShooterConstants {
@@ -231,6 +233,14 @@ public final class Constants {
     public static final double feedShootSpeed = 200.; //RPM
     public static final double conveyorShootSpeed = 300.; //RPM
 
+    //Shooter Math Constants 
+    public static final double gravity = 9.81; //m/s^2
+    public static final double h_shooter = 15; //in ESTIMATE TODO set real height
+    public static final double delta_H = Units.inchesToMeters(72)-Units.inchesToMeters(h_shooter);
+    public static final double shooter_angle_deg = 0; //TODO set real angle
+    public static final double wheel_diameter_meter = Units.inchesToMeters(0); //TODO set wheel diameter 
+    public static final double max_shooting_distance_meters = 0.0; //TODO find max shooting distance
+    public static final double velocity_fudge_factor = 1.15; //Typical range: 1.10–1.20
   }
 
   public static class ClimberConstants {
@@ -275,10 +285,10 @@ public final class Constants {
     //Driver Buttons
     public static final int kResetGyro =                 1;
     public static final int kDriverRobotOrientedButton = 6;
-    //Game Mech Buttons
-    public static final int kStartShooter =              1;
-    public static final int kInceaseShooter =            3;
-    public static final int kDescreaseShooter =          2;
+    //Game Mech 1 Buttons
+    public static final int kShoot =                     1;
+    public static final int kIntake =                    3;
+    public static final int kAdvancedShoot =             2;
     public static final int kStopShooter =               4;
 
 

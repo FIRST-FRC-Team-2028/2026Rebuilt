@@ -9,22 +9,24 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Shoot extends Command {
+public class AdvancedShoot extends Command {
   private final Shooter shooter;
   double shootSpeedDeadband = 100;
   boolean shooting = false;
   double shotCount = 0;
   double velocityIncrease = 50;
+  double velocity; 
   /** Creates a new Shoot. */
-  public Shoot(Shooter shooter) {
+  public AdvancedShoot(Shooter shooter, double distance) {
     this.shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
+    velocity = shooter.getShooterRPM(distance);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed);
+    shooter.setShooterSpeed(velocity);
     shotCount = 0;
     shooting = false;
   }
@@ -33,15 +35,15 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     if (!shooting){
-      if(shooter.getShooterVelocity()> ShooterConstants.shooterShootSpeed-shootSpeedDeadband){
+      if(shooter.getShooterVelocity()> velocity-shootSpeedDeadband){
         shooter.setConveyorSpeed(ShooterConstants.conveyorShootSpeed);
         shooter.setFeedSpeed(ShooterConstants.feedShootSpeed);
         shooting = true;
       }
     }
-    /*if (shooting && shooter.getShooterVelocity() < ShooterConstants.shooterShootSpeed-shootSpeedDeadband){
+    /*if (shooting && shooter.getShooterVelocity() < velocity-shootSpeedDeadband){
       shotCount++;
-      if (shotCount>5) shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed+velocityIncrease);
+      if (shotCount>5) shooter.setShooterSpeed(velocity+velocityIncrease);
     }*/
   }
 
