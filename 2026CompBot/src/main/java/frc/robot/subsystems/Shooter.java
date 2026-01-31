@@ -7,8 +7,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.controls.Follower;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -91,7 +91,7 @@ public class Shooter extends SubsystemBase {
     
   }
 
-    /**Sets the speed for the shooter using PID controller on velocity control type
+  /**Sets the speed for the shooter using PID controller on velocity control type
    * @param Speed in RPM
    */
   public void setShooterSpeed(double Speed){
@@ -101,14 +101,13 @@ public class Shooter extends SubsystemBase {
   public double getShooterVelocity(){
     return center_Encoder.getVelocity();
   }
-    /**Sets the speed for the conveyor using PID controller on velocity control type
+  /**Sets the speed for the conveyor using PID controller on velocity
    * @param Speed in RPM
    */
   public void setConveyorSpeed(double Speed){
     conveyor_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
   }
-  /**Sets the speed for the feed using PID controller on velocity control type
-   * @param Speed in RPM
+  /**Sets the speed for the feed using PID controller on velocity
    */
   public void setFeedSpeed(double Speed){
     feed_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
@@ -117,7 +116,7 @@ public class Shooter extends SubsystemBase {
     centerShooter.stopMotor();
     feed.stopMotor();
     conveyor.stopMotor();
-    }
+  }
 
 
   //Shooter RPM Math

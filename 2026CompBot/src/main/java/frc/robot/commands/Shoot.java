@@ -15,10 +15,14 @@ public class Shoot extends Command {
   boolean shooting = false;
   double shotCount = 0;
   double velocityIncrease = 50;
-  /** Creates a new Shoot. */
+  /** Runs procedure to Shoot
+   * <p> Presumes non-negligible time for shooter wheels to get to speed.
+   * <p> Presumes this Command is controlled by holding a button, 
+   * and ends when button is released.
+   */
   public Shoot(Shooter shooter) {
     this.shooter = shooter;
-    // Use addRequirements() here to declare subsystem dependencies.
+    // Use addRequirements() here to declare subsystem dependencies.TODO
   }
 
   // Called when the command is initially scheduled.
