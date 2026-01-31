@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 
@@ -16,10 +18,12 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.FieldCentric;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -28,12 +32,14 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.Constants.RobotConstants;
 
@@ -306,6 +312,17 @@ public class Drivetrain extends SubsystemBase {
   }
   public void resetPoseEstimatorPose(Pose2d pose) {
     m_poseEstimator.resetPosition(getHeading(), getModulePositions(), pose);
+  }
+
+  public double getDistanceToHub(Optional<Alliance> alliance){
+    Pose3d targetHub = null;
+    if(alliance.get() == Alliance.Red) {targetHub = FieldConstants.redHubFieldPose;}
+    if(alliance.get() == Alliance.Blue) {targetHub = FieldConstants.blueHubFieldPose;}
+    
+    double xdist = targetHub.getX() - m_poseEstimator.getEstimatedPosition().getX();
+    double ydist = targetHub.getY() - m_poseEstimator.getEstimatedPosition().getY();
+    double dist = Math.sqrt((xdist*xdist) + (ydist*ydist));
+    return dist;
   }
 
  /**Contructs and runs a path to the given path name avoiding obsticals outlinned in navgrid.json. Uses the

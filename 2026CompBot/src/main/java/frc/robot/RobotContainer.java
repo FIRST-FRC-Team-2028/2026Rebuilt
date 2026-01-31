@@ -4,7 +4,11 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -26,6 +30,7 @@ public class RobotContainer {
   private final Shooter shootingSubsystem;
   private final Intake intakeSubsystem;
   private final Climber climberSubsystem;
+  public static Optional<Alliance> alliance = DriverStation.getAlliance();
 
   // Joysticks
     private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
@@ -74,4 +79,19 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
+  public Drivetrain getDrivetrain(){
+    return driveSubsystem;
+  }
+  public Intake getIntake(){
+    return intakeSubsystem;
+  }
+  public Shooter getShoot(){
+    return shootingSubsystem;
+  }
+  public Climber getClimber(){
+    return climberSubsystem;
+  }
+
+  
+
 }

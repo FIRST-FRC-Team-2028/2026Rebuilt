@@ -8,6 +8,7 @@ import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -330,5 +331,12 @@ public final class Constants {
                           1);*/
   }
 
+  public static class FieldConstants{
+    //Center of the Hexagon, Top of the funnel 
+    public static final Pose3d blueHubFieldPose = new Pose3d(Units.inchesToMeters(157.79+23.51),
+      Units.inchesToMeters(158.32), Units.inchesToMeters(72.00), null);
+    public static final Pose3d redHubFieldPose = new Pose3d(Units.inchesToMeters(444.80+23.51), 
+      Units.inchesToMeters(158.32), Units.inchesToMeters(72.00), null);
+  }
 
 }
