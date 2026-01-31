@@ -18,7 +18,7 @@ public class MoveClimber extends Command {
     this.climber = climber;
     this.speed = speed;
     this.position = position;
-    // Use addRequirements() here to declare subsystem dependencies.
+    // Use addRequirements() here to declare subsystem dependencies. TODO
   }
 
   // Called when the command is initially scheduled.

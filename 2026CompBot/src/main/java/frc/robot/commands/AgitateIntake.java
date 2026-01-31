@@ -14,10 +14,14 @@ public class AgitateIntake extends Command {
   private final Intake intake;
   double deadband = 5; //Degrees
   double setPoint = IntakeConstants.JointPickupPosition;
-  /** Creates a new AgitateIntake. */
+  /** Shake hopper
+   * <p> Presumes this Command is controlled by holding a button,
+   * and ends when button is released.
+   * @param intake
+   */
   public AgitateIntake(Intake intake) {
     this.intake = intake;
-    // Use addRequirements() here to declare subsystem dependencies.
+    // Use addRequirements() here to declare subsystem dependencies. TODO
   }
 
   // Called when the command is initially scheduled.
@@ -32,6 +36,9 @@ public class AgitateIntake extends Command {
   public void execute() {
     if (intake.getJointPosition()<setPoint+deadband && intake.getJointPosition()>setPoint-deadband){
       if (setPoint == IntakeConstants.JointPickupPosition){
+        /* MrG asks: How frequently will it switch set points?
+         * Relative to the time it takes to move from one positionto the other. TODO
+        */
         setPoint = IntakeConstants.JointAgitatePosition;
       } else {
         setPoint = IntakeConstants.JointPickupPosition;

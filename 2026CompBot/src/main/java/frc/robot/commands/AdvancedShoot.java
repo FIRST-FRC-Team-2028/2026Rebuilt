@@ -16,10 +16,18 @@ public class AdvancedShoot extends Command {
   double shotCount = 0;
   double velocityIncrease = 50;
   double velocity; 
-  /** Creates a new Shoot. */
+  /** Controls process to shoot.
+   * <p> Delays feeding until shooting wheels are up to speed.
+   * <p> Computes Wheel Speed based on distance from Tower.
+   * <p> Presumes this Command runs while a button is help
+   * and ends when released.
+   * @param shooter
+   * @param distance
+   */
   public AdvancedShoot(Shooter shooter, double distance) {
     this.shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(shooter);
     velocity = shooter.getShooterRPM(distance);
   }
 
