@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.numbers.N8;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -34,10 +35,10 @@ public class AprilTags extends SubsystemBase {
   List<PhotonPipelineResult> cameraResults;
   PhotonTrackedTarget target;
   Optional<EstimatedRobotPose> estimatedPose;
+  double distToTarget;
   double estimatedPoseTime;
   Pose3d estimatedPose3d;
-  Matrix<N3,N3> camMatrix;
-  Matrix<N8,N1> distCoeffs;
+  double xdist2,ydist2,zdist2;
 
   /** Creates a new AprilTags. */
   public AprilTags() {
@@ -52,23 +53,57 @@ public class AprilTags extends SubsystemBase {
     //cameraResult = camera.getLatestResult();
     cameraResults = camera.getAllUnreadResults();
     estimatedPose = Optional.empty();
-    target = cameraResult.getBestTarget();
+    //target = cameraResult.getBestTarget();
     for (var result : camera.getAllUnreadResults()) {
-      camMatrix = camera.getCameraMatrix().orElseThrow();
-      distCoeffs = camera.getDistCoeffs().orElseThrow();
-      estimatedPose = poseEstimator.estimateRioMultiTagPose(result, camMatrix, distCoeffs);
-      if (estimatedPose.isEmpty()){
-        estimatedPose = poseEstimator.estimateLowestAmbiguityPose(result);
-      }
+      if(result.hasTargets()){
+        target = result.getBestTarget();
+        distToTarget = getNorm(target);
+        SmartDashboard.putNumber("Distance To Target", distToTarget);
+        SmartDashboard.putNumber("Distance To Target (X only)", target.getBestCameraToTarget().getX());
+        estimatedPose = poseEstimator.estimateCoprocMultiTagPose(result);
+        if (estimatedPose.isEmpty()){
+          estimatedPose = poseEstimator.estimateLowestAmbiguityPose(result);
+        }
     }
       if(estimatedPose.isPresent()){
       EstimatedRobotPose poseEstimated = estimatedPose.get();
       estimatedPoseTime = poseEstimated.timestampSeconds;
       estimatedPose3d = poseEstimated.estimatedPose;
       }
+    }
   }
     
-    public Pose3d getPose3d(){
+  public Pose3d getPose3d(){
     return estimatedPose3d;
+  }
+
+  public double getNorm(PhotonTrackedTarget target) {
+    xdist2 = Math.pow(target.getBestCameraToTarget().getX(),2);
+    ydist2 = Math.pow(target.getBestCameraToTarget().getY(),2);
+    zdist2 = Math.pow(target.getBestCameraToTarget().getZ(),2);
+    return Math.sqrt(xdist2+ydist2+zdist2);
+  }
+
+  public static class VisionMeasurement {
+    public final Pose2d estmatedPose;
+    public final double timestamp;
+    public final edu.wpi.first.math.Matrix<
+      edu.wpi.first.math.numbers.N3,
+      edu.wpi.first.math.numbers.N1
+      > stdDevs;
+  
+    public VisionMeasurement(
+      Pose2d estmatedPose,
+      double timestamp,
+      edu.wpi.first.math.Matrix<
+        edu.wpi.first.math.numbers.N3,
+        edu.wpi.first.math.numbers.N1
+      > stdDevs
+    ) {
+      this.estmatedPose = estmatedPose;
+      this.timestamp = timestamp;
+      this.stdDevs = stdDevs;
+    }
+  
   }
 }
