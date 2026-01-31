@@ -252,7 +252,9 @@ public final class Constants {
     public static final double reverseSoftLimit = 0;
     public static final double positionConversionFactor = 1;
     public static final double kRampRate = 1;
-    public static final double climbPosition = 0;
+    public static final double climbPosition = 0; //Degrees
+    public static final double hookPosition = 0; //Degrees
+    public static final double travelPosition = 0;//Degrees
 
   }
 
@@ -289,8 +291,8 @@ public final class Constants {
     public static final int kShoot =                     1;
     public static final int kIntake =                    3;
     public static final int kAdvancedShoot =             2;
-    public static final int kStopShooter =               4;
-
+    public static final int kClimberHook =               4;
+    public static final int kClimberClimb =              5;
 
     public static final double kDeadband = 0.075;
 
