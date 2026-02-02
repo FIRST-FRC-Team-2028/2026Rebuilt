@@ -84,26 +84,5 @@ public class AprilTags extends SubsystemBase {
     return Math.sqrt(xdist2+ydist2+zdist2);
   }
 
-  public static class VisionMeasurement {
-    public final Pose2d estmatedPose;
-    public final double timestamp;
-    public final edu.wpi.first.math.Matrix<
-      edu.wpi.first.math.numbers.N3,
-      edu.wpi.first.math.numbers.N1
-      > stdDevs;
-  
-    public VisionMeasurement(
-      Pose2d estmatedPose,
-      double timestamp,
-      edu.wpi.first.math.Matrix<
-        edu.wpi.first.math.numbers.N3,
-        edu.wpi.first.math.numbers.N1
-      > stdDevs
-    ) {
-      this.estmatedPose = estmatedPose;
-      this.timestamp = timestamp;
-      this.stdDevs = stdDevs;
-    }
-  
-  }
+
 }
