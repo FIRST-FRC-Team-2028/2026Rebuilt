@@ -11,6 +11,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -30,32 +31,77 @@ import frc.robot.Constants.CamConstants;
 
 public class AprilTags extends SubsystemBase {
   private final PhotonCamera camera;
+  //private final PhotonCamera camera2;
+
   AprilTagFieldLayout aprilTagFieldLayout;
   private final PhotonPoseEstimator poseEstimator;
-  PhotonPipelineResult cameraResult;
+  //private final PhotonPoseEstimator poseEstimator2;
+
+  PhotonPipelineResult cameraResult, cameraResult2;
   List<PhotonPipelineResult> cameraResults;
   PhotonTrackedTarget target;
-  Optional<EstimatedRobotPose> estimatedPose;
+  Optional<EstimatedRobotPose> estimatedPose, estimatedPose2;
+  Optional<MultiTargetPNPResult> multiTagResult;
   double distToTarget;
-  double estimatedPoseTime;
-  Pose3d estimatedPose3d;
+  double estimatedPoseTime, estimatedPoseTime2;
+  Pose3d estimatedPose3d, estimatedPose3d2;
   double xdist2,ydist2,zdist2;
+  boolean isEstimated, isEstimated2;
 
   /** Creates a new AprilTags. */
   public AprilTags() {
     camera = new PhotonCamera(CamConstants.camera_name);
+    //camera2 = new PhotonCamera(CamConstants.camera_name2);
     aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
     poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, Constants.CamConstants.robot_to_camera);
+    //poseEstimator2 = new PhotonPoseEstimator(aprilTagFieldLayout, Constants.CamConstants.robot_to_camera2);
+
   }
 
 
   @Override
   public void periodic() {
+    for (var results: camera.getAllUnreadResults()){
+       estimatedPose = poseEstimator.estimateCoprocMultiTagPose(results);
+      if (estimatedPose.isPresent()){
+        estimatedPoseTime = estimatedPose.get().timestampSeconds;
+        estimatedPose3d = estimatedPose.get().estimatedPose;
+        isEstimated=true;
+      } else if (estimatedPose.isPresent()) {  //If multi tag isn't present, use average best targets
+        estimatedPose = poseEstimator.estimateAverageBestTargetsPose(results);
+        estimatedPoseTime = estimatedPose.get().timestampSeconds;
+        estimatedPose3d = estimatedPose.get().estimatedPose;
+        isEstimated=true;
+      } else isEstimated = false;
+    }
+
+    /*for (var results2: camera2.getAllUnreadResults()){
+       estimatedPose2 = poseEstimator2.estimateCoprocMultiTagPose(results2);
+      if (estimatedPose2.isPresent()){
+        estimatedPoseTime2 = estimatedPose2.get().timestampSeconds;
+        estimatedPose3d2 = estimatedPose2.get().estimatedPose;
+        isEstimated2 = true;  TODO 2nd Camera?
+      } else if (estimatedPose2.isPresent()) {  //If multi tag isn't present, use average best targets
+        estimatedPose2 = poseEstimator2.estimateAverageBestTargetsPose(results2);
+        estimatedPoseTime2 = estimatedPose2.get().timestampSeconds;
+        estimatedPose3d2 = estimatedPose2.get().estimatedPose;
+        isEstimated2=true;
+      } else isEstimated2 = false;
+    }*
     //cameraResult = camera.getLatestResult();
-    cameraResults = camera.getAllUnreadResults();
-    estimatedPose = Optional.empty();
+    
     //target = cameraResult.getBestTarget();
-    for (var result : camera.getAllUnreadResults()) {
+
+    /*for (var camResults : camera.getAllUnreadResults()){
+      multiTagResult = camResults.getMultiTagResult();
+        if (multiTagResult.isPresent()){
+          var fieldToCamera = multiTagResult.get().estimatedPose.best;
+          Pose2d fieldToCameraPose2d = new Pose2d(fieldToCamera.getX(), fieldToCamera.getY(), fieldToCamera.getRotation().toRotation2d());
+          
+        }
+    }Theory code to use getMultiTagResults()*/ 
+
+    /*for (var result : camera.getAllUnreadResults()) {
       if(result.hasTargets()){
         target = result.getBestTarget();
         distToTarget = getNorm(target);
@@ -71,12 +117,21 @@ public class AprilTags extends SubsystemBase {
       estimatedPoseTime = poseEstimated.timestampSeconds;
       estimatedPose3d = poseEstimated.estimatedPose;
       }
-    }
+    }*/
   }
     
-  public Pose3d getPose3d(){
+  public Pose3d getEstimatedPose3d(){
     return estimatedPose3d;
   }
+  public double getTimeStamp(){
+    return estimatedPoseTime;
+  }
+  /*public Pose3d getEstimatedPose3d2(){
+    return estimatedPose3d2;
+  }
+  public double getTimeStamp2(){  TODO 2nd Camera?
+    return estimatedPoseTime2;
+  }*/
 
   public double getNorm(PhotonTrackedTarget target) {
     xdist2 = Math.pow(target.getBestCameraToTarget().getX(),2);

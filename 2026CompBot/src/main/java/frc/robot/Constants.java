@@ -45,8 +45,8 @@ public final class Constants {
      public static final int kDriveMotorCurrentLimit = 80;
     public static final int kTurningMotorCurrentLimit = 80;
     public static final double kWheelDiameterMeters = Units.inchesToMeters(3.75);
-    public static final double kDriveMotorGearRatio = 1 / 5.36;
-    public static final double kTurningMotorGearRatio = 1 / 18.75;
+    public static final double kDriveMotorGearRatio = 1 / 5.36; //2026 Competition Robot
+    public static final double kTurningMotorGearRatio = 1 / 18.75;  //2026 Competition Robot
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
    // Theoraticlly maybe; in practice from measurements
     //public static final double kDriveEncoderRot2Meter = Units.inchesToMeters(1)/41.2;
@@ -60,7 +60,7 @@ public final class Constants {
     public static final double kDriveFF = 0.255; // 2025 Competition Robot
 
 
-    public static final double kTurningP = 2.3;//2.05; // 2025 Competition Robot   0.75
+    public static final double kTurningP = 2.3;//2.05; // 2023 Competition Robot   0.75
     public static final double kTurningI = 0.0; // 2025 Competition Robot
     public static final double kTurningD = 0.0; // 2025 Competition Robot
 
@@ -91,9 +91,9 @@ public final class Constants {
 
         // Distance between right and left wheels
         // Distance between front and back wheels
-        public static final double kTrackWidth = Units.inchesToMeters(16.5);  //16.5     
+        public static final double kTrackWidth = Units.inchesToMeters(21.5);      
         //
-        public static final double kWheelBase = Units.inchesToMeters(22.5);   //22.5       
+        public static final double kWheelBase = Units.inchesToMeters(21.5);          
         // 
         public static final SwerveDriveKinematics kDriveKinematics =
         new SwerveDriveKinematics(
@@ -167,7 +167,7 @@ public final class Constants {
   public static final boolean kBackRightDriveAbsoluteEncoderReversed  = true;
 
   // Speed Limits
-  public static final double kPhysicalMaxSpeedMetersPerSecond = 4.5;
+  public static final double kPhysicalMaxSpeedMetersPerSecond = 4.923;  //2026
   public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 3 * 2 * Math.PI;
 
   public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond /1.5;
@@ -175,7 +175,6 @@ public final class Constants {
                                      kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
   public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
   public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 1.8;
-  public static final double kptwist = .5;
 
   public static final double kFineControlSpeed = .5;
   public static final double kFasterSpeed = .4;
@@ -184,7 +183,7 @@ public final class Constants {
   public static final double kDefaultAbsEncoderOffset = 0.0;
 
   // Units are meters per second
-  public static final double kMaxTranslationalVelocity = 4.0; // 2023 Competion Robot // max 4.5
+  public static final double kMaxTranslationalVelocity = 4.923; // 2026 Competion Robot 
 
   // Units are radians per second
   public static final double kMaxRotationalVelocity = 5.0; // 2023 Competion Robot // max 5.0
@@ -235,10 +234,10 @@ public final class Constants {
 
     //Shooter Math Constants 
     public static final double gravity = 9.81; //m/s^2
-    public static final double h_shooter = 15; //in ESTIMATE TODO set real height
+    public static final double h_shooter = 15; //is ESTIMATE TODO set real height
     public static final double delta_H = Units.inchesToMeters(72)-Units.inchesToMeters(h_shooter);
     public static final double shooter_angle_deg = 0; //TODO set real angle
-    public static final double wheel_diameter_meter = Units.inchesToMeters(0); //TODO set wheel diameter 
+    public static final double wheel_diameter_meter = Units.inchesToMeters(4.25);  
     public static final double max_shooting_distance_meters = 0.0; //TODO find max shooting distance
     public static final double velocity_fudge_factor = 1.15; //Typical range: 1.10–1.20
   }
@@ -301,6 +300,7 @@ public final class Constants {
 
   public static class CamConstants {
     public static final String camera_name = "Camera_Module_v2";
+    public static final String camera_name2 = "IDK";
       //public static final double camera_Height_Meters = Units.inchesToMeters(7.);
       //public static final double target_Height_Meters = Units.inchesToMeters(78.);
 
@@ -316,6 +316,11 @@ public final class Constants {
                                                         0,
                                                         0,
                                                         new Rotation3d(0.0,0.0,0.0));
+      public static final Transform3d robot_to_camera2 = new Transform3d(
+                                                        0,
+                                                        0,
+                                                        0,
+                                                        new Rotation3d(0.0,0.0,0.0));
 
       public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
       public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
@@ -325,9 +330,8 @@ public final class Constants {
     public static final double xcg = Units.inchesToMeters(0);  // from the geometric centroid
     public static final double kNominalVoltage = 12.0;
     public static final double kPeriod = TimedRobot.kDefaultPeriod;
-    public static final double robotLength = Units.inchesToMeters(34.5); //inches
-    public static final double robotWidth = Units.inchesToMeters(29.25) ; //inches
-    public static final double handlerThickness = Units.inchesToMeters(6.); //inches
+    public static final double robotLength = Units.inchesToMeters(33.75); //2026 inches  With Bumpers
+    public static final double robotWidth = Units.inchesToMeters(33.75) ; //2026 inches  With Bumpers
   }
 
   public static final class PathPlannerConstants {
