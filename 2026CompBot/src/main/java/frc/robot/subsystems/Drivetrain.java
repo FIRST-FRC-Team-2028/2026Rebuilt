@@ -111,7 +111,6 @@ public class Drivetrain extends SubsystemBase {
     resetGyro();
     for (SwerveModule module : modules) {
       module.resetDriveEncoder();
-      module.initializeAbsoluteTurningEncoder();
       module.initializeRelativeTurningEncoder();
 
     }
@@ -158,13 +157,13 @@ public class Drivetrain extends SubsystemBase {
     //SmartDashboard.putNumber("front Left Velocity", m_frontLeft.getVelocity());
     
     //SmartDashboard.putNumber("front left abs", m_frontLeft.getAbsTurningPosition(0.1).getDegrees());
-    //SmartDashboard.putNumber("front left rel", m_frontLeft.getRelativeTurningPosition().getDegrees());
+    SmartDashboard.putNumber("front left rel", m_frontLeft.getRelativeTurningPosition().getDegrees());
     //SmartDashboard.putNumber("front right abs", m_frontRight.getAbsTurningPosition(0.1).getDegrees());
-    //SmartDashboard.putNumber("front right rel", m_frontRight.getRelativeTurningPosition().getDegrees());
+    SmartDashboard.putNumber("front right rel", m_frontRight.getRelativeTurningPosition().getDegrees());
     //SmartDashboard.putNumber("back left abs", m_backLeft.getAbsTurningPosition(0.1).getDegrees());
-    //SmartDashboard.putNumber("back left rel", m_backLeft.getRelativeTurningPosition().getDegrees());
+    SmartDashboard.putNumber("back left rel", m_backLeft.getRelativeTurningPosition().getDegrees());
     //SmartDashboard.putNumber("back right abs", m_backRight.getAbsTurningPosition(0.1).getDegrees());
-    //SmartDashboard.putNumber("back right rel", m_backRight.getRelativeTurningPosition().getDegrees());
+    SmartDashboard.putNumber("back right rel", m_backRight.getRelativeTurningPosition().getDegrees());
     // This method will be called once per scheduler run
   }
 
@@ -265,13 +264,13 @@ public class Drivetrain extends SubsystemBase {
     });
 
     if(Constants.CAMERA_AVAILABLE){
-      //if (aprilSubsystem.isPoseEstimated()) {
+      if (aprilSubsystem.isPoseEstimated()) {
 
         //var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
         //var camPose = aprilTagFieldLayout.getTagPose(4).transformBy(camToTargetTrans.inverse());
         m_poseEstimator.addVisionMeasurement(
-                  aprilSubsystem.getPose3d().toPose2d(), aprilSubsystem.estimatedPoseTime); 
-      //}
+                  aprilSubsystem.getEstimatedPose3d().toPose2d(), aprilSubsystem.estimatedPoseTime); 
+      }
       //SmartDashboard.putNumber("Swerve Robot X Pos", m_poseEstimator.getEstimatedPosition().getX());
       //SmartDashboard.putNumber("Swerve Robot Y Pos", m_poseEstimator.getEstimatedPosition().getY());
       //SmartDashboard.putNumber("Get Pose to Pose", aprilSubsystem.getPoseToPose(getPoseEstimatorPose(), gamemechSwitch));

@@ -45,10 +45,18 @@ public class AprilTags extends SubsystemBase {
   double distToTarget;
   double estimatedPoseTime, estimatedPoseTime2;
   Pose3d estimatedPose3d, estimatedPose3d2;
-  double xdist2,ydist2,zdist2;
   boolean isEstimated, isEstimated2;
 
-  /** Creates a new AprilTags. */
+  /** Uses the PhotonVision VendorDep to process April Tags
+   * <p>Methods<ul>
+   * <li>{@code getMag} - Gets the magnitude of the distance vector with the X and Y components
+   * <li>{@code getMagZ} - Gets the magnitude of the distance vector with the X, Y, and Z components
+   * <li>{@code isPoseEstimated} - Gets the boolean to determine if a pose is estimated
+   * <li>{@code getEstimatedPose3d} - Gets the Pose3d of the position estimated by the pose estimator
+   * <li>{@code getTimestamp} - Gets the timestamp of the position estimated the pose estimator
+   * </ul>
+   * </p>
+   */
   public AprilTags() {
     camera = new PhotonCamera(CamConstants.camera_name);
     //camera2 = new PhotonCamera(CamConstants.camera_name2);
@@ -119,10 +127,23 @@ public class AprilTags extends SubsystemBase {
       }
     }*/
   }
-    
+  /** Gets the boolean to determine if a pose is estimated
+   * @return If a pose is estimated
+   */
+  public boolean isPoseEstimated(){
+    return isEstimated;
+  }
+
+  /** Gets the Pose3d of the position estimated by the pose estimator
+   * @return estimatedPose3d: The Pose3d of the position estimated by the pose estimator
+   */
   public Pose3d getEstimatedPose3d(){
     return estimatedPose3d;
   }
+
+  /** Gets the timestamp of the position estimated the pose estimator 
+   * @return estimatedPoseTime: The timestamp of the position estimated the pose estimator 
+  */
   public double getTimeStamp(){
     return estimatedPoseTime;
   }
@@ -132,13 +153,25 @@ public class AprilTags extends SubsystemBase {
   public double getTimeStamp2(){  TODO 2nd Camera?
     return estimatedPoseTime2;
   }*/
-
-  public double getNorm(PhotonTrackedTarget target) {
-    xdist2 = Math.pow(target.getBestCameraToTarget().getX(),2);
-    ydist2 = Math.pow(target.getBestCameraToTarget().getY(),2);
-    zdist2 = Math.pow(target.getBestCameraToTarget().getZ(),2);
+  
+  /** Gets the magnitude of the distance vector with the X, Y, and Z components
+   * @param target the target that the distance is found
+   * @return the magnitude of the distance vector to the target AprilTag
+   */
+  public double getMagZ(PhotonTrackedTarget target) {
+    var xdist2 = Math.pow(target.getBestCameraToTarget().getX(),2);
+    var ydist2 = Math.pow(target.getBestCameraToTarget().getY(),2);
+    var zdist2 = Math.pow(target.getBestCameraToTarget().getZ(),2);
     return Math.sqrt(xdist2+ydist2+zdist2);
   }
 
-
+  /** Gets the magnitude of the distance vector with the X, and Y components
+   * @param target the target that the distance is found
+   * @return the magnitude of the distance vector to the target AprilTag
+   */
+    public double getMag(PhotonTrackedTarget target) {
+    var xdist2 = Math.pow(target.getBestCameraToTarget().getX(),2);
+    var ydist2 = Math.pow(target.getBestCameraToTarget().getY(),2);
+    return Math.sqrt(xdist2+ydist2);
+    }
 }

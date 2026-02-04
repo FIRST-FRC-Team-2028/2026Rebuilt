@@ -26,7 +26,23 @@ public class Shooter extends SubsystemBase {
   private final SparkMaxConfig left_Config, center_Config, right_Config, feed_Config, conveyor_Config;
   private final RelativeEncoder center_Encoder, conveyor_Encoder, feed_Encoder;
   private final SparkClosedLoopController center_ClosedLoopController, conveyor_ClosedLoopController, feed_ClosedLoopController;
-  /** Creates a new Shooter Subsytem. */
+  /** Manupulates scoring element: fuel
+   * <p>Methods:<ul>
+   * <li>{@code setShooterSpeed} - Sets the speed for the shooter using PID controller on velocity control type
+   * <li>{@code getShooterVelocity} - Returns the RPM of the shooter wheels
+   * <li>{@code setConveyorSpeed} - Sets the speed for the conveyor using PID controller on velocity
+   * <li>{@code setFeedSpeed} - Sets the speed for the feed using PID controller on velocity
+   * <li>{@code stopShooting} - Stops all of the motors involved with shooting
+   * <li>{@code getShooterRPM} - Computes the desired shooter wheel speed in RPM based on horizontal distance
+   * to the target.
+   * <li>{@code calculateExitVelocity} - Calculates the linear exit velocity required for a fuel to reach
+   * the target from a given horizontal distance.
+   * <li>{@code velocityToRPM} - Converts a linear exit velocity into shooter wheel RPM. Using <pre>
+   * v = ωr
+   * </pre>
+   * </ul>
+   * </p>
+   */
   public Shooter() {
     leftShooter = new SparkMax(CANIDS.leftShooter, MotorType.kBrushless);
     centerShooter = new SparkMax(CANIDS.centerShooter, MotorType.kBrushless);
@@ -82,8 +98,6 @@ public class Shooter extends SubsystemBase {
 
   }
 
-
-  
  @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -97,21 +111,26 @@ public class Shooter extends SubsystemBase {
   public void setShooterSpeed(double Speed){
     center_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
   }
-  /** Returns the Velocity in RPM */
+  
+  /** Returns the RPM of the shooter wheels */
   public double getShooterVelocity(){
     return center_Encoder.getVelocity();
   }
-  /**Sets the speed for the conveyor using PID controller on velocity
+
+  /** Sets the speed for the conveyor using PID controller on velocity
    * @param Speed in RPM
    */
   public void setConveyorSpeed(double Speed){
     conveyor_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
   }
-  /**Sets the speed for the feed using PID controller on velocity
+  
+  /** Sets the speed for the feed using PID controller on velocity
+   * @param Speed in RPM
    */
   public void setFeedSpeed(double Speed){
     feed_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
   }
+  /** Stops all of the motors involved with shooting */
   public void stopShooting(){
     centerShooter.stopMotor();
     feed.stopMotor();
@@ -157,7 +176,7 @@ public class Shooter extends SubsystemBase {
     }
 
     /**
- * Calculates the linear exit velocity required for a projectile to reach
+ * Calculates the linear exit velocity required for a fuel to reach
  * the target from a given horizontal distance.
  *
  * <p>This calculation assumes:

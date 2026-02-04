@@ -33,7 +33,15 @@ public class Intake extends SubsystemBase {
   private final RelativeEncoder rollers_Encoder;
   private final RelativeEncoder joint_Encoder;
   private final SparkClosedLoopController joint_Controller;
-  /** Creates a new Intake. */
+  /** Picks up the scoring element: fuel
+   * <p>Methods: <ul>
+   * <li>{@code rollers} - Sets the rollers to a speed
+   * <li>{@code setJointPosition} - Sets the joint position in degrees
+   * <li>{@code getJointPosition} - Gets the joint position in degrees
+   * <li>{@code runIntake} - Runs the rollers at half speed
+   * <li>{@code runIntake(double speed)} - Runs the rollers at inputed speed
+   * <li>{@code stopIntake} - Stops the rollers 
+   */
   public Intake() {
     rollers = new SparkMax(Constants.CANIDS.roller, MotorType.kBrushless);
     joint = new SparkMax(Constants.CANIDS.joint, MotorType.kBrushless);
@@ -69,29 +77,37 @@ public class Intake extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
+  public void periodic() {}
     // This method will be called once per scheduler run
-  }
-  /**Set the rollers to a speed between -1 and 1 */
+  
+  /** Set the rollers to a speed between -1 and 1 */
   public void rollers(double speed){
     rollers.set(speed);
   }
-  /**Sets the position of the Joint in degrees */
-  public void PositionJoint(double position){
+  /** Sets the position of the Joint in degrees */
+  public void setJointPosition(double position){
     position = Units.degreesToRotations(position);
     joint_Controller.setSetpoint(position, ControlType.kPosition);
   }  
-  /**Returns the joint position in degrees */
+  /** Returns the joint position in degrees */
   public double getJointPosition() {
     return Units.rotationsToDegrees(joint_Encoder.getPosition());
   }
 
+  /** Runs the rollers at {@code .5} speed */
   public Command runIntake(){
     return new InstantCommand(()->rollers(0.5));
   }
+
+  /** Runs the intake wheels at a inputed speed
+   * @param speed to set the rollers between -1 and 1
+   */
    public Command runIntake(double speed){
     return new InstantCommand(()->rollers(speed));
   }
+
+  /** Stops the rollers
+   */
   public Command stopIntake(){
     return new InstantCommand(()->rollers.stopMotor());
   }
