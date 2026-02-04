@@ -219,7 +219,7 @@ public class SwerveModule {
     }
     
     
-    return Rotation2d.fromRotations(absPositonRotations.magnitude());
+    return Rotation2d.fromRotations(-absPositonRotations.magnitude());
   }
 
   /**

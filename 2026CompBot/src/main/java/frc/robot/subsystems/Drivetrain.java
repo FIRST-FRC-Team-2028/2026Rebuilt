@@ -48,7 +48,6 @@ public class Drivetrain extends SubsystemBase {
   static double kMaxSpeed = Constants.DriveConstants.kMaxTranslationalVelocity;
   static double kMaxAngularSpeed = Constants.DriveConstants.kMaxRotationalVelocity;
   private final SwerveDriveKinematics m_kinematics = DriveConstants.kDriveKinematics;
-  private boolean gamemechSwitch;
   private AprilTags aprilSubsystem;
 
   private final SwerveModule m_frontLeft =
@@ -101,7 +100,7 @@ public class Drivetrain extends SubsystemBase {
          },
         new Pose2d(),
         VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-        VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+        VecBuilder.fill(0.2, 0.2, Units.degreesToRadians(20)));
 
   /** Creates a new Drivetrain. */
   public Drivetrain(AprilTags aprilSubsystem) {
@@ -157,13 +156,13 @@ public class Drivetrain extends SubsystemBase {
     //SmartDashboard.putNumber("front Left Velocity", m_frontLeft.getVelocity());
     
     //SmartDashboard.putNumber("front left abs", m_frontLeft.getAbsTurningPosition(0.1).getDegrees());
-    SmartDashboard.putNumber("front left rel", m_frontLeft.getRelativeTurningPosition().getDegrees());
+    //SmartDashboard.putNumber("front left rel", m_frontLeft.getRelativeTurningPosition().getDegrees());
     //SmartDashboard.putNumber("front right abs", m_frontRight.getAbsTurningPosition(0.1).getDegrees());
-    SmartDashboard.putNumber("front right rel", m_frontRight.getRelativeTurningPosition().getDegrees());
+    //SmartDashboard.putNumber("front right rel", m_frontRight.getRelativeTurningPosition().getDegrees());
     //SmartDashboard.putNumber("back left abs", m_backLeft.getAbsTurningPosition(0.1).getDegrees());
-    SmartDashboard.putNumber("back left rel", m_backLeft.getRelativeTurningPosition().getDegrees());
+    //SmartDashboard.putNumber("back left rel", m_backLeft.getRelativeTurningPosition().getDegrees());
     //SmartDashboard.putNumber("back right abs", m_backRight.getAbsTurningPosition(0.1).getDegrees());
-    SmartDashboard.putNumber("back right rel", m_backRight.getRelativeTurningPosition().getDegrees());
+    //SmartDashboard.putNumber("back right rel", m_backRight.getRelativeTurningPosition().getDegrees());
     // This method will be called once per scheduler run
   }
 
@@ -192,13 +191,7 @@ public class Drivetrain extends SubsystemBase {
     return m_gyro.getRotation2d();
   }
 
-  public void gamemechSwitchOff(){
-    gamemechSwitch = false;
-  }
 
-  public void gamemechSwitchOn(){
-    gamemechSwitch = true;
-  }
 
   /** return a Rotation2d representing the heading of the robot
      * described in radians clockwise from forward
@@ -227,9 +220,9 @@ public class Drivetrain extends SubsystemBase {
   }
   
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    /*for (SwerveModuleState state:desiredStates){
-      state.angle= new Rotation2d(state.angle.getRadians()); //The encoder won't let us invert it 
-    }*/
+    for (SwerveModuleState state:desiredStates){
+      state.angle= new Rotation2d(-state.angle.getRadians()); //The encoder won't let us invert it 
+    }
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
@@ -265,15 +258,13 @@ public class Drivetrain extends SubsystemBase {
 
     if(Constants.CAMERA_AVAILABLE){
       if (aprilSubsystem.isPoseEstimated()) {
-
-        //var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
-        //var camPose = aprilTagFieldLayout.getTagPose(4).transformBy(camToTargetTrans.inverse());
         m_poseEstimator.addVisionMeasurement(
                   aprilSubsystem.getEstimatedPose3d().toPose2d(), aprilSubsystem.estimatedPoseTime); 
       }
-      //SmartDashboard.putNumber("Swerve Robot X Pos", m_poseEstimator.getEstimatedPosition().getX());
-      //SmartDashboard.putNumber("Swerve Robot Y Pos", m_poseEstimator.getEstimatedPosition().getY());
-      //SmartDashboard.putNumber("Get Pose to Pose", aprilSubsystem.getPoseToPose(getPoseEstimatorPose(), gamemechSwitch));
+      /*if (aprilSubsystem.isPoseEstimated2()) {
+        m_poseEstimator.addVisionMeasurement(         FOR SECOND CAMERA
+                  aprilSubsystem.getEstimatedPose3d2().toPose2d(), aprilSubsystem.estimatedPoseTime2);
+      }*/
           
     }
     SmartDashboard.putNumber("Robot X Pos", m_poseEstimator.getEstimatedPosition().getX());

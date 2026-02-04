@@ -95,37 +95,8 @@ public class AprilTags extends SubsystemBase {
         estimatedPose3d2 = estimatedPose2.get().estimatedPose;
         isEstimated2=true;
       } else isEstimated2 = false;
-    }*
-    //cameraResult = camera.getLatestResult();
-    
-    //target = cameraResult.getBestTarget();
-
-    /*for (var camResults : camera.getAllUnreadResults()){
-      multiTagResult = camResults.getMultiTagResult();
-        if (multiTagResult.isPresent()){
-          var fieldToCamera = multiTagResult.get().estimatedPose.best;
-          Pose2d fieldToCameraPose2d = new Pose2d(fieldToCamera.getX(), fieldToCamera.getY(), fieldToCamera.getRotation().toRotation2d());
-          
-        }
-    }Theory code to use getMultiTagResults()*/ 
-
-    /*for (var result : camera.getAllUnreadResults()) {
-      if(result.hasTargets()){
-        target = result.getBestTarget();
-        distToTarget = getNorm(target);
-        SmartDashboard.putNumber("Distance To Target", distToTarget);
-        SmartDashboard.putNumber("Distance To Target (X only)", target.getBestCameraToTarget().getX());
-        estimatedPose = poseEstimator.estimateCoprocMultiTagPose(result);
-        if (estimatedPose.isEmpty()){
-          estimatedPose = poseEstimator.estimateLowestAmbiguityPose(result);
-        }
-    }
-      if(estimatedPose.isPresent()){
-      EstimatedRobotPose poseEstimated = estimatedPose.get();
-      estimatedPoseTime = poseEstimated.timestampSeconds;
-      estimatedPose3d = poseEstimated.estimatedPose;
-      }
     }*/
+    
   }
   /** Gets the boolean to determine if a pose is estimated
    * @return If a pose is estimated

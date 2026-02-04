@@ -56,7 +56,7 @@ public class RobotContainer {
     } else climberSubsystem = null;
     if (Constants.DRIVE_AVAILABLE){
       driveSubsystem = new Drivetrain(aprilSubsystem);
-      driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem));
+      driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driverJoytick));
     } else driveSubsystem = null;
 
     configureBindings();
