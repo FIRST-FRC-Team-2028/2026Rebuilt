@@ -78,13 +78,13 @@ public class PoseVec2d
      * @param dotee
      */
     public double dot(PoseVec2d dotee) {
-        return x[0]*dotee.X() + x[0]*dotee.Y();
+        return x[0]*dotee.X() + x[1]*dotee.Y();
     }
 
     /**Compute second norm  */
     public  double norm() {
         //return x[0]*x[0] + x[1]*x[1];
-        return this.dot(this);
+        return  Math.sqrt(this.dot(this)) ;
      }
 
      /**

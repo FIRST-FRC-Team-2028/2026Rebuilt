@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.PoseVec2d;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
@@ -302,40 +303,36 @@ public class Drivetrain extends SubsystemBase {
     m_poseEstimator.resetPosition(getHeading(), getModulePositions(), pose);
   }
 
-  public Transform2d getTransform2dToHub(Optional<Alliance> alliance){
-    Pose3d targetHub = null;
-    Transform2d deltaPose;
-    if(alliance.get() == Alliance.Red) {targetHub = FieldConstants.redHubFieldPose;}
-    if(alliance.get() == Alliance.Blue) {targetHub = FieldConstants.blueHubFieldPose;}
-    deltaPose = targetHub.toPose2d().minus(m_poseEstimator.getEstimatedPosition());
-    
-    SmartDashboard.putNumber("TransformX", deltaPose.getX());
-    SmartDashboard.putNumber("TransformY", deltaPose.getY());
-    SmartDashboard.putNumber("TransformRot", deltaPose.getRotation().getDegrees());
-
-    return targetHub.toPose2d().minus(m_poseEstimator.getEstimatedPosition());
+  public PoseVec2d getVecToHub(Optional<Alliance> alliance){
+    PoseVec2d whereIam = new PoseVec2d(getPoseEstimatorPose());
+    PoseVec2d diff = new PoseVec2d(null);
+    if(alliance.get() == Alliance.Red){diff = FieldConstants.PoseVec2dRedHub.minus(whereIam);}
+    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.PoseVec2dRedHub.minus(whereIam);}
+    return diff;
   }
 
-  public Command getInRange(double range, Optional<Alliance> alliance){
-    double targetX, targetY, targetTheta, distance;
-    distance = Math.sqrt(Math.pow(getTransform2dToHub(alliance).getX(),2)+Math.pow(getTransform2dToHub(alliance).getY(), 2));
-    Transform2d unitVector = new Transform2d(getTransform2dToHub(alliance).getX(), getTransform2dToHub(alliance).getY(), null);
-    Pose2d targetPose = m_poseEstimator.getEstimatedPosition().plus(unitVector.times(distance-range));
-        targetTheta = Math.asin(getTransform2dToHub(alliance).getY()/distance);
+
+  public Command goTorange(Optional<Alliance> alliance, double range){
+    PoseVec2d whereIam = new PoseVec2d(getPoseEstimatorPose());
+    PoseVec2d diff = getVecToHub(alliance);
+    double dist = diff.norm() - range;
+    PoseVec2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
+    double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
+    return pathfindToPose(whereToGo.X(), whereToGo.Y(), theta, 0);
     
-    
-    return pathfindToPose(targetPose.getX(), targetPose.getY(), targetTheta, 0);
   }
-  public void getInRangeVoid(double range, Optional<Alliance> alliance){
-    double targetX, targetY, targetTheta, distance;
-    distance = Math.sqrt(Math.pow(getTransform2dToHub(alliance).getX(),2)+Math.pow(getTransform2dToHub(alliance).getY(), 2));
-    Transform2d unitVector = new Transform2d(getTransform2dToHub(alliance).getX(), getTransform2dToHub(alliance).getY(), null);
-    Pose2d targetPose = m_poseEstimator.getEstimatedPosition().plus(unitVector.times(distance-range));
-        targetTheta = Math.asin(getTransform2dToHub(alliance).getY()/distance);
-    SmartDashboard.putNumber("TargetX", targetPose.getX());
-    SmartDashboard.putNumber("TargetY", targetPose.getY());
-    SmartDashboard.putNumber("Rotation Target", targetTheta);
-    
+    public void goTorangeTEST(Optional<Alliance> alliance, double range){
+    SmartDashboard.putBoolean("RedAlliance", alliance.get()==Alliance.Red);
+    PoseVec2d whereIam = new PoseVec2d(getPoseEstimatorPose());
+    PoseVec2d diff = new PoseVec2d(null);
+    if(alliance.get() == Alliance.Red){diff = FieldConstants.PoseVec2dRedHub.minus(whereIam);}
+    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.PoseVec2dRedHub.minus(whereIam);}
+    double dist = diff.norm() - range;
+    PoseVec2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
+    double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
+    SmartDashboard.putNumber("TargetX", whereToGo.X());
+    SmartDashboard.putNumber("TargetY", whereToGo.Y());
+    SmartDashboard.putNumber("TargetTheta", theta);
   }
 
  /**Contructs and runs a path to the given path name avoiding obsticals outlinned in navgrid.json. Uses the

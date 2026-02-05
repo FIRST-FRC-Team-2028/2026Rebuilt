@@ -71,7 +71,18 @@
     }
   ],
   "constraintZones": [],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.6,
+        "y": 4.02
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 1.6333066453162517,
+      "maxWaypointRelativePos": 3.0,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
@@ -83,7 +94,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -34.0
+    "rotation": -31.970000000000002
   },
   "reversed": false,
   "folder": null,

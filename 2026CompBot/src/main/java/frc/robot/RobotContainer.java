@@ -70,7 +70,7 @@ public class RobotContainer {
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
       new JoystickButton(driverJoytick, 2)
-        .onTrue(new InstantCommand(()->driveSubsystem.getInRange(1, alliance)));
+        .onTrue(new InstantCommand(()->driveSubsystem.goTorangeTEST(alliance, 1)));
     }
 
     if (Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
@@ -78,9 +78,9 @@ public class RobotContainer {
         .whileTrue(new Shoot(shootingSubsystem)
         .alongWith(new AgitateIntake(intakeSubsystem)));
 
-      /*new JoystickButton(mechJoytick1, OIConstants.kAdvancedShoot)
-        .whileTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getDistanceToHub(alliance))
-        .alongWith(new AgitateIntake(intakeSubsystem)));*/
+      new JoystickButton(mechJoytick1, OIConstants.kAdvancedShoot)
+        .whileTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm())
+        .alongWith(new AgitateIntake(intakeSubsystem)));
 
       new JoystickButton(mechJoytick1, OIConstants.kIntake)
         .onTrue(intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed))
@@ -125,6 +125,9 @@ public class RobotContainer {
   }
   public Joystick getMech2Joystick(){
     return mechJoytick2;
+  }
+  public Optional<Alliance> getAlliance(){
+    return alliance;
   }
   
 
