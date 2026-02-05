@@ -78,7 +78,7 @@ public class VPose2d
      * @param dotee
      */
     public double dot(VPose2d dotee) {
-        return x[0]*dotee.X() + x[0]*dotee.Y();
+        return x[0]*dotee.X() + x[1]*dotee.Y();
     }
 
     /**Compute second norm  */
