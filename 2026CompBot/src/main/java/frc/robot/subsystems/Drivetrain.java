@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
+import org.opencv.core.Mat;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 
@@ -25,12 +26,14 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -211,12 +214,6 @@ public class Drivetrain extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
     
     setModuleStates(swerveModuleStates);
-    
-    //SmartDashboard.putNumber("Module Turning Real", m_frontLeft.getRelativeTurningPosition().getRotations());
-    /*m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);*/
   }
   
   public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -305,15 +302,40 @@ public class Drivetrain extends SubsystemBase {
     m_poseEstimator.resetPosition(getHeading(), getModulePositions(), pose);
   }
 
-  public double getDistanceToHub(Optional<Alliance> alliance){
+  public Transform2d getTransform2dToHub(Optional<Alliance> alliance){
     Pose3d targetHub = null;
+    Transform2d deltaPose;
     if(alliance.get() == Alliance.Red) {targetHub = FieldConstants.redHubFieldPose;}
     if(alliance.get() == Alliance.Blue) {targetHub = FieldConstants.blueHubFieldPose;}
+    deltaPose = targetHub.toPose2d().minus(m_poseEstimator.getEstimatedPosition());
     
-    double xdist = targetHub.getX() - m_poseEstimator.getEstimatedPosition().getX();
-    double ydist = targetHub.getY() - m_poseEstimator.getEstimatedPosition().getY();
-    double dist = Math.sqrt((xdist*xdist) + (ydist*ydist));
-    return dist;
+    SmartDashboard.putNumber("TransformX", deltaPose.getX());
+    SmartDashboard.putNumber("TransformY", deltaPose.getY());
+    SmartDashboard.putNumber("TransformRot", deltaPose.getRotation().getDegrees());
+
+    return targetHub.toPose2d().minus(m_poseEstimator.getEstimatedPosition());
+  }
+
+  public Command getInRange(double range, Optional<Alliance> alliance){
+    double targetX, targetY, targetTheta, distance;
+    distance = Math.sqrt(Math.pow(getTransform2dToHub(alliance).getX(),2)+Math.pow(getTransform2dToHub(alliance).getY(), 2));
+    Transform2d unitVector = new Transform2d(getTransform2dToHub(alliance).getX(), getTransform2dToHub(alliance).getY(), null);
+    Pose2d targetPose = m_poseEstimator.getEstimatedPosition().plus(unitVector.times(distance-range));
+        targetTheta = Math.asin(getTransform2dToHub(alliance).getY()/distance);
+    
+    
+    return pathfindToPose(targetPose.getX(), targetPose.getY(), targetTheta, 0);
+  }
+  public void getInRangeVoid(double range, Optional<Alliance> alliance){
+    double targetX, targetY, targetTheta, distance;
+    distance = Math.sqrt(Math.pow(getTransform2dToHub(alliance).getX(),2)+Math.pow(getTransform2dToHub(alliance).getY(), 2));
+    Transform2d unitVector = new Transform2d(getTransform2dToHub(alliance).getX(), getTransform2dToHub(alliance).getY(), null);
+    Pose2d targetPose = m_poseEstimator.getEstimatedPosition().plus(unitVector.times(distance-range));
+        targetTheta = Math.asin(getTransform2dToHub(alliance).getY()/distance);
+    SmartDashboard.putNumber("TargetX", targetPose.getX());
+    SmartDashboard.putNumber("TargetY", targetPose.getY());
+    SmartDashboard.putNumber("Rotation Target", targetTheta);
+    
   }
 
  /**Contructs and runs a path to the given path name avoiding obsticals outlinned in navgrid.json. Uses the
@@ -334,12 +356,12 @@ public class Drivetrain extends SubsystemBase {
   /**Contructs and runs a path to the given pose avoiding obsticals outlinned in navgrid.json
    * @param x The x cordinate of the target position 
    * @param y The y cordinate of the target position
-   * @param rotation the Rotation 2d value of the target position
+   * @param rotation the Rotation 2d value of the target position in degrees
    * @param goalEndVelocity The velocity of the robot at the end of the path. 0 is required to stop at the target pose.
    * A value > 0 may be used to keep the robot up to speed for the driver to take over.
    */
   public Command pathfindToPose(double x, double y, double rotation, double goalEndVelocity) {
-    Rotation2d rotation2d = new Rotation2d(rotation);
+    Rotation2d rotation2d = new Rotation2d(Units.degreesToRadians(rotation));
     Pose2d targetPose = new Pose2d(x, y, rotation2d);
     return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraints, goalEndVelocity);
   }
