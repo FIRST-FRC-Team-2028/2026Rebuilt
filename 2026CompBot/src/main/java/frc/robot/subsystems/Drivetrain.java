@@ -320,7 +320,9 @@ public class Drivetrain extends SubsystemBase {
     double targetX, targetY, targetTheta, distance;
     distance = Math.sqrt(Math.pow(getTransform2dToHub(alliance).getX(),2)+Math.pow(getTransform2dToHub(alliance).getY(), 2));
     Transform2d unitVector = new Transform2d(getTransform2dToHub(alliance).getX(), getTransform2dToHub(alliance).getY(), null);
+    // MrG notes that unitVector is not length=1.; NOT a unit vector
     Pose2d targetPose = m_poseEstimator.getEstimatedPosition().plus(unitVector.times(distance-range));
+    // MrG fix: times(1.-range/distance) TODO
         targetTheta = Math.asin(getTransform2dToHub(alliance).getY()/distance);
     
     
