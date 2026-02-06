@@ -353,8 +353,8 @@ public final class Constants {
       Units.inchesToMeters(158.32), Units.inchesToMeters(72.00), new Rotation3d(new Rotation2d(180))); //The angle the scoring side faces
     public static final Pose3d redHubFieldPose = new Pose3d(Units.inchesToMeters(444.80+23.51), 
       Units.inchesToMeters(158.32), Units.inchesToMeters(72.00), new Rotation3d(new Rotation2d(0)));  //The angle the scoring side faces
-    public static final PoseVec2d PoseVec2dBlueHub = new PoseVec2d(blueHubFieldPose.toPose2d());
-    public static final PoseVec2d PoseVec2dRedHub = new PoseVec2d(redHubFieldPose.toPose2d());
+    public static final VPose2d VPose2dBlueHub = new VPose2d(blueHubFieldPose.toPose2d());
+    public static final VPose2d VPose2dRedHub = new VPose2d(redHubFieldPose.toPose2d());
   }
 
 }

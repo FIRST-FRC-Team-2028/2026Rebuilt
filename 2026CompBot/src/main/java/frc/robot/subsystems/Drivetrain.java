@@ -41,8 +41,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.PoseVec2d;
 import frc.robot.RobotContainer;
+import frc.robot.VPose2d;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PathPlannerConstants;
@@ -303,32 +303,32 @@ public class Drivetrain extends SubsystemBase {
     m_poseEstimator.resetPosition(getHeading(), getModulePositions(), pose);
   }
 
-  public PoseVec2d getVecToHub(Optional<Alliance> alliance){
-    PoseVec2d whereIam = new PoseVec2d(getPoseEstimatorPose());
-    PoseVec2d diff = new PoseVec2d(null);
-    if(alliance.get() == Alliance.Red){diff = FieldConstants.PoseVec2dRedHub.minus(whereIam);}
-    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.PoseVec2dRedHub.minus(whereIam);}
+  public VPose2d getVecToHub(Optional<Alliance> alliance){
+    VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
+    VPose2d diff = new VPose2d(null);
+    if(alliance.get() == Alliance.Red){diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
+    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
     return diff;
   }
 
 
   public Command goTorange(Optional<Alliance> alliance, double range){
-    PoseVec2d whereIam = new PoseVec2d(getPoseEstimatorPose());
-    PoseVec2d diff = getVecToHub(alliance);
+    VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
+    VPose2d diff = getVecToHub(alliance);
     double dist = diff.norm() - range;
-    PoseVec2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
+    VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
     return pathfindToPose(whereToGo.X(), whereToGo.Y(), theta, 0);
     
   }
     public void goTorangeTEST(Optional<Alliance> alliance, double range){
     SmartDashboard.putBoolean("RedAlliance", alliance.get()==Alliance.Red);
-    PoseVec2d whereIam = new PoseVec2d(getPoseEstimatorPose());
-    PoseVec2d diff = new PoseVec2d(null);
-    if(alliance.get() == Alliance.Red){diff = FieldConstants.PoseVec2dRedHub.minus(whereIam);}
-    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.PoseVec2dRedHub.minus(whereIam);}
+    VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
+    VPose2d diff = new VPose2d(null);
+    if(alliance.get() == Alliance.Red){diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
+    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
     double dist = diff.norm() - range;
-    PoseVec2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
+    VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
     SmartDashboard.putNumber("TargetX", whereToGo.X());
     SmartDashboard.putNumber("TargetY", whereToGo.Y());

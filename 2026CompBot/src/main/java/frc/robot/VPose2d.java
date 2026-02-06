@@ -14,7 +14,7 @@ import edu.wpi.first.math.numbers.N3;
      * <p> But scalar multiplication, dot product, cross product,
      * <p> unit vector, norm 
      * <p> do not apply to the angles*/
-public class PoseVec2d 
+public class VPose2d 
     //extends Vector
     {
     double[] x = new double[3];
@@ -24,7 +24,7 @@ public class PoseVec2d
      * <p> scalar multiplication, dot product, cross product,
      * <p> unit vector, norm
     */
-    public PoseVec2d(Pose2d me){
+    public VPose2d(Pose2d me){
         //Matrix mat = new Matrix(<N3>, <N1>);
         //oduble[0]=me.getX();
         //super(mat);
@@ -34,13 +34,13 @@ public class PoseVec2d
         x[2]=me.getRotation().getRadians();
     }
 
-    /** Construct new PoseVec2d from componentscomponents
+    /** Construct new VPose2d from componentscomponents
      * <p> Please provide angle in radians
      * @param x
      * @param y
      * @param t
      */
-    public PoseVec2d(double x, double y, double t){
+    public VPose2d(double x, double y, double t){
         this.x[0]=x;
         this.x[1]=y;
         this.x[2]=t;
@@ -59,16 +59,16 @@ public class PoseVec2d
     public double T(){return x[2];}
 
     /**Add components of addend to this vector and return the resulting new vector */
-    public PoseVec2d plus(PoseVec2d addend) {
-        return new PoseVec2d(x[0]+addend.X(),
+    public VPose2d plus(VPose2d addend) {
+        return new VPose2d(x[0]+addend.X(),
                              x[1]+addend.Y(),
                              x[2]+addend.T()
                             );
     }
 
     /**subtract components of addend from this vector and return the resulting new vector */
-    public PoseVec2d minus(PoseVec2d addend) {
-        return new PoseVec2d(x[0]-addend.X(),
+    public VPose2d minus(VPose2d addend) {
+        return new VPose2d(x[0]-addend.X(),
                              x[1]-addend.Y(),
                              x[2]-addend.T()
                             );
@@ -77,7 +77,7 @@ public class PoseVec2d
     /**Compute dot product with
      * @param dotee
      */
-    public double dot(PoseVec2d dotee) {
+    public double dot(VPose2d dotee) {
         return x[0]*dotee.X() + x[1]*dotee.Y();
     }
 
@@ -90,28 +90,28 @@ public class PoseVec2d
      /**
       * Apply multiplier only to X and Y components, not angle T: use original
      * @param mult
-     * @return a new PoseVec2d
+     * @return a new VPose2d
      */
-    public PoseVec2d scalarProd(double mult) {
-        return new PoseVec2d(x[0]*mult,
+    public VPose2d scalarProd(double mult) {
+        return new VPose2d(x[0]*mult,
                              x[1]*mult,
                              x[2]
                             );
     }
 
     /**Generate vector of length 1 in the same direction*/
-    public PoseVec2d unit() {
+    public VPose2d unit() {
         return scalarProd(1./norm());
     }
 
     /** Compute inner product */
-    public double cross(PoseVec2d posee) {
+    public double cross(VPose2d posee) {
         return x[0]*posee.Y() - x[1]*posee.X();
     }
 
     /** transform (not done yet)
-    public PoseVec2d transform(Matrix<N3,N3> trans){
-        PoseVec2d res = new PoseVec2d(this.dot(trans.extractColumnVector(0)),
+    public VPose2d transform(Matrix<N3,N3> trans){
+        VPose2d res = new VPose2d(this.dot(trans.extractColumnVector(0)),
                                       this.dot(trans.extractColumnVector(1)),
                                       this.dot(trans.extractColumnVector(2)));
     } */
@@ -120,9 +120,9 @@ public class PoseVec2d
      *  dest = start + (total dist - range) * ||(hub - whereIam)||
      * 
     void goTorange() {
-        PoseVec2d diff = new PoseVec2d(AprilTag.getPose2d()).minus(whereIam);
+        VPose2d diff = new VPose2d(AprilTag.getPose2d()).minus(whereIam);
         double dist = diff.norm() - desiredRange;
-        PoseVec2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));  // this doesn't change the heading
+        VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));  // this doesn't change the heading
     }
     */
 }
