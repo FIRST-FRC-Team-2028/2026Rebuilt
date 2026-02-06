@@ -9,6 +9,7 @@ import java.util.Optional;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -70,7 +71,9 @@ public class RobotContainer {
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
       new JoystickButton(driverJoytick, 2)
-        .onTrue(new InstantCommand(()->driveSubsystem.goTorangeTEST(alliance, 1)));
+        .onTrue(new InstantCommand(()->driveSubsystem.goTorangeTEST(alliance, 5)));
+      new JoystickButton(driverJoytick, 3)
+        .onTrue(new InstantCommand(()-> driveSubsystem.goTorangeTEST(alliance, 2)));
     }
 
     if (Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){

@@ -324,12 +324,15 @@ public class Drivetrain extends SubsystemBase {
     public void goTorangeTEST(Optional<Alliance> alliance, double range){
     SmartDashboard.putBoolean("RedAlliance", alliance.get()==Alliance.Red);
     VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
-    VPose2d diff = new VPose2d(null);
+    VPose2d diff = new VPose2d(getPoseEstimatorPose()); //Can't be null
     if(alliance.get() == Alliance.Red){diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
-    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
+    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dBlueHub.minus(whereIam);}
     double dist = diff.norm() - range;
+   
     VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
+    if(dist<=0){ whereToGo = whereIam;}
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
+    SmartDashboard.putNumber("dist", dist);
     SmartDashboard.putNumber("TargetX", whereToGo.X());
     SmartDashboard.putNumber("TargetY", whereToGo.Y());
     SmartDashboard.putNumber("TargetTheta", theta);
