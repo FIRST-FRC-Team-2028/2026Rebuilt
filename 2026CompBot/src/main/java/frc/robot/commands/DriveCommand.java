@@ -17,11 +17,12 @@ import frc.robot.subsystems.Drivetrain;
 public class DriveCommand extends Command {
   private SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   double smoothedXSpeed, smoothedYSpeed, smoothedTurningSpeed;
-  private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
+  private final Joystick driverJoytick;
   Drivetrain drivetrain;
   /** Creates a new DriveCommand. */
-  public DriveCommand(Drivetrain subsystem) {
+  public DriveCommand(Drivetrain subsystem, Joystick driverJoytick) {
     drivetrain = subsystem;
+    this.driverJoytick = driverJoytick;
     this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
@@ -45,9 +46,9 @@ public class DriveCommand extends Command {
     turningSpeed *= 1.
                     - (DriveConstants.kFineControlSpeed * driverJoytick.getRawAxis(OIConstants.kFineControlAxis))
                     + (DriveConstants.kFasterSpeed * driverJoytick.getRawAxis(OIConstants.kFastControlAxis));
-    smoothedXSpeed = smoothedXSpeed + (xSpeed - smoothedXSpeed) * .08;
-    smoothedYSpeed = smoothedYSpeed + (ySpeed - smoothedYSpeed) * .08;
-    smoothedTurningSpeed = smoothedTurningSpeed + (turningSpeed - smoothedTurningSpeed) * .08;
+    smoothedXSpeed = smoothedXSpeed + (xSpeed - smoothedXSpeed) * .18;
+    smoothedYSpeed = smoothedYSpeed + (ySpeed - smoothedYSpeed) * .18;
+    smoothedTurningSpeed = smoothedTurningSpeed + (turningSpeed - smoothedTurningSpeed) * .35;
 
     xSpeed = smoothedXSpeed;
     ySpeed = smoothedYSpeed;

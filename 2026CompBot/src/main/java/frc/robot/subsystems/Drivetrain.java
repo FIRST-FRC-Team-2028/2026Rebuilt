@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
+import org.opencv.core.Mat;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 
@@ -25,12 +26,14 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,6 +42,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.VPose2d;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PathPlannerConstants;
@@ -48,7 +52,6 @@ public class Drivetrain extends SubsystemBase {
   static double kMaxSpeed = Constants.DriveConstants.kMaxTranslationalVelocity;
   static double kMaxAngularSpeed = Constants.DriveConstants.kMaxRotationalVelocity;
   private final SwerveDriveKinematics m_kinematics = DriveConstants.kDriveKinematics;
-  private boolean gamemechSwitch;
   private AprilTags aprilSubsystem;
 
   private final SwerveModule m_frontLeft =
@@ -101,7 +104,7 @@ public class Drivetrain extends SubsystemBase {
          },
         new Pose2d(),
         VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-        VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+        VecBuilder.fill(0.2, 0.2, Units.degreesToRadians(20)));
 
   /** Creates a new Drivetrain. */
   public Drivetrain(AprilTags aprilSubsystem) {
@@ -111,7 +114,6 @@ public class Drivetrain extends SubsystemBase {
     resetGyro();
     for (SwerveModule module : modules) {
       module.resetDriveEncoder();
-      module.initializeAbsoluteTurningEncoder();
       module.initializeRelativeTurningEncoder();
 
     }
@@ -193,13 +195,7 @@ public class Drivetrain extends SubsystemBase {
     return m_gyro.getRotation2d();
   }
 
-  public void gamemechSwitchOff(){
-    gamemechSwitch = false;
-  }
 
-  public void gamemechSwitchOn(){
-    gamemechSwitch = true;
-  }
 
   /** return a Rotation2d representing the heading of the robot
      * described in radians clockwise from forward
@@ -219,18 +215,12 @@ public class Drivetrain extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
     
     setModuleStates(swerveModuleStates);
-    
-    //SmartDashboard.putNumber("Module Turning Real", m_frontLeft.getRelativeTurningPosition().getRotations());
-    /*m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);*/
   }
   
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    /*for (SwerveModuleState state:desiredStates){
-      state.angle= new Rotation2d(state.angle.getRadians()); //The encoder won't let us invert it 
-    }*/
+    for (SwerveModuleState state:desiredStates){
+      state.angle= new Rotation2d(-state.angle.getRadians()); //The encoder won't let us invert it 
+    }
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
@@ -265,16 +255,14 @@ public class Drivetrain extends SubsystemBase {
     });
 
     if(Constants.CAMERA_AVAILABLE){
-      //if (aprilSubsystem.isPoseEstimated()) {
-
-        //var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
-        //var camPose = aprilTagFieldLayout.getTagPose(4).transformBy(camToTargetTrans.inverse());
+      if (aprilSubsystem.isPoseEstimated()) {
         m_poseEstimator.addVisionMeasurement(
-                  aprilSubsystem.getPose3d().toPose2d(), aprilSubsystem.estimatedPoseTime); 
-      //}
-      //SmartDashboard.putNumber("Swerve Robot X Pos", m_poseEstimator.getEstimatedPosition().getX());
-      //SmartDashboard.putNumber("Swerve Robot Y Pos", m_poseEstimator.getEstimatedPosition().getY());
-      //SmartDashboard.putNumber("Get Pose to Pose", aprilSubsystem.getPoseToPose(getPoseEstimatorPose(), gamemechSwitch));
+                  aprilSubsystem.getEstimatedPose3d().toPose2d(), aprilSubsystem.estimatedPoseTime); 
+      }
+      /*if (aprilSubsystem.isPoseEstimated2()) {
+        m_poseEstimator.addVisionMeasurement(         FOR SECOND CAMERA
+                  aprilSubsystem.getEstimatedPose3d2().toPose2d(), aprilSubsystem.estimatedPoseTime2);
+      }*/
           
     }
     SmartDashboard.putNumber("Robot X Pos", m_poseEstimator.getEstimatedPosition().getX());
@@ -315,15 +303,39 @@ public class Drivetrain extends SubsystemBase {
     m_poseEstimator.resetPosition(getHeading(), getModulePositions(), pose);
   }
 
-  public double getDistanceToHub(Optional<Alliance> alliance){
-    Pose3d targetHub = null;
-    if(alliance.get() == Alliance.Red) {targetHub = FieldConstants.redHubFieldPose;}
-    if(alliance.get() == Alliance.Blue) {targetHub = FieldConstants.blueHubFieldPose;}
+  public VPose2d getVecToHub(Optional<Alliance> alliance){
+    VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
+    VPose2d diff = new VPose2d(null);
+    if(alliance.get() == Alliance.Red){diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
+    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
+    return diff;
+  }
+
+
+  public Command goTorange(Optional<Alliance> alliance, double range){
+    VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
+    VPose2d diff = getVecToHub(alliance);
+    double dist = diff.norm() - range;
+    VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
+    double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
+    return pathfindToPose(whereToGo.X(), whereToGo.Y(), theta, 0);
     
-    double xdist = targetHub.getX() - m_poseEstimator.getEstimatedPosition().getX();
-    double ydist = targetHub.getY() - m_poseEstimator.getEstimatedPosition().getY();
-    double dist = Math.sqrt((xdist*xdist) + (ydist*ydist));
-    return dist;
+  }
+    public void goTorangeTEST(Optional<Alliance> alliance, double range){
+    SmartDashboard.putBoolean("RedAlliance", alliance.get()==Alliance.Red);
+    VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
+    VPose2d diff = new VPose2d(getPoseEstimatorPose()); //Can't be null
+    if(alliance.get() == Alliance.Red){diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
+    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dBlueHub.minus(whereIam);}
+    double dist = diff.norm() - range;
+   
+    VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
+    if(dist<=0){ whereToGo = whereIam;}
+    double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
+    SmartDashboard.putNumber("dist", dist);
+    SmartDashboard.putNumber("TargetX", whereToGo.X());
+    SmartDashboard.putNumber("TargetY", whereToGo.Y());
+    SmartDashboard.putNumber("TargetTheta", theta);
   }
 
  /**Contructs and runs a path to the given path name avoiding obsticals outlinned in navgrid.json. Uses the
@@ -344,12 +356,12 @@ public class Drivetrain extends SubsystemBase {
   /**Contructs and runs a path to the given pose avoiding obsticals outlinned in navgrid.json
    * @param x The x cordinate of the target position 
    * @param y The y cordinate of the target position
-   * @param rotation the Rotation 2d value of the target position
+   * @param rotation the Rotation 2d value of the target position in degrees
    * @param goalEndVelocity The velocity of the robot at the end of the path. 0 is required to stop at the target pose.
    * A value > 0 may be used to keep the robot up to speed for the driver to take over.
    */
   public Command pathfindToPose(double x, double y, double rotation, double goalEndVelocity) {
-    Rotation2d rotation2d = new Rotation2d(rotation);
+    Rotation2d rotation2d = new Rotation2d(Units.degreesToRadians(rotation));
     Pose2d targetPose = new Pose2d(x, y, rotation2d);
     return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraints, goalEndVelocity);
   }

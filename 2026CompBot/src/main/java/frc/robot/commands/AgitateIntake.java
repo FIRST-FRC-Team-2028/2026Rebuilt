@@ -28,7 +28,7 @@ public class AgitateIntake extends Command {
   @Override
   public void initialize() {
     
-    intake.PositionJoint(setPoint);
+    intake.setJointPosition(setPoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,14 +43,14 @@ public class AgitateIntake extends Command {
       } else {
         setPoint = IntakeConstants.JointPickupPosition;
       }
-      intake.PositionJoint(setPoint);
+      intake.setJointPosition(setPoint);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.PositionJoint(IntakeConstants.JointPickupPosition);
+    intake.setJointPosition(IntakeConstants.JointPickupPosition);
   }
 
   // Returns true when the command should end.

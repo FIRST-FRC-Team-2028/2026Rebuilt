@@ -89,8 +89,8 @@ public class SwerveModule {
     
     m_turningConfig
         .idleMode(IdleMode.kBrake)
-        .closedLoopRampRate(ModuleConstants.kRampRateT)
-        .openLoopRampRate(ModuleConstants.kRampRateT)
+        //.closedLoopRampRate(ModuleConstants.kRampRateT)
+        //.openLoopRampRate(ModuleConstants.kRampRateT)
         .voltageCompensation(RobotConstants.kNominalVoltage)
         .smartCurrentLimit(ModuleConstants.kDriveMotorCurrentLimit)
         .inverted(false);
@@ -219,7 +219,7 @@ public class SwerveModule {
     }
     
     
-    return Rotation2d.fromRotations(absPositonRotations.magnitude());
+    return Rotation2d.fromRotations(-absPositonRotations.magnitude());
   }
 
   /**
