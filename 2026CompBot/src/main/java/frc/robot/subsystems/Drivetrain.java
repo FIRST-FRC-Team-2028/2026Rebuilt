@@ -312,31 +312,16 @@ public class Drivetrain extends SubsystemBase {
   }
 
 
-  public Command goTorange(Optional<Alliance> alliance, double range){
+  public Pose2d goTorange(Optional<Alliance> alliance, double range){
     VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
     VPose2d diff = getVecToHub(alliance);
     double dist = diff.norm() - range;
     VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
-    return pathfindToPose(whereToGo.X(), whereToGo.Y(), theta, 0);
+    return new Pose2d(whereIam.X(), whereIam.Y(), new Rotation2d(Units.degreesToRadians(theta)));
     
   }
-    public void goTorangeTEST(Optional<Alliance> alliance, double range){
-    SmartDashboard.putBoolean("RedAlliance", alliance.get()==Alliance.Red);
-    VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
-    VPose2d diff = new VPose2d(getPoseEstimatorPose()); //Can't be null
-    if(alliance.get() == Alliance.Red){diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
-    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dBlueHub.minus(whereIam);}
-    double dist = diff.norm() - range;
-   
-    VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
-    if(dist<=0){ whereToGo = whereIam;}
-    double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
-    SmartDashboard.putNumber("dist", dist);
-    SmartDashboard.putNumber("TargetX", whereToGo.X());
-    SmartDashboard.putNumber("TargetY", whereToGo.Y());
-    SmartDashboard.putNumber("TargetTheta", theta);
-  }
+
 
  /**Contructs and runs a path to the given path name avoiding obsticals outlinned in navgrid.json. Uses the
    * normal constraints of the robot as path constraints.
@@ -363,6 +348,10 @@ public class Drivetrain extends SubsystemBase {
   public Command pathfindToPose(double x, double y, double rotation, double goalEndVelocity) {
     Rotation2d rotation2d = new Rotation2d(Units.degreesToRadians(rotation));
     Pose2d targetPose = new Pose2d(x, y, rotation2d);
+    return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraints, goalEndVelocity);
+  }
+
+    public Command pathfindToPose(Pose2d targetPose, double goalEndVelocity) {
     return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraints, goalEndVelocity);
   }
 

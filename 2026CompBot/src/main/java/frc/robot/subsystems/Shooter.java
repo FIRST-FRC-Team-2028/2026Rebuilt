@@ -22,8 +22,8 @@ import frc.robot.Constants.CANIDS;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
-  private final SparkMax leftShooter, centerShooter, rightShooter, conveyor, feed;
-  private final SparkMaxConfig left_Config, center_Config, right_Config, feed_Config, conveyor_Config;
+  private final SparkMax centerShooter, leftShooter, rightShooter, conveyor, feed;
+  private final SparkMaxConfig  center_Config, left_Config, right_Config, feed_Config, conveyor_Config;
   private final RelativeEncoder center_Encoder, conveyor_Encoder, feed_Encoder;
   private final SparkClosedLoopController center_ClosedLoopController, conveyor_ClosedLoopController, feed_ClosedLoopController;
   /** Manupulates scoring element: fuel
