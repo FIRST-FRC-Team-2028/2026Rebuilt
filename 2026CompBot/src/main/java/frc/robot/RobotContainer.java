@@ -70,10 +70,7 @@ public class RobotContainer {
     if (Constants.DRIVE_AVAILABLE){
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
-      new JoystickButton(driverJoytick, 2)
-        .onTrue(new InstantCommand(()->driveSubsystem.goTorangeTEST(alliance, 5)));
-      new JoystickButton(driverJoytick, 3)
-        .onTrue(new InstantCommand(()-> driveSubsystem.goTorangeTEST(alliance, 2)));
+
     }
 
     if (Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
