@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.util.Optional;
+import java.util.Set;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -76,11 +77,12 @@ public class RobotContainer {
     if (Constants.DRIVE_AVAILABLE){
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
-      /*new JoystickButton(driverJoytick, 2)
-        .whileTrue(new InstantCommand(()->driveSubsystem.goTorange(alliance, 2))
-        .andThen(driveSubsystem.pathfindToPose(0, alliance, 2)));*/
       new JoystickButton(driverJoytick, 2)
-        .whileTrue(AutoBuilder.followPath(driveSubsystem.goInRangePath(alliance, 2, 0)));
+        .whileTrue(
+          Commands.defer(()->driveSubsystem.pathfindToPose(driveSubsystem.getTorange(alliance, 2), 0), Set.of(driveSubsystem))
+        );
+      /* JoystickButton(driverJoytick, 2)
+        .whileTrue(AutoBuilder.followPath(driveSubsystem.goInRangePath(alliance, 2, 0)));*/
       new JoystickButton(driverJoytick, 3)
         .whileTrue(new GetInRange(driveSubsystem, alliance, 2, 0));
 

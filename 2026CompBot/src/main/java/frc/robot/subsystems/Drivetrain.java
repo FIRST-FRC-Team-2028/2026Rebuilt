@@ -381,7 +381,6 @@ public class Drivetrain extends SubsystemBase {
   public PathPlannerPath goInRangePath(Optional<Alliance> alliance, double range, double goalEndVelocity){
     Pose2d endPose = getTorange(alliance, range);
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        getPoseEstimatorPose(),
         endPose);
     // Create the path using the waypoints created above
       PathPlannerPath path = new PathPlannerPath(
