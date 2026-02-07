@@ -1,13 +1,13 @@
 package frc.robot;
 
-import edu.wpi.first.apriltag.AprilTag;
-import edu.wpi.first.math.Matrix;
+//import edu.wpi.first.apriltag.AprilTag;
+//import edu.wpi.first.math.Matrix;
 //import edu.wpi.first.math.Matrix;
 //import edu.wpi.first.math.Nat;
 //import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.numbers.N3;
+//import edu.wpi.first.math.numbers.N3;
 
 /**Provide 2D vector arithmetic methods to treat Pose2D objects like vectors 
      * <p> ie, addition and subtraction are component operations - yes all three, including the angles
@@ -19,16 +19,12 @@ public class VPose2d
     {
     double[] x = new double[3];
     //Vector vMe;
-    /** Construct an entity that acts like a vector from a Pose2d 
-     * <p> ie, addition and subtraction are component operations
+    /**  From a Pose2d, construct an entity that acts like a vector
+     * <p> ie, addition and subtraction are component operations.
      * <p> scalar multiplication, dot product, cross product,
-     * <p> unit vector, norm
+     * <p> unit vector, norm apply to the location parts
     */
     public VPose2d(Pose2d me){
-        //Matrix mat = new Matrix(<N3>, <N1>);
-        //oduble[0]=me.getX();
-        //super(mat);
-        //super(<N1><Double> 3);
         x[0]=me.getX();
         x[1]=me.getY();
         x[2]=me.getRotation().getRadians();
@@ -36,9 +32,9 @@ public class VPose2d
 
     /** Construct new VPose2d from componentscomponents
      * <p> Please provide angle in radians
-     * @param x
-     * @param y
-     * @param t
+     * @param x  location, meters to be consistent with WPI
+     * @param y  location, ditto
+     * @param t  heading angle, radians - ditto
      */
     public VPose2d(double x, double y, double t){
         this.x[0]=x;
@@ -49,6 +45,12 @@ public class VPose2d
     /**Construct Pose2d from this "vector" */
     public Pose2d toPose2d() {
         return new Pose2d(x[0],x[1],new Rotation2d(x[2]));
+    }
+    /**Construct Pose2d from this "vector" 
+     @param rot  rotation to overwrite, radians
+    */
+    public Pose2d toPose2d(double rot) {
+        return new Pose2d(x[0],x[1],new Rotation2d(rot));
     }
 
     /** return X component of this "vector" */
@@ -87,15 +89,17 @@ public class VPose2d
         return  Math.sqrt(this.dot(this)) ;
      }
 
-     /**
-      * Apply multiplier only to X and Y components, not angle T: use original
-     * @param mult
+     /** Apply multiplier only to X and Y components, not angle T: use original
+     * @param mult applied to x and y; rot
      * @return a new VPose2d
      */
     public VPose2d scalarProd(double mult) {
+        return scalarProd(mult, 1.);
+    }
+    public VPose2d scalarProd(double mult, double multr) {
         return new VPose2d(x[0]*mult,
                              x[1]*mult,
-                             x[2]
+                             x[2] *multr  // just in case you might want
                             );
     }
 
