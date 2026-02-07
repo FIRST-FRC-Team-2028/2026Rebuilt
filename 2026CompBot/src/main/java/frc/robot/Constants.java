@@ -8,6 +8,7 @@ import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -55,7 +56,7 @@ public final class Constants {
     public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 42;
     public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 42;
     public static final double kPTurning_Comp = 0.5;
-    public static final double kDriveP = 0.22; // 2025 Competition Robot
+    public static final double kDriveP = 0.26; //.22 2025 Competition Robot
     public static final double kDriveI = 0.0; // 2025 Competition Robot
     public static final double kDriveD = 0.0; // 2025 Competition Robot
     public static final double kDriveFF = 0.255; // 2025 Competition Robot
@@ -190,9 +191,9 @@ public final class Constants {
   public static final double kMaxRotationalVelocity = 5.0; // 2023 Competion Robot // max 5.0
   public static final double kRotateToZero = -2;
   public static final PIDConstants translationConstants = 
-    new PIDConstants(1.0, 0,0);     //d:.475
+    new PIDConstants(3.5, .2,0);     //d:.475
   public static final PIDConstants rotationConstants = 
-    new PIDConstants(1,0.,0.);       
+    new PIDConstants(3,0.,0.);       
 
   }
 
@@ -341,10 +342,10 @@ public final class Constants {
                           DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond,
                           DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond,
                           DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
-    public static final PathConstraints pathConstraintsTest = new PathConstraints(.5,
-                          0.25,
-                          Math.PI/4,
-                          Math.PI/4);
+    public static final PathConstraints pathConstraintsTest = new PathConstraints(2,
+                          2.5,
+                          Math.PI/2,
+                          Math.PI/2);
   }
 
   public static class FieldConstants{
@@ -355,6 +356,15 @@ public final class Constants {
       Units.inchesToMeters(158.32), Units.inchesToMeters(72.00), new Rotation3d(new Rotation2d(0)));  //The angle the scoring side faces
     public static final VPose2d VPose2dBlueHub = new VPose2d(blueHubFieldPose.toPose2d());
     public static final VPose2d VPose2dRedHub = new VPose2d(redHubFieldPose.toPose2d());
+
+    public static final Pose2d blueTowerLClimb = new Pose2d(Units.inchesToMeters(60.55),    
+      Units.inchesToMeters(129.86), new Rotation2d(Units.degreesToRadians(0)));
+    public static final Pose2d blueTowerRClimb = new Pose2d(Units.inchesToMeters(60.55),
+      Units.inchesToMeters(163.86), new Rotation2d(Units.degreesToRadians(0)));
+    public static final Pose2d redTowerLClimb = new Pose2d(Units.inchesToMeters(589.57),
+      Units.inchesToMeters(118.78), new Rotation2d(Units.degreesToRadians(180)));
+    public static final Pose2d redTowerRClimb = new Pose2d(Units.inchesToMeters(589.57),
+      Units.inchesToMeters(152.78), new Rotation2d(Units.degreesToRadians(180)));
   }
 
 }
