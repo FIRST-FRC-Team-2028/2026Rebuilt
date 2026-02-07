@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.opencv.core.Mat;
@@ -14,8 +15,10 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -303,40 +306,39 @@ public class Drivetrain extends SubsystemBase {
     m_poseEstimator.resetPosition(getHeading(), getModulePositions(), pose);
   }
 
+
   public VPose2d getVecToHub(Optional<Alliance> alliance){
     VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
-    VPose2d diff = new VPose2d(null);
+    VPose2d diff = new VPose2d(getPoseEstimatorPose()); //Can't be null
     if(alliance.get() == Alliance.Red){diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
-    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
+    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dBlueHub.minus(whereIam);}
+    
     return diff;
   }
 
-
-  public Command goTorange(Optional<Alliance> alliance, double range){
+  Pose2d wheretoDrive = new Pose2d();
+  public Pose2d getTorange(Optional<Alliance> alliance, double range){
     VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
     VPose2d diff = getVecToHub(alliance);
     double dist = diff.norm() - range;
     VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
-    return pathfindToPose(whereToGo.X(), whereToGo.Y(), theta, 0);
-    
-  }
-    public void goTorangeTEST(Optional<Alliance> alliance, double range){
-    SmartDashboard.putBoolean("RedAlliance", alliance.get()==Alliance.Red);
-    VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
-    VPose2d diff = new VPose2d(getPoseEstimatorPose()); //Can't be null
-    if(alliance.get() == Alliance.Red){diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
-    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dBlueHub.minus(whereIam);}
-    double dist = diff.norm() - range;
-   
-    VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
+    if (alliance.get()==Alliance.Red)theta += 180;
     if(dist<=0){ whereToGo = whereIam;}
-    double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
+    System.out.println("Running");
     SmartDashboard.putNumber("dist", dist);
     SmartDashboard.putNumber("TargetX", whereToGo.X());
     SmartDashboard.putNumber("TargetY", whereToGo.Y());
     SmartDashboard.putNumber("TargetTheta", theta);
+    wheretoDrive = new Pose2d(whereToGo.X(), whereToGo.Y(), new Rotation2d(Units.degreesToRadians(theta)));
+    return wheretoDrive;
+    
   }
+  public Pose2d getWhereToDrive(){
+    return wheretoDrive;
+  }
+
+
 
  /**Contructs and runs a path to the given path name avoiding obsticals outlinned in navgrid.json. Uses the
    * normal constraints of the robot as path constraints.
@@ -363,7 +365,32 @@ public class Drivetrain extends SubsystemBase {
   public Command pathfindToPose(double x, double y, double rotation, double goalEndVelocity) {
     Rotation2d rotation2d = new Rotation2d(Units.degreesToRadians(rotation));
     Pose2d targetPose = new Pose2d(x, y, rotation2d);
-    return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraints, goalEndVelocity);
+    SmartDashboard.putString("Target Pose", targetPose.toString());
+    return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraintsTest, goalEndVelocity);
+  }
+  /** Contructs and runs a path to the given pose avoiding obsticals outlinned in navgrid.json
+   * @param goalEndVelocity The velocity of the robot at the end of the path. 0 is required to stop at the target pose.
+   * @param alliance The alliance from the driver station 
+   * @param range the range from the hub to drive to
+   * */
+  public Command pathfindToPose(Pose2d targetPose, double goalEndVelocity) {
+    SmartDashboard.putString("Target Pose", wheretoDrive.toString());
+    return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraintsTest, goalEndVelocity);
+  }
+
+  public PathPlannerPath goInRangePath(Optional<Alliance> alliance, double range, double goalEndVelocity){
+    Pose2d endPose = getTorange(alliance, range);
+    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+        getPoseEstimatorPose(),
+        endPose);
+    // Create the path using the waypoints created above
+      PathPlannerPath path = new PathPlannerPath(
+        waypoints,
+        PathPlannerConstants.pathConstraintsTest,
+        null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
+        new GoalEndState(0.0, Rotation2d.fromDegrees(endPose.getRotation().getDegrees())) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+      );
+      return path;
   }
 
 }

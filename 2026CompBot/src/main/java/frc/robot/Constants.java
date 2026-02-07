@@ -190,9 +190,9 @@ public final class Constants {
   public static final double kMaxRotationalVelocity = 5.0; // 2023 Competion Robot // max 5.0
   public static final double kRotateToZero = -2;
   public static final PIDConstants translationConstants = 
-    new PIDConstants(6.0, 1.6, 1);     //d:.475
+    new PIDConstants(1.0, 0,0);     //d:.475
   public static final PIDConstants rotationConstants = 
-    new PIDConstants(2.9,0.,0.);       
+    new PIDConstants(1,0.,0.);       
 
   }
 
@@ -313,14 +313,14 @@ public final class Constants {
       public static final double drive_Range_Meters = 1;
 
       public static final Transform3d robot_to_camera = new Transform3d(
-                                                        0,
-                                                        0,
-                                                        0,
-                                                        new Rotation3d(0.0,0.0,0.0));
+                                                        Units.inchesToMeters(5),
+                                                        Units.inchesToMeters(1),
+                                                        Units.inchesToMeters(26),
+                                                        new Rotation3d(Units.degreesToRadians(20),0.0,0.0));
       public static final Transform3d robot_to_camera2 = new Transform3d(
-                                                        0,
-                                                        0,
-                                                        0,
+                                                        Units.inchesToMeters(0),
+                                                        Units.inchesToMeters(0),
+                                                        Units.inchesToMeters(0),
                                                         new Rotation3d(0.0,0.0,0.0));
 
       public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
@@ -341,10 +341,10 @@ public final class Constants {
                           DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond,
                           DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond,
                           DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
-    /*public static final PathConstraints pathConstraints = new PathConstraints(2,
-                          4,
-                          3,
-                          1);*/
+    public static final PathConstraints pathConstraintsTest = new PathConstraints(.5,
+                          0.25,
+                          Math.PI/4,
+                          Math.PI/4);
   }
 
   public static class FieldConstants{

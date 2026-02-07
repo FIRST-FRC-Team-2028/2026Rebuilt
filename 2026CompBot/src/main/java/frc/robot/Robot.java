@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Climber;
@@ -25,6 +28,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
   }
 
   @Override
@@ -35,6 +39,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledExit() {}
+
+  public void robotInit(){
+    FollowPathCommand.warmupCommand().schedule();
+  }
 
   @Override
   public void autonomousInit() {

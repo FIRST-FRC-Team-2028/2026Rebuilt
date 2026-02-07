@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.85725,
-  "robotLength": 0.85725,
+  "robotWidth": 0.6858,
+  "robotLength": 0.6858,
   "holonomicMode": true,
   "pathFolders": [
     "Pathfind To Paths"
@@ -11,14 +11,14 @@
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
-  "robotMass": 1.0,
-  "robotMOI": 1.0,
+  "robotMass": 30.0,
+  "robotMOI": 2.35,
   "robotTrackwidth": 0.546,
   "driveWheelRadius": 0.051,
   "driveGearing": 5.36,
   "maxDriveSpeed": 4.923,
   "driveMotorType": "NEO",
-  "driveCurrentLimit": 80.0,
+  "driveCurrentLimit": 40.0,
   "wheelCOF": 1.534,
   "flModuleX": 0.273,
   "flModuleY": 0.273,
