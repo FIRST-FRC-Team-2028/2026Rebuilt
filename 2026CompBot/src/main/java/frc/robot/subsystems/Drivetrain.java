@@ -312,7 +312,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
 
-  public Pose2d goTorange(Optional<Alliance> alliance, double MaxRange, double MinRange){
+  public Pose2d getTorange(Optional<Alliance> alliance, double MaxRange, double MinRange){
     VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
     VPose2d diff = getVecToHub(alliance);
     double dist = diff.norm() - MaxRange;
