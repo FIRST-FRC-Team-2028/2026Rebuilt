@@ -312,10 +312,14 @@ public class Drivetrain extends SubsystemBase {
   }
 
 
-  public Pose2d goTorange(Optional<Alliance> alliance, double range){
+  public Pose2d goTorange(Optional<Alliance> alliance, double MaxRange, double MinRange){
     VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
     VPose2d diff = getVecToHub(alliance);
-    double dist = diff.norm() - range;
+    double dist = diff.norm() - MaxRange;
+    if (dist<0){      //Allows robot to travel backwards if too close
+      diff = getVecToHub(alliance).scalarProd(-1);
+      dist = diff.norm() - MinRange;
+    }
     VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
     return new Pose2d(whereIam.X(), whereIam.Y(), new Rotation2d(Units.degreesToRadians(theta)));

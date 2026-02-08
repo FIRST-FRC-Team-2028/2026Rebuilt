@@ -21,6 +21,7 @@ public class AgitateIntake extends Command {
    */
   public AgitateIntake(Intake intake) {
     this.intake = intake;
+    addRequirements(intake);
     // Use addRequirements() here to declare subsystem dependencies. TODO
   }
 

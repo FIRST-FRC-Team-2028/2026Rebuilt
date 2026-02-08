@@ -5,10 +5,15 @@
 package frc.robot;
 
 import java.util.Optional;
+import java.util.Set;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -18,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.commands.AdvancedShoot;
 import frc.robot.commands.AgitateIntake;
 import frc.robot.commands.DriveCommand;
@@ -35,6 +41,7 @@ public class RobotContainer {
   private final Intake intakeSubsystem;
   private final Climber climberSubsystem;
   public static Optional<Alliance> alliance = DriverStation.getAlliance();
+  private final SendableChooser<Command> autoChooser;
 
   // Joysticks
     private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
@@ -53,12 +60,21 @@ public class RobotContainer {
       intakeSubsystem = new Intake();
     } else intakeSubsystem = null;
     if (Constants.CLIMBER_AVAILABLE){
-      climberSubsystem = new Climber();
+      climberSubsystem = new Climber(alliance);
     } else climberSubsystem = null;
     if (Constants.DRIVE_AVAILABLE){
       driveSubsystem = new Drivetrain(aprilSubsystem);
       driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driverJoytick));
     } else driveSubsystem = null;
+
+    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+        (stream) -> PathPlannerConstants.isCompetition
+          ? stream.filter(auto -> auto.getName().startsWith("Comp"))
+          : stream);
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    
+
+
 
     configureBindings();
   }
@@ -70,6 +86,13 @@ public class RobotContainer {
     if (Constants.DRIVE_AVAILABLE){
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
+
+        
+      if (Constants.CLIMBER_AVAILABLE){
+        new JoystickButton(mechJoytick2, OIConstants.kDriveToClimb) //Drive to the selected Climb Location
+          .whileTrue(
+            Commands.defer(()->driveSubsystem.pathfindToPose(climberSubsystem.getWhereToClimb(), 0), Set.of(driveSubsystem))
+        );}
 
     }
 
@@ -99,7 +122,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autoChooser.getSelected();
   }
   public Drivetrain getDrivetrain(){
     return driveSubsystem;
