@@ -325,11 +325,7 @@ public class Drivetrain extends SubsystemBase {
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
     if (alliance.get()==Alliance.Red)theta += 180;
     if(dist<=0){ whereToGo = whereIam;}
-    System.out.println("Running");
-    SmartDashboard.putNumber("dist", dist);
-    SmartDashboard.putNumber("TargetX", whereToGo.X());
-    SmartDashboard.putNumber("TargetY", whereToGo.Y());
-    SmartDashboard.putNumber("TargetTheta", theta);
+    
     wheretoDrive = new Pose2d(whereToGo.X(), whereToGo.Y(), new Rotation2d(Units.degreesToRadians(theta)));
     return wheretoDrive;
     

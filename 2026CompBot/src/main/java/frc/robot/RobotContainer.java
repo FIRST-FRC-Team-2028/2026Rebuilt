@@ -20,13 +20,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.commands.AdvancedShoot;
 import frc.robot.commands.AgitateIntake;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.GetInRange;
 import frc.robot.commands.Shoot;
 import frc.robot.subsystems.AprilTags;
 import frc.robot.subsystems.Climber;
@@ -77,16 +77,18 @@ public class RobotContainer {
     if (Constants.DRIVE_AVAILABLE){
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
-      new JoystickButton(driverJoytick, 2)
+      new JoystickButton(driverJoytick, 4)
         .whileTrue(
           Commands.defer(()->driveSubsystem.pathfindToPose(driveSubsystem.getTorange(alliance, 2), 0), Set.of(driveSubsystem))
         );
-      /* JoystickButton(driverJoytick, 2)
-        .whileTrue(AutoBuilder.followPath(driveSubsystem.goInRangePath(alliance, 2, 0)));*/
       new JoystickButton(driverJoytick, 3)
-        .whileTrue(new GetInRange(driveSubsystem, alliance, 2, 0));
-
-      
+        .whileTrue(
+          Commands.defer(()->driveSubsystem.pathfindToPose(FieldConstants.blueTowerLClimb, 0), Set.of(driveSubsystem))
+        );
+      new JoystickButton(driverJoytick, 2)
+        .whileTrue(
+          Commands.defer(()->driveSubsystem.pathfindToPose(FieldConstants.blueTowerRClimb, 0), Set.of(driveSubsystem))
+        );
     } 
 
     if (Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
