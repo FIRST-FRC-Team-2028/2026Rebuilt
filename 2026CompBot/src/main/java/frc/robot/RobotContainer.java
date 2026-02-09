@@ -112,11 +112,18 @@ public class RobotContainer {
     }
     
     if (Constants.CLIMBER_AVAILABLE){
-      new JoystickButton(mechJoytick1, OIConstants.kClimberHook)
+      /*new JoystickButton(mechJoytick1, OIConstants.kClimberHook)
         .onTrue(climberSubsystem.MoveClimber(ClimberConstants.hookPosition));
 
       new JoystickButton(mechJoytick1, OIConstants.kClimberClimb)
-        .onTrue(climberSubsystem.MoveClimber(ClimberConstants.climbPosition));
+        .onTrue(climberSubsystem.MoveClimber(ClimberConstants.climbPosition));*/
+      new JoystickButton(mechJoytick1, 1)
+        .onTrue(new InstantCommand(()-> climberSubsystem.setClimberSpeed(.3)))
+        .onFalse(new InstantCommand(()-> climberSubsystem.setClimberSpeed(0)));
+      new JoystickButton(mechJoytick1, 2)
+        .onTrue(new InstantCommand(()-> climberSubsystem.setClimberSpeed(-.3)))
+        .onFalse(new InstantCommand(()-> climberSubsystem.setClimberSpeed(0)));
+  
     }
 
   }
