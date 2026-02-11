@@ -8,6 +8,9 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
+
+import java.util.Optional;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -17,7 +20,12 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import frc.robot.Constants;
 import frc.robot.Constants.CANIDS;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.FieldConstants;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,8 +35,11 @@ public class Climber extends SubsystemBase {
   private final SparkMaxConfig climber_Config, follower_Config;
   private final RelativeEncoder climber_Encoder;
   private final SparkClosedLoopController climber_ClosedLoopController;
+  private SendableChooser<Pose2d> whereToClimb;
+  Optional<Alliance> alliance;
+
   /** Creates a new Climber. */
-  public Climber() {
+  public Climber(Optional<Alliance> alliance) {
     climber = new SparkMax(CANIDS.climber, MotorType.kBrushless);
     follower = new SparkMax(CANIDS.climber_follower, MotorType.kBrushless);
 
@@ -57,6 +68,17 @@ public class Climber extends SubsystemBase {
 
     climber.configure(climber_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     follower.configure(follower_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    this.alliance = alliance;
+    whereToClimb = new SendableChooser<Pose2d>();
+    if (alliance.get()==Alliance.Blue){
+      whereToClimb.setDefaultOption("Left", FieldConstants.blueTowerLClimb);
+      whereToClimb.addOption("Right", FieldConstants.blueTowerRClimb);
+    } else{
+      whereToClimb.setDefaultOption("Left", FieldConstants.redTowerLClimb);
+      whereToClimb.addOption("Right", FieldConstants.redTowerRClimb);
+    }
+    SmartDashboard.putData("Where To CLimb", whereToClimb);
   }
 
   @Override
@@ -90,6 +112,10 @@ public class Climber extends SubsystemBase {
   /**Set the position of the climber in degrees */
   public Command MoveClimber(double position){
     return new InstantCommand(()->setClimberPosition(position));
+  }
+
+  public Pose2d getWhereToClimb(){
+    return whereToClimb.getSelected();
   }
 
 }

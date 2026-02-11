@@ -145,7 +145,7 @@ public class SwerveModule {
    * @return The current position of the module.
    */
   public SwerveModulePosition getPosition() {
-    return new SwerveModulePosition(getRelativeDrivePosition(), getRelativeTurningPosition());
+    return new SwerveModulePosition(getRelativeDrivePosition(), getRelativeTurningPosition().times(-1));
   }
 
   /**

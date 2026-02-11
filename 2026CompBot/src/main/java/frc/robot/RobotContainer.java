@@ -5,10 +5,15 @@
 package frc.robot;
 
 import java.util.Optional;
+import java.util.Set;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -18,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.commands.AdvancedShoot;
 import frc.robot.commands.AgitateIntake;
 import frc.robot.commands.DriveCommand;
@@ -37,6 +43,7 @@ public class RobotContainer {
   private final Climber climberSubsystem;
   private final PixyCamReader pixy;
   public static Optional<Alliance> alliance = DriverStation.getAlliance();
+  private final SendableChooser<Command> autoChooser;
 
   // Joysticks
     private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
@@ -55,7 +62,7 @@ public class RobotContainer {
       intakeSubsystem = new Intake();
     } else intakeSubsystem = null;
     if (Constants.CLIMBER_AVAILABLE){
-      climberSubsystem = new Climber();
+      climberSubsystem = new Climber(alliance);
     } else climberSubsystem = null;
     if (Constants.PIXYCAM_AVAILABLE){
       pixy = new PixyCamReader();
@@ -64,6 +71,15 @@ public class RobotContainer {
       driveSubsystem = new Drivetrain(aprilSubsystem);
       driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driverJoytick));
     } else driveSubsystem = null;
+
+    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+        (stream) -> PathPlannerConstants.isCompetition
+          ? stream.filter(auto -> auto.getName().startsWith("Comp"))
+          : stream);
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    
+
+
 
     configureBindings();
   }
@@ -75,10 +91,14 @@ public class RobotContainer {
     if (Constants.DRIVE_AVAILABLE){
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
-      new JoystickButton(driverJoytick, 2)
-        .onTrue(new InstantCommand(()->driveSubsystem.goTorangeTEST(alliance, 5)));
-      new JoystickButton(driverJoytick, 3)
-        .onTrue(new InstantCommand(()-> driveSubsystem.goTorangeTEST(alliance, 2)));
+
+        
+      if (Constants.CLIMBER_AVAILABLE){
+        new JoystickButton(mechJoytick2, OIConstants.kDriveToClimb) //Drive to the selected Climb Location
+          .whileTrue(
+            Commands.defer(()->driveSubsystem.pathfindToPose(climberSubsystem.getWhereToClimb(), 0), Set.of(driveSubsystem))
+        );}
+
     }
 
     if (Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
@@ -97,17 +117,24 @@ public class RobotContainer {
     }
     
     if (Constants.CLIMBER_AVAILABLE){
-      new JoystickButton(mechJoytick1, OIConstants.kClimberHook)
+      /*new JoystickButton(mechJoytick1, OIConstants.kClimberHook)
         .onTrue(climberSubsystem.MoveClimber(ClimberConstants.hookPosition));
 
       new JoystickButton(mechJoytick1, OIConstants.kClimberClimb)
-        .onTrue(climberSubsystem.MoveClimber(ClimberConstants.climbPosition));
+        .onTrue(climberSubsystem.MoveClimber(ClimberConstants.climbPosition));*/
+      new JoystickButton(mechJoytick1, 1)
+        .onTrue(new InstantCommand(()-> climberSubsystem.setClimberSpeed(.3)))
+        .onFalse(new InstantCommand(()-> climberSubsystem.setClimberSpeed(0)));
+      new JoystickButton(mechJoytick1, 2)
+        .onTrue(new InstantCommand(()-> climberSubsystem.setClimberSpeed(-.3)))
+        .onFalse(new InstantCommand(()-> climberSubsystem.setClimberSpeed(0)));
+  
     }
 
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autoChooser.getSelected();
   }
   public Drivetrain getDrivetrain(){
     return driveSubsystem;
