@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 /** Table of Contents
@@ -188,12 +189,10 @@ public final class Constants {
   public static final double kMaxTranslationalVelocity = 4.923; // 2026 Competion Robot 
 
   // Units are radians per second
-  public static final double kMaxRotationalVelocity = 5.0; // 2023 Competion Robot // max 5.0
-  public static final double kRotateToZero = -2;
   public static final PIDConstants translationConstants = 
-    new PIDConstants(3.5, .2,0);     //d:.475
+    new PIDConstants(4, .75,0);     //d:.475
   public static final PIDConstants rotationConstants = 
-    new PIDConstants(3,0.,0.);       
+    new PIDConstants(4,.7,0.);       
 
   }
 
@@ -314,10 +313,10 @@ public final class Constants {
       public static final double drive_Range_Meters = 1;
 
       public static final Transform3d robot_to_camera = new Transform3d(
-                                                        Units.inchesToMeters(5),
+                                                        Units.inchesToMeters(16+(3/16)), //4+(3/16)
                                                         Units.inchesToMeters(1),
                                                         Units.inchesToMeters(26),
-                                                        new Rotation3d(Units.degreesToRadians(20),0.0,0.0));
+                                                        new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(15.5),0.0));
       public static final Transform3d robot_to_camera2 = new Transform3d(
                                                         Units.inchesToMeters(0),
                                                         Units.inchesToMeters(0),
@@ -343,7 +342,7 @@ public final class Constants {
                           DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond,
                           DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
     public static final PathConstraints pathConstraintsTest = new PathConstraints(2,
-                          2.5,
+                          1.5,
                           Math.PI/2,
                           Math.PI/2);
   }
@@ -357,9 +356,9 @@ public final class Constants {
     public static final VPose2d VPose2dBlueHub = new VPose2d(blueHubFieldPose.toPose2d());
     public static final VPose2d VPose2dRedHub = new VPose2d(redHubFieldPose.toPose2d());
 
-    public static final Pose2d blueTowerLClimb = new Pose2d(Units.inchesToMeters(60.55),    
+    public static final Pose2d blueTowerLClimb = new Pose2d(Units.inchesToMeters(59.55),    
       Units.inchesToMeters(129.86), new Rotation2d(Units.degreesToRadians(0)));
-    public static final Pose2d blueTowerRClimb = new Pose2d(Units.inchesToMeters(60.55),
+    public static final Pose2d blueTowerRClimb = new Pose2d(Units.inchesToMeters(59.55),  //62.55
       Units.inchesToMeters(163.86), new Rotation2d(Units.degreesToRadians(0)));
     public static final Pose2d redTowerLClimb = new Pose2d(Units.inchesToMeters(589.57),
       Units.inchesToMeters(118.78), new Rotation2d(Units.degreesToRadians(180)));

@@ -39,6 +39,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -53,9 +54,9 @@ import frc.robot.Constants.RobotConstants;
 
 public class Drivetrain extends SubsystemBase {
   static double kMaxSpeed = Constants.DriveConstants.kMaxTranslationalVelocity;
-  static double kMaxAngularSpeed = Constants.DriveConstants.kMaxRotationalVelocity;
   private final SwerveDriveKinematics m_kinematics = DriveConstants.kDriveKinematics;
   private AprilTags aprilSubsystem;
+  Field2d field;
 
   private final SwerveModule m_frontLeft =
       new SwerveModule(
@@ -120,6 +121,9 @@ public class Drivetrain extends SubsystemBase {
       module.initializeRelativeTurningEncoder();
 
     }
+      field = new Field2d();
+      SmartDashboard.putData(field);
+      field.getObject("TargetPose").setPose(new Pose2d());
     
     //Pathplanner Autobuilder
     try {
@@ -154,12 +158,19 @@ public class Drivetrain extends SubsystemBase {
       e.printStackTrace();
     }
     
+    
   
   }
+
+  public Pose2d getFieldTargetPose(){
+      return field.getObject("TargetPose").getPose();
+    }
+
   @Override
   public void periodic() {
 
     updatePoseEstimator();
+    field.setRobotPose(getPoseEstimatorPose());
     //SmartDashboard.putNumber("front Left Velocity", m_frontLeft.getVelocity());
     
     //SmartDashboard.putNumber("front left abs", m_frontLeft.getAbsTurningPosition(0.1).getDegrees());
@@ -317,17 +328,19 @@ public class Drivetrain extends SubsystemBase {
   }
 
   Pose2d wheretoDrive = new Pose2d();
-  public Pose2d getTorange(Optional<Alliance> alliance, double range){
+  public Pose2d getTorange(Optional<Alliance> alliance, double MaxRange, double MinRange){
     VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
     VPose2d diff = getVecToHub(alliance);
-    double dist = diff.norm() - range;
+    double dist = diff.norm() - MaxRange;
+    if (dist<0){      //Allows robot to travel backwards if too close
+      diff = getVecToHub(alliance).scalarProd(-1);
+      dist = diff.norm() - MinRange;
+    }
     VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
-    if (alliance.get()==Alliance.Red)theta += 180;
-    if(dist<=0){ whereToGo = whereIam;}
-    
-    wheretoDrive = new Pose2d(whereToGo.X(), whereToGo.Y(), new Rotation2d(Units.degreesToRadians(theta)));
-    return wheretoDrive;
+    if (alliance.get() == Alliance.Red) theta += 180;
+    SmartDashboard.putNumber("Dist", dist);
+    return new Pose2d(whereToGo.X(), whereToGo.Y(), new Rotation2d(Units.degreesToRadians(theta)));
     
   }
   public Pose2d getWhereToDrive(){
@@ -374,18 +387,6 @@ public class Drivetrain extends SubsystemBase {
     return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraintsTest, goalEndVelocity);
   }
 
-  public PathPlannerPath goInRangePath(Optional<Alliance> alliance, double range, double goalEndVelocity){
-    Pose2d endPose = getTorange(alliance, range);
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        endPose);
-    // Create the path using the waypoints created above
-      PathPlannerPath path = new PathPlannerPath(
-        waypoints,
-        PathPlannerConstants.pathConstraintsTest,
-        null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
-        new GoalEndState(0.0, Rotation2d.fromDegrees(endPose.getRotation().getDegrees())) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-      );
-      return path;
-  }
+  
 
 }
