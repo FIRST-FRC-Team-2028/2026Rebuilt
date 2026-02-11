@@ -39,6 +39,7 @@ public final class Constants {
   public static final boolean SHOOTER_AVAILABLE = false;
   public static final boolean INTAKE_AVAILABLE = false;
   public static final boolean CLIMBER_AVAILABLE = false;
+  public static final boolean PIXYCAM_AVAILABLE = false;
 
 
 

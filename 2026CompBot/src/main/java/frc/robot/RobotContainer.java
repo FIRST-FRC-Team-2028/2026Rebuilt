@@ -26,6 +26,7 @@ import frc.robot.subsystems.AprilTags;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.PixyCamReader;
 import frc.robot.subsystems.Shooter;
 
 public class RobotContainer {
@@ -34,6 +35,7 @@ public class RobotContainer {
   private final Shooter shootingSubsystem;
   private final Intake intakeSubsystem;
   private final Climber climberSubsystem;
+  private final PixyCamReader pixy;
   public static Optional<Alliance> alliance = DriverStation.getAlliance();
 
   // Joysticks
@@ -55,6 +57,9 @@ public class RobotContainer {
     if (Constants.CLIMBER_AVAILABLE){
       climberSubsystem = new Climber();
     } else climberSubsystem = null;
+    if (Constants.PIXYCAM_AVAILABLE){
+      pixy = new PixyCamReader();
+    } else pixy = null;
     if (Constants.DRIVE_AVAILABLE){
       driveSubsystem = new Drivetrain(aprilSubsystem);
       driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driverJoytick));
@@ -115,6 +120,9 @@ public class RobotContainer {
   }
   public Climber getClimber(){
     return climberSubsystem;
+  }
+  public PixyCamReader getPixyCam(){
+    return pixy;
   }
   public AprilTags getAprilTags(){
     return aprilSubsystem;
