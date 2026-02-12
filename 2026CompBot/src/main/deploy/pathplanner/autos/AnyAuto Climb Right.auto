@@ -13,13 +13,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 10.0
+            "waitTime": 3.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PathfindToClimbPath"
+            "name": "PathfindToClimbRightPath"
           }
         }
       ]

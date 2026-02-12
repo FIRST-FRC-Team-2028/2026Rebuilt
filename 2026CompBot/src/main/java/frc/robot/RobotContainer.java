@@ -75,15 +75,18 @@ public class RobotContainer {
     } else driveSubsystem = null;
 
     if (Constants.DRIVE_AVAILABLE){
+      NamedCommands.registerCommand("Drive To Shoot", Commands.defer(
+          ()->driveSubsystem.pathfindToPose(driveSubsystem.getTorange(alliance, 2.25, 1.5), 0), Set.of(driveSubsystem)).alongWith(new InstantCommand(()->System.out.println("Working"))));
+      NamedCommands.registerCommand("PathfindToClimbLeftPath", driveSubsystem.pathfindToPath("Drive Climb Left"));
+      NamedCommands.registerCommand("PathfindToClimbRightPath", driveSubsystem.pathfindToPath("Drive Climb Right"));
+
+
       autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
         (stream) -> PathPlannerConstants.isCompetition
         ? stream.filter(auto->auto.getName().startsWith("Comp"))
         : stream);
       SmartDashboard.putData("AutoChooser", autoChooser);
-
-      NamedCommands.registerCommand("Drive To Shoot", Commands.defer(
-          ()->driveSubsystem.pathfindToPose(driveSubsystem.getTorange(alliance, 2, 1.5), 0), Set.of(driveSubsystem)));
-      NamedCommands.registerCommand("PathfindToClimbPath", driveSubsystem.pathfindToPath("Example Auto P2"));
+      
     }
 
     configureBindings();
@@ -96,10 +99,10 @@ public class RobotContainer {
     if (Constants.DRIVE_AVAILABLE){
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
-      /*new JoystickButton(driverJoytick, 4)
+      new JoystickButton(driverJoytick, 4)
         .whileTrue(
-          Commands.defer(()->driveSubsystem.pathfindToPose(driveSubsystem.getTorange(alliance, 2, 1.5), 0), Set.of(driveSubsystem))
-        );*/
+          Commands.defer(()->driveSubsystem.pathfindToPose(driveSubsystem.getTorange(alliance, 2.5, 1.5), 0), Set.of(driveSubsystem))
+        );
       new JoystickButton(driverJoytick, 2)
         .whileTrue(
           Commands.defer(()->driveSubsystem.pathfindToPose(FieldConstants.blueTowerLClimb, 0), Set.of(driveSubsystem))
@@ -108,10 +111,10 @@ public class RobotContainer {
         .whileTrue(
           Commands.defer(()->driveSubsystem.pathfindToPose(FieldConstants.blueTowerRClimb, 0), Set.of(driveSubsystem))
         );
-      new JoystickButton(driverJoytick, 4)
+      /*new JoystickButton(driverJoytick, 4)
         .whileTrue(
           Commands.defer(()->driveSubsystem.pathfindToPose(driveSubsystem.getFieldTargetPose(), 0), Set.of(driveSubsystem))
-        );
+        );*/
     } 
 
     if (Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){

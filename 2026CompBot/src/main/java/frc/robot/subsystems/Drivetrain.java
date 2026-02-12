@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.Constants.RobotConstants;
+import pabeles.concurrency.IntOperatorTask.Min;
 
 public class Drivetrain extends SubsystemBase {
   static double kMaxSpeed = Constants.DriveConstants.kMaxTranslationalVelocity;
@@ -332,12 +334,12 @@ public class Drivetrain extends SubsystemBase {
     VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
     VPose2d diff = getVecToHub(alliance);
     double dist = diff.norm() - MaxRange;
-    if (dist<0){      //Allows robot to travel backwards if too close
-      diff = getVecToHub(alliance).scalarProd(-1);
+    /*if (dist<0){      //Allows robot to travel backwards if too close
       dist = diff.norm() - MinRange;
-    }
+    }*/
     VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
+    //if(whereToGo.norm()<(MaxRange-MinRange)) return getPoseEstimatorPose();
     if (alliance.get() == Alliance.Red) theta += 180;
     SmartDashboard.putNumber("Dist", dist);
     return new Pose2d(whereToGo.X(), whereToGo.Y(), new Rotation2d(Units.degreesToRadians(theta)));
@@ -374,7 +376,6 @@ public class Drivetrain extends SubsystemBase {
   public Command pathfindToPose(double x, double y, double rotation, double goalEndVelocity) {
     Rotation2d rotation2d = new Rotation2d(Units.degreesToRadians(rotation));
     Pose2d targetPose = new Pose2d(x, y, rotation2d);
-    SmartDashboard.putString("Target Pose", targetPose.toString());
     return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraintsTest, goalEndVelocity);
   }
   /** Contructs and runs a path to the given pose avoiding obsticals outlinned in navgrid.json
@@ -383,7 +384,6 @@ public class Drivetrain extends SubsystemBase {
    * @param range the range from the hub to drive to
    * */
   public Command pathfindToPose(Pose2d targetPose, double goalEndVelocity) {
-    SmartDashboard.putString("Target Pose", wheretoDrive.toString());
     return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraintsTest, goalEndVelocity);
   }
 

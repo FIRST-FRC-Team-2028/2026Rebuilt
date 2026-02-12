@@ -342,9 +342,9 @@ public final class Constants {
                           DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond,
                           DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
     public static final PathConstraints pathConstraintsTest = new PathConstraints(2,
-                          1.5,
-                          Math.PI/2,
-                          Math.PI/2);
+                          1.75,
+                          Math.PI,
+                          Math.PI);
   }
 
   public static class FieldConstants{
