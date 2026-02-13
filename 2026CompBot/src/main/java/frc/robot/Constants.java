@@ -287,6 +287,8 @@ public final class Constants {
     public static final int kDriverRotAxis =             4;
     //Driver Buttons
     public static final int kResetGyro =                 1;
+    public static final int kDriveToMechPose =           4;
+
     public static final int kDriverRobotOrientedButton = 6;
     //Game Mech 1 Buttons
     public static final int kShoot =                     1;

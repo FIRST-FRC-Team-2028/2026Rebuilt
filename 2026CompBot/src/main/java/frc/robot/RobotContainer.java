@@ -42,6 +42,7 @@ public class RobotContainer {
   private final Climber climberSubsystem;
   public static Optional<Alliance> alliance = DriverStation.getAlliance();
   private final SendableChooser<Command> autoChooser;
+  Pose2d mechTargetPose;
 
   // Joysticks
     private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
@@ -86,6 +87,8 @@ public class RobotContainer {
     if (Constants.DRIVE_AVAILABLE){
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
+      new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose);
+
 
         
       if (Constants.CLIMBER_AVAILABLE){
