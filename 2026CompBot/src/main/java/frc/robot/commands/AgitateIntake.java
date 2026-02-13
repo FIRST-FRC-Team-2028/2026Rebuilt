@@ -22,13 +22,11 @@ public class AgitateIntake extends Command {
   public AgitateIntake(Intake intake) {
     this.intake = intake;
     addRequirements(intake);
-    // Use addRequirements() here to declare subsystem dependencies. TODO
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
     intake.setJointPosition(setPoint);
   }
 
@@ -37,9 +35,6 @@ public class AgitateIntake extends Command {
   public void execute() {
     if (intake.getJointPosition()<setPoint+deadband && intake.getJointPosition()>setPoint-deadband){
       if (setPoint == IntakeConstants.JointPickupPosition){
-        /* MrG asks: How frequently will it switch set points?
-         * Relative to the time it takes to move from one positionto the other. TODO
-        */
         setPoint = IntakeConstants.JointAgitatePosition;
       } else {
         setPoint = IntakeConstants.JointPickupPosition;

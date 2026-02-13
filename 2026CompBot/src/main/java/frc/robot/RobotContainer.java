@@ -77,10 +77,6 @@ public class RobotContainer {
           ? stream.filter(auto -> auto.getName().startsWith("Comp"))
           : stream);
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    
-
-
-
     configureBindings();
   }
 
@@ -98,7 +94,6 @@ public class RobotContainer {
           .whileTrue(
             Commands.defer(()->driveSubsystem.pathfindToPose(climberSubsystem.getWhereToClimb(), 0), Set.of(driveSubsystem))
         );}
-
     }
 
     if (Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
@@ -167,6 +162,4 @@ public class RobotContainer {
   public Optional<Alliance> getAlliance(){
     return alliance;
   }
-  
-
 }
