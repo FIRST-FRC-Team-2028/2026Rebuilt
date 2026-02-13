@@ -99,22 +99,22 @@ public class RobotContainer {
     if (Constants.DRIVE_AVAILABLE){
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
-      new JoystickButton(driverJoytick, 4)
+      /*new JoystickButton(driverJoytick, 4)
         .whileTrue(
           Commands.defer(()->driveSubsystem.pathfindToPose(driveSubsystem.getTorange(alliance, 2.5, 1.5), 0), Set.of(driveSubsystem))
-        );
+        );*/
       new JoystickButton(driverJoytick, 2)
         .whileTrue(
-          Commands.defer(()->driveSubsystem.pathfindToPose(FieldConstants.blueTowerLClimb, 0), Set.of(driveSubsystem))
+          Commands.defer(()->driveSubsystem.pathfindToPath("Drive Climb Left"), Set.of(driveSubsystem))
         );
       new JoystickButton(driverJoytick, 3)
         .whileTrue(
-          Commands.defer(()->driveSubsystem.pathfindToPose(FieldConstants.blueTowerRClimb, 0), Set.of(driveSubsystem))
+          Commands.defer(()->driveSubsystem.pathfindToPath("Drive Climb Right"), Set.of(driveSubsystem))
         );
-      /*new JoystickButton(driverJoytick, 4)
+      new JoystickButton(driverJoytick, 4)
         .whileTrue(
           Commands.defer(()->driveSubsystem.pathfindToPose(driveSubsystem.getFieldTargetPose(), 0), Set.of(driveSubsystem))
-        );*/
+        );
     } 
 
     if (Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
