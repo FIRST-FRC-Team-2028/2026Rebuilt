@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.Climber;
 
@@ -13,12 +14,17 @@ public class MoveClimber extends Command {
     private final Climber climber;
     double speed;
     double position;
-  /** Creates a new Climb. */
-  public MoveClimber(Climber climber/*, double speed, double position*/) {
+  /** Climb to desired "height" 
+   * @param position  ie, travel, engage, level1 or level2
+  */
+  public MoveClimber(Climber climber, double position/*, double speed*/) {
     this.climber = climber;
     this.speed = speed;
     this.position = position;
-    // Use addRequirements() here to declare subsystem dependencies. TODO
+    addRequirements(climber);
+  }
+  public MoveClimber(Climber climber) {
+    this(climber, Constants.ClimberConstants.travelPosition);
   }
 
   // Called when the command is initially scheduled.

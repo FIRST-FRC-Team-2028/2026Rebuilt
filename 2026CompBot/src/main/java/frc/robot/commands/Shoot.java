@@ -22,7 +22,7 @@ public class Shoot extends Command {
    */
   public Shoot(Shooter shooter) {
     this.shooter = shooter;
-    // Use addRequirements() here to declare subsystem dependencies.TODO
+    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
