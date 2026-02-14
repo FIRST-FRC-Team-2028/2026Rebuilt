@@ -7,7 +7,9 @@ package frc.robot;
 import java.util.Optional;
 import java.util.Set;
 
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.FieldCentric;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -21,9 +23,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PathPlannerConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.AdvancedShoot;
 import frc.robot.commands.AgitateIntake;
 import frc.robot.commands.DriveCommand;
@@ -43,8 +47,9 @@ public class RobotContainer {
   private final Climber climberSubsystem;
   private final PixyCamReader pixy;
   public static Optional<Alliance> alliance = DriverStation.getAlliance();
-  private final SendableChooser<Command> autoChooser;
+  private SendableChooser<Command> autoChooser;
   Pose2d mechTargetPose;
+  String mechPathName;
 
   // Joysticks
     private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
@@ -73,11 +78,18 @@ public class RobotContainer {
       driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driverJoytick));
     } else driveSubsystem = null;
 
+    if (Constants.DRIVE_AVAILABLE){
+       NamedCommands.registerCommand("Drive To Shoot", Commands.defer(
+          ()->driveSubsystem.pathfindToPose(driveSubsystem.getTorange(alliance, 2.25, 1.5), 0), Set.of(driveSubsystem)).alongWith(new InstantCommand(()->System.out.println("Working"))));
+      NamedCommands.registerCommand("PathfindToClimbLeftPath", driveSubsystem.pathfindToPath("Drive Climb Left"));
+      NamedCommands.registerCommand("PathfindToClimbRightPath", driveSubsystem.pathfindToPath("Drive Climb Right"));
+
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
         (stream) -> PathPlannerConstants.isCompetition
           ? stream.filter(auto -> auto.getName().startsWith("Comp"))
           : stream);
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
     configureBindings();
   }
 
@@ -88,14 +100,25 @@ public class RobotContainer {
     if (Constants.DRIVE_AVAILABLE){
       new JoystickButton(driverJoytick, OIConstants.kResetGyro)
         .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
-      new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose);
-
-
+      new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
+        .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPose(
+            driveSubsystem.getTorange(alliance, ShooterConstants.OptimalRange, ShooterConstants.MinRange), 0), Set.of(driveSubsystem)));
+      new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose)
+      .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(mechTargetPose, 0, mechPathName), Set.of(driveSubsystem)));
+      //Game Mech Set Target Buttons
+      new JoystickButton(mechJoytick1, 0) //Outpost
+        .onTrue(new InstantCommand(()->mechPathName=FieldConstants.OutpostPath));
+      new JoystickButton(mechJoytick1, 0) //Climb
+        .onTrue(new InstantCommand(()->mechPathName=climberSubsystem.getWhereToClimb()));
+      new JoystickButton(mechJoytick1, 0) //Neutral Zone Left
+        .onTrue(new InstantCommand(()->mechPathName=FieldConstants.noPath).alongWith(new InstantCommand(()->mechTargetPose=FieldConstants.NeutralZoneLeft)));
+      new JoystickButton(mechJoytick1, 0) //Neutral Zone Right
+        .onTrue(new InstantCommand(()->mechPathName=FieldConstants.noPath).alongWith(new InstantCommand(()->mechTargetPose=FieldConstants.NeutralZoneRight)));
         
       if (Constants.CLIMBER_AVAILABLE){
         new JoystickButton(mechJoytick2, OIConstants.kDriveToClimb) //Drive to the selected Climb Location
           .whileTrue(
-            Commands.defer(()->driveSubsystem.pathfindToPose(climberSubsystem.getWhereToClimb(), 0), Set.of(driveSubsystem))
+            Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(new Pose2d(), 0, climberSubsystem.getWhereToClimb()), Set.of(driveSubsystem))
         );}
     }
 

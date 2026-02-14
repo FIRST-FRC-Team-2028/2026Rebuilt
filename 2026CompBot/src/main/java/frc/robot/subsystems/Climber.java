@@ -35,7 +35,7 @@ public class Climber extends SubsystemBase {
   private final SparkMaxConfig climber_Config, follower_Config;
   private final RelativeEncoder climber_Encoder;
   private final SparkClosedLoopController climber_ClosedLoopController;
-  private SendableChooser<Pose2d> whereToClimb;
+  private SendableChooser<String> whereToClimb;
   Optional<Alliance> alliance;
 
   /** Creates a new Climber. */
@@ -70,14 +70,11 @@ public class Climber extends SubsystemBase {
     follower.configure(follower_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     this.alliance = alliance;
-    whereToClimb = new SendableChooser<Pose2d>();
-    if (alliance.get()==Alliance.Blue){
-      whereToClimb.setDefaultOption("Left", FieldConstants.blueTowerLClimb);
-      whereToClimb.addOption("Right", FieldConstants.blueTowerRClimb);
-    } else{
-      whereToClimb.setDefaultOption("Left", FieldConstants.redTowerLClimb);
-      whereToClimb.addOption("Right", FieldConstants.redTowerRClimb);
-    }
+    whereToClimb = new SendableChooser<String>();
+      whereToClimb.setDefaultOption("Left L1", FieldConstants.LeftClimbPath);
+      whereToClimb.addOption("Right L1", FieldConstants.RightClimbPath);
+      //whereToClimb.addOption("Left L2", FieldConstants.redTowerLClimb);
+      //whereToClimb.addOption("Right L2", FieldConstants.redTowerRClimb);
     SmartDashboard.putData("Where To CLimb", whereToClimb);
   }
 
@@ -114,7 +111,7 @@ public class Climber extends SubsystemBase {
     return new InstantCommand(()->setClimberPosition(position));
   }
 
-  public Pose2d getWhereToClimb(){
+  public String getWhereToClimb(){
     return whereToClimb.getSelected();
   }
 

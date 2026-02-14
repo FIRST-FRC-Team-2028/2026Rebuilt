@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.5,
-        "y": 2.5
+        "x": 7.69,
+        "y": 5.535214646464647
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2842685434266343,
-        "y": 3.863652304722141
+        "x": 3.6656102469031246,
+        "y": 5.792550969901705
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Pathfind To Center END"
     },
     {
       "anchor": {
-        "x": 0.6752409638554218,
-        "y": 0.7457590361445796
+        "x": 2.6699621212121216,
+        "y": 5.535214646464647
       },
       "prevControl": {
-        "x": 0.9043052762424714,
-        "y": 0.34531272744549496
+        "x": 3.0699698092385823,
+        "y": 5.853757275176516
       },
       "nextControl": {
-        "x": 0.5511090761452175,
-        "y": 0.9627642767575686
+        "x": 2.4743963707586896,
+        "y": 5.379477569152962
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.789867469879518,
-        "y": 2.352132530120481
+        "x": 2.6127020202020206,
+        "y": 4.01209595959596
       },
       "prevControl": {
-        "x": 0.648799250905775,
-        "y": 1.9141030669169603
+        "x": 2.481186717749552,
+        "y": 4.46820059692432
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,13 +46,20 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 180.0
+      "waypointRelativePos": 0.15,
+      "rotationDegrees": -45.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Start Shooter",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -63,13 +70,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 45.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Autos and Auto Pathfinds",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

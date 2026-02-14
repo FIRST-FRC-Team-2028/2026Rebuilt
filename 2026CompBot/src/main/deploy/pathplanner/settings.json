@@ -3,6 +3,7 @@
   "robotLength": 0.85725,
   "holonomicMode": true,
   "pathFolders": [
+    "Autos and Auto Pathfinds",
     "Pathfind To Paths"
   ],
   "autoFolders": [],
@@ -30,5 +31,7 @@
   "brModuleY": -0.273,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.25,\"y\":0.0},\"size\":{\"width\":0.75,\"length\":0.3},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}"
+  ]
 }

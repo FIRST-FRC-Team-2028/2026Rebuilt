@@ -203,7 +203,7 @@ public final class Constants {
     public static final double jointP = 0.;
     public static final double jointI = 0.;
     public static final double jointD = 0.;
-    public static final double JointPositionConversionFactor = 1;
+    public static final double JointPositionConversionFactor = 1/100; //Guess
     public static final double RollerVelocityConversionFactor = 1;
     public static final double jointForwardSoftLimit = 0;
     public static final double jointReverseSoftLimit = 0;
@@ -226,14 +226,14 @@ public final class Constants {
     public static final double conveyorI = 0;
     public static final double conveyorD = 0;
     public static final double conveyorVelocityConversionFactor = 1;
-    public static final double feedP = 0;
-    public static final double feedI = 0;
-    public static final double feedD = 0;
-    public static final double feedVelocityConversionFactor = 1;
+
 
     public static final double shooterShootSpeed = 1400.; //RPM
     public static final double feedShootSpeed = 200.; //RPM
     public static final double conveyorShootSpeed = 300.; //RPM
+    
+    public static final double OptimalRange = 2.5;  //Meters
+    public static final double MinRange = 1.5;      //Meters
 
     //Shooter Math Constants 
     public static final double gravity = 9.81; //m/s^2
@@ -243,6 +243,7 @@ public final class Constants {
     public static final double wheel_diameter_meter = Units.inchesToMeters(4.25);  
     public static final double max_shooting_distance_meters = 0.0; //TODO find max shooting distance
     public static final double velocity_fudge_factor = 1.15; //Typical range: 1.10–1.20
+
   }
 
   public static class ClimberConstants {
@@ -270,7 +271,6 @@ public final class Constants {
     public static final int centerShooter = 51;
     public static final int rightShooter = 52;
     public static final int conveyor = 60;
-    public static final int feed = 61;
     //Climber
     public static final int climber = 70;
     public static final int climber_follower = 71;
@@ -289,6 +289,7 @@ public final class Constants {
     public static final int kDriverRotAxis =             4;
     //Driver Buttons
     public static final int kResetGyro =                 1;
+    public static final int kDriveToShootRange =         3;
     public static final int kDriveToMechPose =           4;
 
     public static final int kDriverRobotOrientedButton = 6;
@@ -371,6 +372,14 @@ public final class Constants {
       Units.inchesToMeters(118.78), new Rotation2d(Units.degreesToRadians(180)));
     public static final Pose2d redTowerRClimb = new Pose2d(Units.inchesToMeters(589.57),
       Units.inchesToMeters(152.78), new Rotation2d(Units.degreesToRadians(180)));
+    public static final String noPath = "None";
+    public static final String OutpostPath = "Drive To Outpost";
+    public static final String LeftClimbPath = "Drive Left Climb";
+    public static final String RightClimbPath = "Drive Right Climb"; 
+    public static final Pose2d NeutralZoneLeft = new Pose2d(6.5, 5.5, new Rotation2d(0)); //Meters (NOT MEASURED FROM SOMETHING)
+    public static final Pose2d NeutralZoneRight = new Pose2d(6.5, 2.5, new Rotation2d(0)); //Meters (NOT MEASURED FROM SOMETHING)
+
+
   }
 
 }
