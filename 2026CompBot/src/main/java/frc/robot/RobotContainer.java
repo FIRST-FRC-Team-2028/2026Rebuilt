@@ -43,7 +43,7 @@ public class RobotContainer {
   private final Climber climberSubsystem;
   private final PixyCamReader pixy;
   public static Optional<Alliance> alliance = DriverStation.getAlliance();
-  private final SendableChooser<Command> autoChooser;
+  private  SendableChooser<Command> autoChooser = null;
 
   // Joysticks
     private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
@@ -72,11 +72,13 @@ public class RobotContainer {
       driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driverJoytick));
     } else driveSubsystem = null;
 
+    if (Constants.DRIVE_AVAILABLE ){
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
         (stream) -> PathPlannerConstants.isCompetition
           ? stream.filter(auto -> auto.getName().startsWith("Comp"))
           : stream);
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
     configureBindings();
   }
 
@@ -105,9 +107,9 @@ public class RobotContainer {
         .whileTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm())
         .alongWith(new AgitateIntake(intakeSubsystem)));
 
-      new JoystickButton(mechJoytick1, OIConstants.kIntake)
+      /* new JoystickButton(mechJoytick1, OIConstants.kIntake)
         .onTrue(intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed))
-        .onFalse(intakeSubsystem.stopIntake());
+        .onFalse(intakeSubsystem.stopIntake()); */
 
     }
     
@@ -128,9 +130,9 @@ public class RobotContainer {
 
   }
 
-  public Command getAutonomousCommand() {
+ /*  public Command getAutonomousCommand() {
     return autoChooser.getSelected();
-  }
+  } */
   public Drivetrain getDrivetrain(){
     return driveSubsystem;
   }

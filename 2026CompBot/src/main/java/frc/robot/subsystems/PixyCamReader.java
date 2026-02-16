@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
+//import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PixyCamReader extends SubsystemBase {
@@ -17,19 +17,18 @@ public class PixyCamReader extends SubsystemBase {
   double position;
   boolean targetVisible;
 
-  /** Creates a new ExampleSubsystem. */
+  /** Pixy camera to sense climber tower.
+   * <p> Trained to sense Blue and Red towers
+   */
   public PixyCamReader() {
     analog = new AnalogInput(3);
     //analogExist = new AnalogInput(1);
     tExist = new DigitalInput(0);
-    
   }
 
-
-
-  /**Reads voltage [Far Left = 0.0V - Far Right = 3.3V] from analog. (Already translated to be between -1 & 1). */
+  /**Report position -1 Left, 0 center, +1 right */
   public double getPosition() {
-    position = (0.6 * analog.getVoltage()) -1.; 
+    position = (0.6 * analog.getVoltage()) -1.; // convert from [0, 3.3] to [-1,1], left to right
     return position;
   }
 

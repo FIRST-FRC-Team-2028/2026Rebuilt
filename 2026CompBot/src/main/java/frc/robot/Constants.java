@@ -37,8 +37,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 public final class Constants {
   public static final boolean DRIVE_AVAILABLE = false;
   public static final boolean CAMERA_AVAILABLE = false;
-  public static final boolean SHOOTER_AVAILABLE = true;
-  public static final boolean INTAKE_AVAILABLE = false;
+  public static final boolean SHOOTER_AVAILABLE = false;
+  public static final boolean INTAKE_AVAILABLE = true;
   public static final boolean CLIMBER_AVAILABLE = false;
   public static final boolean PIXYCAM_AVAILABLE = false;
 
@@ -203,10 +203,10 @@ public final class Constants {
     public static final double jointP = 0.;
     public static final double jointI = 0.;
     public static final double jointD = 0.;
-    public static final double JointPositionConversionFactor = 1;
-    public static final double RollerVelocityConversionFactor = 1;
-    public static final double jointForwardSoftLimit = 0;
-    public static final double jointReverseSoftLimit = 0;
+    public static final double JointPositionConversionFactor = 110./38.; //in -20, target in -20| out -58, target out 90
+    public static final double RollerVelocityConversionFactor = 1.;
+    public static final double jointForwardSoftLimit = 20.;
+    public static final double jointReverseSoftLimit = -90.;
 
     //Joint Positions
     public static final double JointPickupPosition = 90; //Degrees
@@ -263,13 +263,14 @@ public final class Constants {
 
   public static class CANIDS {
     //Intake
-    public static final int roller = 1000;
-    public static final int joint = 1001;
+    public static final int roller = 60;
+    public static final int jointLead = 50;
+    public static final int jointFollow = 52;
     //Shooter
     public static final int leftShooter = 50;
     public static final int centerShooter = 51;
     public static final int rightShooter = 52;
-    public static final int conveyor = 60;
+    public static final int conveyor = 1000;
     public static final int feed = 61;
     //Climber
     public static final int climber = 70;
@@ -301,7 +302,16 @@ public final class Constants {
 
     public static final double kDeadband = 0.075;
 
-    
+    // testMode buttons
+    public static final int RIGHTSTICKVERT        = 5;  // driver
+    public static final int TEST_INTAKE_ROLLER    = 1;  // A
+    public static final int TEST_INTAKE_JOINT     = 2;  // A
+    public static final int TEST_CLIMB            = 3;  // A
+    public static final int TEST_SHOOT            = 4;  // A
+    public static final int TEST_CONVEYOR         = 5;  // A
+    public static final int SOFTLIMIT_DISABLE     = 6;  // A
+    public static final int SOFTLIMIT_ENABLE      = 7;  // A
+    public static final int RESETENCODER          = 11; // A
   }
 
   public static class CamConstants {

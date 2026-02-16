@@ -8,15 +8,15 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.SparkFlex;
+//import com.revrobotics.spark.config.ClosedLoopConfig;
+//import com.revrobotics.spark.config.EncoderConfig;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,12 +26,12 @@ import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
-  private final SparkMax rollers;
-  private final SparkMax joint;
-  private final SparkMaxConfig rollers_Config;
-  private final SparkMaxConfig joint_Config;
+  private final SparkFlex rollers;
+  private final SparkMax jointLead, jointFollow;
+  private final SparkFlexConfig rollers_Config;
+  private final SparkMaxConfig joint_Config, jointF_Config;
   private final RelativeEncoder rollers_Encoder;
-  private final RelativeEncoder joint_Encoder;
+  private final RelativeEncoder joint_Encoder, joint_Encoder2;
   private final SparkClosedLoopController joint_Controller;
   /** Picks up the scoring element: fuel
    * <p>Methods: <ul>
@@ -43,11 +43,14 @@ public class Intake extends SubsystemBase {
    * <li>{@code stopIntake} - Stops the rollers 
    */
   public Intake() {
-    rollers = new SparkMax(Constants.CANIDS.roller, MotorType.kBrushless);
-    joint = new SparkMax(Constants.CANIDS.joint, MotorType.kBrushless);
+    rollers = new SparkFlex(Constants.CANIDS.roller, MotorType.kBrushless);
+    jointLead = new SparkMax(Constants.CANIDS.jointLead, MotorType.kBrushless);
+    jointFollow = new SparkMax(Constants.CANIDS.jointFollow, MotorType.kBrushless);
     
-    rollers_Config = new SparkMaxConfig();
+    rollers_Config = new SparkFlexConfig();
     joint_Config = new SparkMaxConfig();
+    jointF_Config = new SparkMaxConfig();
+
 
     rollers_Config
       .idleMode(IdleMode.kCoast);
@@ -58,6 +61,8 @@ public class Intake extends SubsystemBase {
       .idleMode(IdleMode.kCoast);
     joint_Config.encoder
       .positionConversionFactor(IntakeConstants.JointPositionConversionFactor);
+    jointF_Config.encoder
+      .positionConversionFactor(IntakeConstants.JointPositionConversionFactor);
     joint_Config.closedLoop
       .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
     joint_Config.softLimit
@@ -65,14 +70,18 @@ public class Intake extends SubsystemBase {
       .forwardSoftLimitEnabled(true)
       .reverseSoftLimit(IntakeConstants.jointReverseSoftLimit)
       .reverseSoftLimitEnabled(true);
+    jointF_Config.follow(jointLead,true);
 
     rollers.configure(rollers_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    joint.configure(joint_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    jointLead.configure(joint_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    jointFollow.configure(jointF_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     rollers_Encoder = rollers.getEncoder();
-    joint_Encoder = joint.getEncoder();
+    joint_Encoder = jointLead.getEncoder();
+    joint_Encoder2 = jointFollow.getEncoder();
 
-    joint_Controller = joint.getClosedLoopController();
+    joint_Controller = jointLead.getClosedLoopController();
+    joint_Encoder.setPosition(IntakeConstants.jointForwardSoftLimit);
 
   }
 
@@ -84,14 +93,24 @@ public class Intake extends SubsystemBase {
   public void rollers(double speed){
     rollers.set(speed);
   }
+  /**make joint motor move Vbus - for testing */
+  public void goJoint(double speed){
+    jointLead.set(speed);
+  }
+  public void goJointF(double speed){
+    jointFollow.set(speed);
+  }
   /** Sets the position of the Joint in degrees */
   public void setJointPosition(double position){
     position = Units.degreesToRotations(position);
     joint_Controller.setSetpoint(position, ControlType.kPosition);
   }  
-  /** Returns the joint position in degrees */
+  /**NO Returns the joint position in degrees */
   public double getJointPosition() {
-    return Units.rotationsToDegrees(joint_Encoder.getPosition());
+    return joint_Encoder.getPosition();
+  }
+  public double getJointPosition2() {
+    return joint_Encoder2.getPosition();
   }
 
   /** Runs the rollers at {@code .5} speed */
@@ -110,6 +129,11 @@ public class Intake extends SubsystemBase {
    */
   public Command stopIntake(){
     return new InstantCommand(()->rollers.stopMotor());
+  }
+
+  public void resetJointEncoder(){
+    joint_Encoder.setPosition(IntakeConstants.jointForwardSoftLimit);
+    //joint_Encoder2.setPosition(IntakeConstants.jointReverseSoftLimit);
   }
 
 }
