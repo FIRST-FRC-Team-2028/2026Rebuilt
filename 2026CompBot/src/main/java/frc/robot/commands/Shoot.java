@@ -39,7 +39,7 @@ public class Shoot extends Command {
     if (!shooting){
       if(shooter.getShooterVelocity()> ShooterConstants.shooterShootSpeed-shootSpeedDeadband){
         shooter.setConveyorSpeed(ShooterConstants.conveyorShootSpeed);
-        shooter.setFeedSpeed(ShooterConstants.feedShootSpeed);
+        //shooter.setFeedSpeed(ShooterConstants.feedShootSpeed);
         shooting = true;
       }
     }

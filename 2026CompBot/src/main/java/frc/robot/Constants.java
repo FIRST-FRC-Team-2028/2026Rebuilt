@@ -200,18 +200,19 @@ public final class Constants {
 
   public static class IntakeConstants {
     //Configs
-    public static final double jointP = 0.;
+    public static final double jointP = 0.01;
     public static final double jointI = 0.;
     public static final double jointD = 0.;
     public static final double JointPositionConversionFactor = 110./38.; //in -20, target in -20| out -58, target out 90
+    // We found that the encoder range is more negative out than in, but we cannot set this in the conversion factor
     public static final double RollerVelocityConversionFactor = 1.;
     public static final double jointForwardSoftLimit = 20.;
     public static final double jointReverseSoftLimit = -90.;
 
     //Joint Positions
-    public static final double JointPickupPosition = 90; //Degrees
-    public static final double JointUpPosition = 0; //Degrees
-    public static final double JointAgitatePosition = 75; //Degrees
+    public static final double JointPickupPosition = -90.; //Degrees
+    public static final double JointUpPosition = 20.; //Degrees
+    public static final double JointAgitatePosition = -75.; //Degrees
 
     //Rollers Speed
     public static final double IntakeSpeed = 0.75; //-1 to 1
@@ -316,6 +317,9 @@ public final class Constants {
     public static final int SOFTLIMIT_DISABLE     = 6;  // A
     public static final int SOFTLIMIT_ENABLE      = 7;  // A
     public static final int RESETENCODER          = 11; // A
+    public static final int TEST_LOW_CONTROL      = 9;  // A
+    public static final int TEST_HIGH_CONTROL     = 10; // A
+    public static final int TEST_CLMODE           = 2; //B
   }
 
   public static class CamConstants {

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 
 public class Robot extends TimedRobot {
@@ -102,7 +103,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopExit() {}
 
-  boolean testClimb, testIntakeRoller, testIntakeJoint, testConveyor,testShoot;
+  boolean testClimb, testIntakeRoller, testIntakeJoint, testConveyor,testShoot,vbus;
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
@@ -112,6 +113,8 @@ public class Robot extends TimedRobot {
     testIntakeJoint=false;
     testConveyor=false;
     testShoot=false;
+    SmartDashboard.putNumber("testP",0.);
+    vbus = true;  // switch between vbus and closed loop
   }
 
   String onstring;
@@ -119,8 +122,11 @@ public class Robot extends TimedRobot {
   double testVal2 = 0.;
   @Override
   public void testPeriodic() {
+    if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_CLMODE)) vbus=!vbus;
+    SmartDashboard.putBoolean("vbus",vbus);
     if(mechJoytick1.getRawButtonPressed(Constants.OIConstants.TEST_INTAKE_JOINT)){
       testIntakeJoint=!testIntakeJoint;
+      if(testIntakeJoint)SmartDashboard.putNumber("testP",Constants.IntakeConstants.jointP);
     }
     if(mechJoytick1.getRawButtonPressed(Constants.OIConstants.TEST_INTAKE_ROLLER)){
       testIntakeRoller=!testIntakeRoller;
@@ -143,31 +149,55 @@ public class Robot extends TimedRobot {
     if (testIntakeRoller)onstring+=" Roller ";
     if (testShoot)       onstring+=" Shoot ";
     SmartDashboard.putString("testMode",onstring);
+
     if (Constants.CLIMBER_AVAILABLE){
-      if (mechJoytick1.getRawButtonPressed(OIConstants.SOFTLIMIT_DISABLE)){
-        m_robotContainer.getClimber().switchSoftLimits(false, false);
-      }
-      if (mechJoytick1.getRawButtonPressed(OIConstants.SOFTLIMIT_ENABLE)){
-        m_robotContainer.getClimber().switchSoftLimits(true, true);
+      if(testIntakeJoint){
+        if (mechJoytick1.getRawButtonPressed(OIConstants.SOFTLIMIT_DISABLE)){
+          m_robotContainer.getClimber().switchSoftLimits(false, false);
+        }
+        if (mechJoytick1.getRawButtonPressed(OIConstants.SOFTLIMIT_ENABLE)){
+          m_robotContainer.getClimber().switchSoftLimits(true, true);
+        }
+        if(vbus)m_robotContainer.getClimber().setClimberSpeed(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT)*.3);
+        testVal = m_robotContainer.getClimber().getClimberPosition();
+        if (mechJoytick1.getRawButtonPressed(OIConstants.RESETENCODER)){
+          m_robotContainer.getClimber().switchSoftLimits(true, true);  
+        // yeah there is already a special button for this, but this is consistent with other functionality and doesn't hurt anything
+        }
       }
     }
     if (Constants.INTAKE_AVAILABLE){
       if(testIntakeJoint){
-        m_robotContainer.getIntake().goJoint(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT)*.3);
+        if(vbus)m_robotContainer.getIntake().goJoint(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT)*.3);
         testVal = m_robotContainer.getIntake().getJointPosition();
         testVal2 = m_robotContainer.getIntake().getJointPosition2();
+        if (mechJoytick1.getRawButtonPressed(OIConstants.SOFTLIMIT_DISABLE)){
+          m_robotContainer.getIntake().switchSoftLimits(false, false);
+        }
+        if (mechJoytick1.getRawButtonPressed(OIConstants.SOFTLIMIT_ENABLE)){
+          m_robotContainer.getIntake().switchSoftLimits(true, true);
+        }
         if (mechJoytick1.getRawButtonPressed(OIConstants.RESETENCODER)){
           m_robotContainer.getIntake().resetJointEncoder();
         }
+        if (mechJoytick1.getRawButtonPressed(OIConstants.TEST_LOW_CONTROL)){
+          m_robotContainer.getIntake().setJointPosition(IntakeConstants.JointUpPosition);
+        }
+        if (mechJoytick1.getRawButtonPressed(OIConstants.TEST_HIGH_CONTROL)){
+          m_robotContainer.getIntake().setJointPosition(IntakeConstants.JointPickupPosition);
+        }
+        double testP = SmartDashboard.getNumber("testP",0.);
+        m_robotContainer.getIntake().setJointPID(testP,0.,0.);
     }
       if(testIntakeRoller){
-        m_robotContainer.getIntake().rollers(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
+        if(vbus)m_robotContainer.getIntake().rollers(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
+        testVal = m_robotContainer.getIntake().getRollerSpeed();
       }
       
     }
     if (Constants.SHOOTER_AVAILABLE){
        if(testConveyor){
-        m_robotContainer.getShoot().goConvey(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
+        if(vbus)m_robotContainer.getShoot().goConvey(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
         testVal = m_robotContainer.getShoot().getConveySpeed();
       }
     }

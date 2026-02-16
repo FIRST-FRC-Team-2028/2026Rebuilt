@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
@@ -60,15 +61,15 @@ public class Intake extends SubsystemBase {
     joint_Config
       .idleMode(IdleMode.kCoast);
     joint_Config.encoder
-      .positionConversionFactor(IntakeConstants.JointPositionConversionFactor);
+      .positionConversionFactor(IntakeConstants.JointPositionConversionFactor);  // cannot change sign; out direction is encoder negative
     jointF_Config.encoder
       .positionConversionFactor(IntakeConstants.JointPositionConversionFactor);
     joint_Config.closedLoop
       .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
     joint_Config.softLimit
-      .forwardSoftLimit(IntakeConstants.jointForwardSoftLimit)
+      .forwardSoftLimit(IntakeConstants.jointForwardSoftLimit)  // forward is retracted
       .forwardSoftLimitEnabled(true)
-      .reverseSoftLimit(IntakeConstants.jointReverseSoftLimit)
+      .reverseSoftLimit(IntakeConstants.jointReverseSoftLimit)  // reverse is deployed
       .reverseSoftLimitEnabled(true);
     jointF_Config.follow(jointLead,true);
 
@@ -93,6 +94,8 @@ public class Intake extends SubsystemBase {
   public void rollers(double speed){
     rollers.set(speed);
   }
+  public double getRollerSpeed(){return rollers_Encoder.getVelocity();}
+
   /**make joint motor move Vbus - for testing */
   public void goJoint(double speed){
     jointLead.set(speed);
@@ -100,9 +103,10 @@ public class Intake extends SubsystemBase {
   public void goJointF(double speed){
     jointFollow.set(speed);
   }
-  /** Sets the position of the Joint in degrees */
+  /** Sets the position of the Joint in degrees
+   * where positive is retracted, negative is deployed
+   */
   public void setJointPosition(double position){
-    position = Units.degreesToRotations(position);
     joint_Controller.setSetpoint(position, ControlType.kPosition);
   }  
   /**NO Returns the joint position in degrees */
@@ -111,6 +115,18 @@ public class Intake extends SubsystemBase {
   }
   public double getJointPosition2() {
     return joint_Encoder2.getPosition();
+  }
+  public void switchSoftLimits(boolean offon, boolean resetZero){
+    joint_Config.softLimit.forwardSoftLimitEnabled(offon);
+    joint_Config.softLimit.reverseSoftLimitEnabled(offon);
+    jointLead.configure(joint_Config, ResetMode.kResetSafeParameters, null);
+    if (resetZero) joint_Encoder.setPosition(IntakeConstants.JointUpPosition);
+  }
+  /**setPID values */
+  public void setJointPID(double p,double i, double d){
+    joint_Config.closedLoop
+      .pid(p,i,d);
+    jointLead.configure(joint_Config, ResetMode.kNoResetSafeParameters, null);
   }
 
   /** Runs the rollers at {@code .5} speed */

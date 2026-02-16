@@ -98,6 +98,10 @@ public class Climber extends SubsystemBase {
   public double getClimberCurrent(){
     return climber.getOutputCurrent();
   }
+  /**enable/disable soft limits
+   * @param enabled  true to enable
+   * @param setPosition true to reset encoder current is called travel position
+   */
   public void switchSoftLimits(boolean enabled, boolean setPosition){
     climber_Config.softLimit.forwardSoftLimitEnabled(enabled);
     climber_Config.softLimit.reverseSoftLimitEnabled(enabled);
