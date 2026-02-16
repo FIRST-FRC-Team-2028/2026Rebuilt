@@ -355,8 +355,23 @@ public class Drivetrain extends SubsystemBase {
     return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraints, goalEndVelocity);
   }
 
-    public Command pathfindToPose(Pose2d targetPose, double goalEndVelocity) {
+  public Command pathfindToPose(Pose2d targetPose, double goalEndVelocity) {
     return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraints, goalEndVelocity);
+  }
+
+  public Command pathfindToPoseOrPath(Pose2d targetPose, double goalEndVelocity, String pathname){
+    if (pathname==FieldConstants.noPath){
+      return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraints, goalEndVelocity);
+    } else {
+      PathPlannerPath path;
+      try{
+        path = PathPlannerPath.fromPathFile(pathname);
+        return AutoBuilder.pathfindThenFollowPath(path, PathPlannerConstants.pathConstraints);
+      } catch(Exception e){
+        e.getStackTrace();
+        return new InstantCommand(()->System.out.println("FAIL"));
+      }
+    }
   }
 
 }

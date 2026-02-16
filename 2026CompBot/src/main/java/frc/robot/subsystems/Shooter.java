@@ -20,10 +20,10 @@ import frc.robot.Constants.CANIDS;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
-  private final SparkMax centerShooter, leftShooter, /*rightShooter,*/ conveyor, feed;
-  private final SparkMaxConfig  center_Config, left_Config, /*right_Config,*/ feed_Config, conveyor_Config;
-  private final RelativeEncoder center_Encoder, conveyor_Encoder, feed_Encoder;
-  private final SparkClosedLoopController center_ClosedLoopController, conveyor_ClosedLoopController, feed_ClosedLoopController;
+  private final SparkMax centerShooter, leftShooter, /*rightShooter,*/ conveyor;
+  private final SparkMaxConfig  center_Config, left_Config, /*right_Config,*/ conveyor_Config;
+  private final RelativeEncoder center_Encoder, conveyor_Encoder;
+  private final SparkClosedLoopController center_ClosedLoopController, conveyor_ClosedLoopController;
   /** Manupulates scoring element: fuel
    * <p>Methods:<ul>
    * <li>{@code setShooterSpeed} - Sets the speed for the shooter using PID controller on velocity control type
@@ -46,21 +46,17 @@ public class Shooter extends SubsystemBase {
     centerShooter = new SparkMax(CANIDS.centerShooter, MotorType.kBrushless);
     //rightShooter = new SparkMax(CANIDS.rightShooter, MotorType.kBrushless);
     conveyor = new SparkMax(CANIDS.conveyor, MotorType.kBrushless);
-    feed = new SparkMax(CANIDS.feed, MotorType.kBrushless);
 
     left_Config = new SparkMaxConfig();
     center_Config = new SparkMaxConfig();
     //right_Config = new SparkMaxConfig();
     conveyor_Config = new SparkMaxConfig();
-    feed_Config = new SparkMaxConfig();
 
     center_Encoder = centerShooter.getEncoder();
     conveyor_Encoder = conveyor.getEncoder();
-    feed_Encoder = feed.getEncoder();
 
     center_ClosedLoopController = centerShooter.getClosedLoopController();
     conveyor_ClosedLoopController = conveyor.getClosedLoopController();
-    feed_ClosedLoopController = feed.getClosedLoopController();
 
 
     center_Config
@@ -80,18 +76,11 @@ public class Shooter extends SubsystemBase {
     conveyor_Config.closedLoop
       .pid(ShooterConstants.conveyorP, ShooterConstants.conveyorI, ShooterConstants.conveyorD);
 
-    feed_Config
-      .idleMode(IdleMode.kCoast);
-    feed_Config.encoder
-      .velocityConversionFactor(ShooterConstants.feedVelocityConversionFactor);
-    feed_Config.closedLoop
-      .pid(ShooterConstants.feedP, ShooterConstants.feedI, ShooterConstants.feedD);
 
     leftShooter.configure(left_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     centerShooter.configure(center_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     //rightShooter.configure(right_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     conveyor.configure(conveyor_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    feed.configure(feed_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 
   }
@@ -124,16 +113,10 @@ public class Shooter extends SubsystemBase {
     conveyor_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
   }
   
-  /** Sets the speed for the feed using PID controller on velocity
-   * @param Speed in RPM
-   */
-  public void setFeedSpeed(double Speed){
-    feed_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
-  }
+
   /** Stops all of the motors involved with shooting */
   public void stopShooting(){
     centerShooter.stopMotor();
-    feed.stopMotor();
     conveyor.stopMotor();
   }
 
