@@ -119,14 +119,19 @@ public class Intake extends SubsystemBase {
   public void switchSoftLimits(boolean offon, boolean resetZero){
     joint_Config.softLimit.forwardSoftLimitEnabled(offon);
     joint_Config.softLimit.reverseSoftLimitEnabled(offon);
-    jointLead.configure(joint_Config, ResetMode.kResetSafeParameters, null);
+    jointLead.configure(joint_Config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     if (resetZero) joint_Encoder.setPosition(IntakeConstants.JointUpPosition);
+  }
+  public void setJointIdleMode(IdleMode mode){
+    joint_Config.idleMode(mode);
+    jointLead.configure(joint_Config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+
   }
   /**setPID values */
   public void setJointPID(double p,double i, double d){
     joint_Config.closedLoop
       .pid(p,i,d);
-    jointLead.configure(joint_Config, ResetMode.kNoResetSafeParameters, null);
+    jointLead.configure(joint_Config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
   /** Runs the rollers at {@code .5} speed */

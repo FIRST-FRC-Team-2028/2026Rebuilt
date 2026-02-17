@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.91,
+        "x": 7.7,
         "y": 2.535
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.444643964677798,
-        "y": 2.046477376130601
+        "x": 3.219659090909091,
+        "y": 2.282840909090909
       },
       "isLocked": false,
       "linkedName": "Right Pathfind To Center END"

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -182,9 +184,11 @@ public class Robot extends TimedRobot {
         }
         if (mechJoytick1.getRawButtonPressed(OIConstants.TEST_LOW_CONTROL)){
           m_robotContainer.getIntake().setJointPosition(IntakeConstants.JointUpPosition);
+          m_robotContainer.getIntake().setJointIdleMode(IdleMode.kBrake);
         }
         if (mechJoytick1.getRawButtonPressed(OIConstants.TEST_HIGH_CONTROL)){
           m_robotContainer.getIntake().setJointPosition(IntakeConstants.JointPickupPosition);
+          m_robotContainer.getIntake().setJointIdleMode(IdleMode.kCoast);
         }
         double testP = SmartDashboard.getNumber("testP",0.);
         m_robotContainer.getIntake().setJointPID(testP,0.,0.);

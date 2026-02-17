@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.jar.Attributes.Name;
 
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.FieldCentric;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -83,7 +84,17 @@ public class RobotContainer {
           ()->driveSubsystem.pathfindToPose(driveSubsystem.getTorange(alliance, 2.25, 1.5), 0), Set.of(driveSubsystem)).alongWith(new InstantCommand(()->System.out.println("Working"))));
       NamedCommands.registerCommand("PathfindToClimbLeftPath", driveSubsystem.pathfindToPath("Drive Climb Left"));
       NamedCommands.registerCommand("PathfindToClimbRightPath", driveSubsystem.pathfindToPath("Drive Climb Right"));
-
+      if (Constants.INTAKE_AVAILABLE){
+        NamedCommands.registerCommand("Intake Out", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition)));
+        NamedCommands.registerCommand("Run Intake", intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed));
+        if (Constants.SHOOTER_AVAILABLE){
+          NamedCommands.registerCommand("Shoot Sequence", new Shoot(shootingSubsystem).alongWith(new AgitateIntake(intakeSubsystem)));
+          //NamedCommands.registerCommand("Advanced Shoot Sequence", new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
+        }
+      }
+      if(Constants.CLIMBER_AVAILABLE){
+        NamedCommands.registerCommand("Climb", null);
+      }
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
         (stream) -> PathPlannerConstants.isCompetition
           ? stream.filter(auto -> auto.getName().startsWith("Comp"))
