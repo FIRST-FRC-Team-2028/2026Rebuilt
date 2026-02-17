@@ -17,7 +17,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import frc.robot.Constants;
 import frc.robot.Constants.CANIDS;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.FieldConstants;
@@ -99,6 +98,10 @@ public class Climber extends SubsystemBase {
   public double getClimberCurrent(){
     return climber.getOutputCurrent();
   }
+  /**enable/disable soft limits
+   * @param enabled  true to enable
+   * @param setPosition true to reset encoder current is called travel position
+   */
   public void switchSoftLimits(boolean enabled, boolean setPosition){
     climber_Config.softLimit.forwardSoftLimitEnabled(enabled);
     climber_Config.softLimit.reverseSoftLimitEnabled(enabled);

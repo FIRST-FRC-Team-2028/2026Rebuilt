@@ -1,0 +1,42 @@
+compAlt/.gitignore
+compAlt/build.gradle
+compAlt/gradlew
+compAlt/gradlew.bat
+compAlt/settings.gradle
+compAlt/WPILib-License.md
+compAlt/.vscode/launch.json
+compAlt/.vscode/settings.json
+compAlt/.wpilib/wpilib_preferences.json
+compAlt/gradle/wrapper/gradle-wrapper.jar
+compAlt/gradle/wrapper/gradle-wrapper.properties
+compAlt/src/main/deploy/example.txt
+compAlt/src/main/deploy/pathplanner/navgrid.json
+compAlt/src/main/deploy/pathplanner/settings.json
+compAlt/src/main/deploy/pathplanner/paths/Example Path.path
+compAlt/src/main/deploy/pathplanner/paths/New New Path.path
+compAlt/src/main/deploy/pathplanner/paths/New Path.path
+compAlt/src/main/java/frc/robot/Constants.java
+compAlt/src/main/java/frc/robot/Main.java
+compAlt/src/main/java/frc/robot/Robot.java
+compAlt/src/main/java/frc/robot/RobotContainer.java
+compAlt/src/main/java/frc/robot/VPose2d.java
+compAlt/src/main/java/frc/robot/commands/AdvancedShoot.java
+compAlt/src/main/java/frc/robot/commands/AgitateIntake.java
+compAlt/src/main/java/frc/robot/commands/AutoCloseAndClimb.java
+compAlt/src/main/java/frc/robot/commands/DriveCommand.java
+compAlt/src/main/java/frc/robot/commands/DriveTowardTower.java
+compAlt/src/main/java/frc/robot/commands/MoveClimber.java
+compAlt/src/main/java/frc/robot/commands/Shoot.java
+compAlt/src/main/java/frc/robot/subsystems/AprilTags.java
+compAlt/src/main/java/frc/robot/subsystems/Climber.java
+compAlt/src/main/java/frc/robot/subsystems/Drivetrain.java
+compAlt/src/main/java/frc/robot/subsystems/Intake.java
+compAlt/src/main/java/frc/robot/subsystems/PixyCamReader.java
+compAlt/src/main/java/frc/robot/subsystems/Shooter.java
+compAlt/src/main/java/frc/robot/subsystems/SwerveModule.java
+compAlt/vendordeps/PathplannerLib-2026.1.2.json
+compAlt/vendordeps/Phoenix5-5.36.0.json
+compAlt/vendordeps/Phoenix6-26.1.1.json
+compAlt/vendordeps/photonlib.json
+compAlt/vendordeps/REVLib.json
+compAlt/vendordeps/WPILibNewCommands.json
