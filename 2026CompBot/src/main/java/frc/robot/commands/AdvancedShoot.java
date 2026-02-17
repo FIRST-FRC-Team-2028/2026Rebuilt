@@ -45,7 +45,6 @@ public class AdvancedShoot extends Command {
     if (!shooting){
       if(shooter.getShooterVelocity()> velocity-shootSpeedDeadband){
         shooter.setConveyorSpeed(ShooterConstants.conveyorShootSpeed);
-        shooter.setFeedSpeed(ShooterConstants.feedShootSpeed);
         shooting = true;
       }
     }
