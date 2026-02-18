@@ -22,7 +22,7 @@ public class AdvancedShoot extends Command {
    * <p> Presumes this Command runs while a button is help
    * and ends when released.
    * @param shooter
-   * @param distance
+   * @param distance in meters
    */
   public AdvancedShoot(Shooter shooter, double distance) {
     this.shooter = shooter;
@@ -42,12 +42,12 @@ public class AdvancedShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!shooting){
+    /*if (!shooting){
       if(shooter.getShooterVelocity()> velocity-shootSpeedDeadband){
         shooter.setConveyorSpeed(ShooterConstants.conveyorShootSpeed);
         shooting = true;
       }
-    }
+    }*/
     /*if (shooting && shooter.getShooterVelocity() < velocity-shootSpeedDeadband){
       shotCount++;
       if (shotCount>5) shooter.setShooterSpeed(velocity+velocityIncrease);

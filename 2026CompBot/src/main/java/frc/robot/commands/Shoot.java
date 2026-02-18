@@ -36,12 +36,12 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!shooting){
+    /*if (!shooting){
       if(shooter.getShooterVelocity()> ShooterConstants.shooterShootSpeed-shootSpeedDeadband){
         shooter.setConveyorSpeed(ShooterConstants.conveyorShootSpeed);
       shooting = true;
       }
-    }
+    }*/
     /*if (shooting && shooter.getShooterVelocity() < ShooterConstants.shooterShootSpeed-shootSpeedDeadband){
       shotCount++;
       if (shotCount>5) shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed+velocityIncrease);
