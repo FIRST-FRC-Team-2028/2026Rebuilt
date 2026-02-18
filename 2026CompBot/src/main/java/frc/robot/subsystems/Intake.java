@@ -32,8 +32,8 @@ public class Intake extends SubsystemBase {
   private final SparkFlexConfig rollers_Config;
   private final SparkMaxConfig joint_Config, jointF_Config;
   private final RelativeEncoder rollers_Encoder;
-  private final RelativeEncoder joint_Encoder, joint_Encoder2;
-  private final SparkClosedLoopController joint_Controller;
+  private final RelativeEncoder joint_Encoder, jointF_Encoder;
+  private final SparkClosedLoopController joint_Controller, jointF_Controller;
   /** Picks up the scoring element: fuel
    * <p>Methods: <ul>
    * <li>{@code rollers} - Sets the rollers to a speed
@@ -63,7 +63,7 @@ public class Intake extends SubsystemBase {
     joint_Config.encoder
       .positionConversionFactor(IntakeConstants.JointPositionConversionFactor);  // cannot change sign; out direction is encoder negative
     jointF_Config.encoder
-      .positionConversionFactor(IntakeConstants.JointPositionConversionFactor);
+      .positionConversionFactor(IntakeConstants.JointFPositionConversionFactor);
     joint_Config.closedLoop
       .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
     joint_Config.softLimit
@@ -71,7 +71,11 @@ public class Intake extends SubsystemBase {
       .forwardSoftLimitEnabled(true)
       .reverseSoftLimit(IntakeConstants.jointReverseSoftLimit)  // reverse is deployed
       .reverseSoftLimitEnabled(true);
-    jointF_Config.follow(jointLead,true);
+    jointF_Config.softLimit
+      .forwardSoftLimit(IntakeConstants.jointFForwardSoftLimit)  // forward is deployed
+      .forwardSoftLimitEnabled(true)
+      .reverseSoftLimit(IntakeConstants.jointFReverseSoftLimit)  // reverse is retracted
+      .reverseSoftLimitEnabled(true);
 
     rollers.configure(rollers_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     jointLead.configure(joint_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -79,9 +83,10 @@ public class Intake extends SubsystemBase {
 
     rollers_Encoder = rollers.getEncoder();
     joint_Encoder = jointLead.getEncoder();
-    joint_Encoder2 = jointFollow.getEncoder();
+    jointF_Encoder = jointFollow.getEncoder();
 
     joint_Controller = jointLead.getClosedLoopController();
+    jointF_Controller = jointFollow.getClosedLoopController();
     joint_Encoder.setPosition(IntakeConstants.jointForwardSoftLimit);
 
   }
@@ -108,23 +113,32 @@ public class Intake extends SubsystemBase {
    */
   public void setJointPosition(double position){
     joint_Controller.setSetpoint(position, ControlType.kPosition);
+    jointF_Controller.setSetpoint(position, ControlType.kPosition);
   }  
-  /**NO Returns the joint position in degrees */
+  /**Returns the joint position in degrees */
   public double getJointPosition() {
     return joint_Encoder.getPosition();
   }
   public double getJointPosition2() {
-    return joint_Encoder2.getPosition();
+    return jointF_Encoder.getPosition();
   }
   public void switchSoftLimits(boolean offon, boolean resetZero){
     joint_Config.softLimit.forwardSoftLimitEnabled(offon);
     joint_Config.softLimit.reverseSoftLimitEnabled(offon);
-    jointLead.configure(joint_Config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-    if (resetZero) joint_Encoder.setPosition(IntakeConstants.JointUpPosition);
+    jointLead.configure(joint_Config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    jointF_Config.softLimit.forwardSoftLimitEnabled(offon);
+    jointF_Config.softLimit.reverseSoftLimitEnabled(offon);
+    jointFollow.configure(jointF_Config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    if (resetZero) {
+      joint_Encoder.setPosition(IntakeConstants.JointUpPosition);
+      jointF_Encoder.setPosition(IntakeConstants.JointFUpPosition);
+    }
   }
   public void setJointIdleMode(IdleMode mode){
     joint_Config.idleMode(mode);
     jointLead.configure(joint_Config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    jointF_Config.idleMode(mode);
+    jointFollow.configure(jointF_Config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
 
   }
   /**setPID values */
@@ -132,6 +146,9 @@ public class Intake extends SubsystemBase {
     joint_Config.closedLoop
       .pid(p,i,d);
     jointLead.configure(joint_Config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    jointF_Config.closedLoop
+      .pid(p,i,d);
+    jointFollow.configure(jointF_Config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
   /** Runs the rollers at {@code .5} speed */
@@ -154,7 +171,7 @@ public class Intake extends SubsystemBase {
 
   public void resetJointEncoder(){
     joint_Encoder.setPosition(IntakeConstants.jointForwardSoftLimit);
-    //joint_Encoder2.setPosition(IntakeConstants.jointReverseSoftLimit);
+    jointF_Encoder.setPosition(IntakeConstants.jointFForwardSoftLimit);
   }
 
 }

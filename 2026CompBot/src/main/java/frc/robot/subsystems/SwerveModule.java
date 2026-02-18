@@ -86,7 +86,7 @@ public class SwerveModule {
         .positionConversionFactor(ModuleConstants.kDrivePositionConversionFactor);
     m_driveConfig.closedLoop
         .pidf(ModuleConstants.kDriveP, ModuleConstants.kDriveI, ModuleConstants.kDriveD, ModuleConstants.kDriveFF);
-    
+        //TODO update this to the new FF config
     m_turningConfig
         .idleMode(IdleMode.kBrake)
         //.closedLoopRampRate(ModuleConstants.kRampRateT)
