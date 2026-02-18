@@ -20,10 +20,10 @@ import frc.robot.Constants.CANIDS;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
-  private final SparkMax centerShooter, leftShooter, /*rightShooter,*/ conveyor;
-  private final SparkMaxConfig  center_Config, left_Config, /*right_Config,*/ conveyor_Config;
-  private final RelativeEncoder center_Encoder, conveyor_Encoder;
-  private final SparkClosedLoopController center_ClosedLoopController, conveyor_ClosedLoopController;
+  private final SparkMax centerShooter, leftShooter; /*rightShooter, conveyor*/
+  private final SparkMaxConfig  center_Config, left_Config; /*right_Config, conveyor_Config*/
+  private final RelativeEncoder center_Encoder/*, conveyor_Encoder*/;
+  private final SparkClosedLoopController center_ClosedLoopController/*, conveyor_ClosedLoopController*/;
   /** Manupulates scoring element: fuel
    * <p>Methods:<ul>
    * <li>{@code setShooterSpeed} - Sets the speed for the shooter using PID controller on velocity control type
@@ -45,18 +45,18 @@ public class Shooter extends SubsystemBase {
     leftShooter = new SparkMax(CANIDS.leftShooter, MotorType.kBrushless);
     centerShooter = new SparkMax(CANIDS.centerShooter, MotorType.kBrushless);
     //rightShooter = new SparkMax(CANIDS.rightShooter, MotorType.kBrushless);
-    conveyor = new SparkMax(CANIDS.conveyor, MotorType.kBrushless);
+    //conveyor = new SparkMax(CANIDS.conveyor, MotorType.kBrushless);
 
     left_Config = new SparkMaxConfig();
     center_Config = new SparkMaxConfig();
     //right_Config = new SparkMaxConfig();
-    conveyor_Config = new SparkMaxConfig();
+    //conveyor_Config = new SparkMaxConfig();
 
     center_Encoder = centerShooter.getEncoder();
-    conveyor_Encoder = conveyor.getEncoder();
+    //conveyor_Encoder = conveyor.getEncoder();
 
     center_ClosedLoopController = centerShooter.getClosedLoopController();
-    conveyor_ClosedLoopController = conveyor.getClosedLoopController();
+    //conveyor_ClosedLoopController = conveyor.getClosedLoopController();
 
 
     center_Config
@@ -69,18 +69,18 @@ public class Shooter extends SubsystemBase {
     left_Config.follow(CANIDS.centerShooter);
     //right_Config.follow(CANIDS.centerShooter);
 
-    conveyor_Config
+    /*conveyor_Config
       .idleMode(IdleMode.kCoast);
     conveyor_Config.encoder
       .velocityConversionFactor(ShooterConstants.conveyorVelocityConversionFactor);
     conveyor_Config.closedLoop
-      .pid(ShooterConstants.conveyorP, ShooterConstants.conveyorI, ShooterConstants.conveyorD);
+      .pid(ShooterConstants.conveyorP, ShooterConstants.conveyorI, ShooterConstants.conveyorD);*/
 
 
     leftShooter.configure(left_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     centerShooter.configure(center_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     //rightShooter.configure(right_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    conveyor.configure(conveyor_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    //conveyor.configure(conveyor_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 
   }
@@ -91,8 +91,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Speed (RPM)", center_Encoder.getVelocity());
   }
 
-  public void goConvey(double speed){conveyor.set(speed);}
-  public double getConveySpeed(){return conveyor_Encoder.getVelocity();}
+  //public void goConvey(double speed){conveyor.set(speed);}
+  //public double getConveySpeed(){return conveyor_Encoder.getVelocity();}
 
   /**Sets the speed for the shooter using PID controller on velocity control type
    * @param Speed in RPM
@@ -110,14 +110,14 @@ public class Shooter extends SubsystemBase {
    * @param Speed in RPM
    */
   public void setConveyorSpeed(double Speed){
-    conveyor_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
+    //conveyor_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
   }
   
 
   /** Stops all of the motors involved with shooting */
   public void stopShooting(){
     centerShooter.stopMotor();
-    conveyor.stopMotor();
+    //conveyor.stopMotor();
   }
 
 

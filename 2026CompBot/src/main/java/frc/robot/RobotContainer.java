@@ -162,6 +162,16 @@ public class RobotContainer {
         .onFalse(new InstantCommand(()-> climberSubsystem.setClimberSpeed(0)));
   
     }
+    if (Constants.SHOOTER_AVAILABLE){
+      new JoystickButton(mechJoytick1, 1) //Set Shooter MAX speed
+        .onTrue(new InstantCommand(()->shootingSubsystem.setShooterSpeed(5676)));
+      new JoystickButton(mechJoytick1, 2)
+        .onTrue(new AdvancedShoot(shootingSubsystem, 3));
+      new JoystickButton(mechJoytick1, 3)
+        .onTrue(new AdvancedShoot(shootingSubsystem, 5));
+            new JoystickButton(mechJoytick1, 4)
+        .onTrue(new AdvancedShoot(shootingSubsystem, 7));
+    }
 
   }
 
