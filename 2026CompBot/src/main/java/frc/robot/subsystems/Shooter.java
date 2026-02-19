@@ -82,8 +82,6 @@ public class Shooter extends SubsystemBase {
     centerShooter.configure(center_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     //rightShooter.configure(right_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     //conveyor.configure(conveyor_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-
   }
 
  @Override
