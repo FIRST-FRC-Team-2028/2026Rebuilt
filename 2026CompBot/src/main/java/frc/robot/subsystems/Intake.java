@@ -60,11 +60,16 @@ public class Intake extends SubsystemBase {
 
     joint_Config
       .idleMode(IdleMode.kCoast);
+    jointF_Config
+      .idleMode(IdleMode.kCoast)
+      .inverted(true);
     joint_Config.encoder
       .positionConversionFactor(IntakeConstants.JointPositionConversionFactor);  // cannot change sign; out direction is encoder negative
     jointF_Config.encoder
       .positionConversionFactor(IntakeConstants.JointFPositionConversionFactor);
     joint_Config.closedLoop
+      .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
+    jointF_Config.closedLoop
       .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
     joint_Config.softLimit
       .forwardSoftLimit(IntakeConstants.jointForwardSoftLimit)  // forward is retracted
@@ -88,6 +93,7 @@ public class Intake extends SubsystemBase {
     joint_Controller = jointLead.getClosedLoopController();
     jointF_Controller = jointFollow.getClosedLoopController();
     joint_Encoder.setPosition(IntakeConstants.jointForwardSoftLimit);
+    jointF_Encoder.setPosition(IntakeConstants.jointForwardSoftLimit);
 
   }
 
@@ -104,6 +110,7 @@ public class Intake extends SubsystemBase {
   /**make joint motor move Vbus - for testing */
   public void goJoint(double speed){
     jointLead.set(speed);
+    jointFollow.set(speed);
   }
   public void goJointF(double speed){
     jointFollow.set(speed);

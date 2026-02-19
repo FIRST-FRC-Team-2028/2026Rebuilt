@@ -66,7 +66,7 @@ public class Shooter extends SubsystemBase {
     center_Config.closedLoop
       .pid(ShooterConstants.shooterP, ShooterConstants.shooterI, ShooterConstants.shooterD);
     
-    left_Config.follow(CANIDS.centerShooter);
+    left_Config.idleMode(IdleMode.kCoast).follow(CANIDS.centerShooter);
     //right_Config.follow(CANIDS.centerShooter);
 
     /*conveyor_Config
@@ -153,6 +153,8 @@ public class Shooter extends SubsystemBase {
 
         // Calculate exit velocity (m/s)
         double velocity = calculateExitVelocity(clampedDistance);
+        SmartDashboard.putNumber("ClampedDistance", clampedDistance);
+        SmartDashboard.putNumber("RPM", velocityToRPM(clampedDistance));
 
         // Convert velocity to RPM
         return velocityToRPM(velocity);
@@ -184,7 +186,7 @@ public class Shooter extends SubsystemBase {
                 * (distanceMeters * Math.tan(thetaRad) - ShooterConstants.delta_H);
 
     double idealVelocity = Math.sqrt(numerator / denominator);
-
+    
     // Apply real-world correction
     return idealVelocity * ShooterConstants.velocity_fudge_factor;
   }

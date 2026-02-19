@@ -35,9 +35,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
  *  FieldConstants
  */
 public final class Constants {
-  public static final boolean DRIVE_AVAILABLE = false;
+  public static final boolean DRIVE_AVAILABLE = true;
   public static final boolean CAMERA_AVAILABLE = false;
-  public static final boolean SHOOTER_AVAILABLE = false;
+  public static final boolean SHOOTER_AVAILABLE = true;
   public static final boolean INTAKE_AVAILABLE = true;
   public static final boolean CLIMBER_AVAILABLE = false;
   public static final boolean PIXYCAM_AVAILABLE = false;
@@ -227,8 +227,8 @@ public final class Constants {
 
   public static class ShooterConstants {
     public static final double shooterP = 0.0002;
-    public static final double shooterI = 0.00000015;
-    public static final double shooterD = 0.015;
+    public static final double shooterI = 0.00000055;
+    public static final double shooterD = 0.00006;
     public static final double shooterVelocityConversionFactor = 1;
     public static final double conveyorP = 0;
     public static final double conveyorI = 0;
@@ -245,12 +245,12 @@ public final class Constants {
 
     //Shooter Math Constants 
     public static final double gravity = 9.81; //m/s^2
-    public static final double h_shooter = 17; //height as of 2/18/26
-    public static final double delta_H = Units.inchesToMeters(0)-Units.inchesToMeters(h_shooter);// 72 - h_shooter
+    public static final double h_shooter = 17; //height in inches as of 2/18/26
+    public static final double delta_H = Units.inchesToMeters(72)-Units.inchesToMeters(h_shooter);// 72 - h_shooter
     public static final double shooter_angle_deg = 50; //Estimate TODO set real angle
     public static final double wheel_diameter_meter = Units.inchesToMeters(4.25);  
-    public static final double max_shooting_distance_meters = 0.0; //TODO find max shooting distance
-    public static final double velocity_fudge_factor = 1.15; //Typical range: 1.10–1.20
+    public static final double max_shooting_distance_meters = Units.feetToMeters(35); //TODO find max shooting distance
+    public static final double velocity_fudge_factor = 2.2; //Typical range for foam: 1.3–1.40
 
   }
 
