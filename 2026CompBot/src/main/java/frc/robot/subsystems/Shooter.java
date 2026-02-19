@@ -14,6 +14,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIDS;
@@ -90,6 +91,10 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter Speed (RPM)", center_Encoder.getVelocity());
   }
+  /** Set the speed for the shooter using VBUS - test control */
+  public void setShooterVbus(double Speed){
+    centerShooter.set(Speed);
+  }
 
   //public void goConvey(double speed){conveyor.set(speed);}
   //public double getConveySpeed(){return conveyor_Encoder.getVelocity();}
@@ -100,6 +105,7 @@ public class Shooter extends SubsystemBase {
   public void setShooterSpeed(double Speed){
     center_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
   }
+
   
   /** Returns the RPM of the shooter wheels */
   public double getShooterVelocity(){

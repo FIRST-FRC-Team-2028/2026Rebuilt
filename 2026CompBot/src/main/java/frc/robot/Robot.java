@@ -204,6 +204,10 @@ public class Robot extends TimedRobot {
         //if(vbus)m_robotContainer.getShoot().goConvey(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
         //testVal = m_robotContainer.getShoot().getConveySpeed();
       }
+      if(testShoot){
+        if(vbus)m_robotContainer.getShoot().setShooterVbus(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
+        testVal = m_robotContainer.getShoot().getShooterVelocity();
+      }
     }
     if (Constants.PIXYCAM_AVAILABLE){
 

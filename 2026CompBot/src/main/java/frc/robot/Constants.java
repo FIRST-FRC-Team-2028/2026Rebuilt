@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 /** Table of Contents
@@ -238,11 +239,11 @@ public final class Constants {
 
     //Shooter Math Constants 
     public static final double gravity = 9.81; //m/s^2
-    public static final double h_shooter = 17; //height as of 2/18/26
-    public static final double delta_H = Units.inchesToMeters(0)-Units.inchesToMeters(h_shooter);// 72 - h_shooter
+    public static final double h_shooter = 17; //inches //height as of 2/18/26
+    public static final double delta_H = Units.inchesToMeters(72.)-Units.inchesToMeters(h_shooter);// 72 - h_shooter
     public static final double shooter_angle_deg = 50; //Estimate TODO set real angle
     public static final double wheel_diameter_meter = Units.inchesToMeters(4.25);  
-    public static final double max_shooting_distance_meters = 0.0; //TODO find max shooting distance
+    public static final double max_shooting_distance_meters = Units.feetToMeters(35.); //TODO find max shooting distance
     public static final double velocity_fudge_factor = 1.15; //Typical range: 1.10–1.20
 
   }
