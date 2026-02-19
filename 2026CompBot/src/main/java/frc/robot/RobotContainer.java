@@ -13,6 +13,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -117,13 +118,13 @@ public class RobotContainer {
       new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose)
       .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(mechTargetPose, 0, mechPathName), Set.of(driveSubsystem)));
       //Game Mech Set Target Buttons
-      new JoystickButton(mechJoytick1, 0) //Outpost
+      new JoystickButton(mechJoytick1, 90) //Outpost
         .onTrue(new InstantCommand(()->mechPathName=FieldConstants.OutpostPath));
-      new JoystickButton(mechJoytick1, 0) //Climb
+      new JoystickButton(mechJoytick1, 90) //Climb
         .onTrue(new InstantCommand(()->mechPathName=climberSubsystem.getWhereToClimb()));
-      new JoystickButton(mechJoytick1, 0) //Neutral Zone Left
+      new JoystickButton(mechJoytick1, 90) //Neutral Zone Left
         .onTrue(new InstantCommand(()->mechPathName=FieldConstants.noPath).alongWith(new InstantCommand(()->mechTargetPose=FieldConstants.NeutralZoneLeft)));
-      new JoystickButton(mechJoytick1, 0) //Neutral Zone Right
+      new JoystickButton(mechJoytick1, 90) //Neutral Zone Right
         .onTrue(new InstantCommand(()->mechPathName=FieldConstants.noPath).alongWith(new InstantCommand(()->mechTargetPose=FieldConstants.NeutralZoneRight)));
         
       if (Constants.CLIMBER_AVAILABLE){
@@ -134,13 +135,13 @@ public class RobotContainer {
     }
 
     if (Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
-      new JoystickButton(mechJoytick1, OIConstants.kShoot)
+      /*new JoystickButton(mechJoytick1, OIConstants.kShoot)
         .whileTrue(new Shoot(shootingSubsystem)
         .alongWith(new AgitateIntake(intakeSubsystem)));
 
       new JoystickButton(mechJoytick1, OIConstants.kAdvancedShoot)
         .whileTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm())
-        .alongWith(new AgitateIntake(intakeSubsystem)));
+        .alongWith(new AgitateIntake(intakeSubsystem)));*/
 
       /* new JoystickButton(mechJoytick1, OIConstants.kIntake)
         .onTrue(intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed))
@@ -164,13 +165,28 @@ public class RobotContainer {
     }
     if (Constants.SHOOTER_AVAILABLE){
       new JoystickButton(mechJoytick1, 1) //Set Shooter MAX speed
-        .onTrue(new InstantCommand(()->shootingSubsystem.setShooterSpeed(5676)));
-      new JoystickButton(mechJoytick1, 2)
-        .onTrue(new AdvancedShoot(shootingSubsystem, 3));
+        .onTrue(new InstantCommand(()->shootingSubsystem.setShooterSpeed(5676)))
+        .onFalse(new InstantCommand(()->shootingSubsystem.stopShooting()));
+      new JoystickButton(mechJoytick1, 2) //Set Shooter MAX speed
+        .onTrue(new InstantCommand(()->shootingSubsystem.setShooterSpeed(2800)))
+        .onFalse(new InstantCommand(()->shootingSubsystem.stopShooting()));
+      //new JoystickButton(mechJoytick1, 2)
+      //  .onTrue(new AdvancedShoot(shootingSubsystem, 3));
       new JoystickButton(mechJoytick1, 3)
-        .onTrue(new AdvancedShoot(shootingSubsystem, 5));
+        .whileTrue(new AdvancedShoot(shootingSubsystem, Units.feetToMeters(15)));
             new JoystickButton(mechJoytick1, 4)
-        .onTrue(new AdvancedShoot(shootingSubsystem, 7));
+        .whileTrue(new AdvancedShoot(shootingSubsystem, Units.feetToMeters(10)));
+    }
+    if (Constants.INTAKE_AVAILABLE){
+      new JoystickButton(mechJoytick1, 5)
+        .onTrue(new InstantCommand(()->intakeSubsystem.goJoint(0.3)))
+        .onFalse(new InstantCommand(()->intakeSubsystem.goJoint(0)));
+      new JoystickButton(mechJoytick1, 6)
+        .onTrue(new InstantCommand(()->intakeSubsystem.goJoint(-0.3)))
+        .onFalse(new InstantCommand(()->intakeSubsystem.goJoint(0)));
+      new JoystickButton(mechJoytick1, 7)
+        .onTrue(new InstantCommand(()->intakeSubsystem.rollers(-.4)))
+        .onFalse(new InstantCommand(()->intakeSubsystem.rollers(0)));
     }
 
   }
@@ -208,5 +224,11 @@ public class RobotContainer {
   }
   public Optional<Alliance> getAlliance(){
     return alliance;
+  }
+  public void turnOffDrive(){
+    driveSubsystem.removeDefaultCommand();
+  }
+  public void turnOnDrive(){
+      driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driverJoytick));
   }
 }

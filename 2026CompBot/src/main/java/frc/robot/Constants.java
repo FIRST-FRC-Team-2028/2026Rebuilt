@@ -36,9 +36,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
  *  FieldConstants
  */
 public final class Constants {
-  public static final boolean DRIVE_AVAILABLE = false;
+  public static final boolean DRIVE_AVAILABLE = true;
   public static final boolean CAMERA_AVAILABLE = false;
-  public static final boolean SHOOTER_AVAILABLE = false;
+  public static final boolean SHOOTER_AVAILABLE = true;
   public static final boolean INTAKE_AVAILABLE = true;
   public static final boolean CLIMBER_AVAILABLE = false;
   public static final boolean PIXYCAM_AVAILABLE = false;
@@ -206,14 +206,21 @@ public final class Constants {
     public static final double jointD = 0.;
     public static final double JointPositionConversionFactor = 110./38.; //in -20, target in -20| out -58, target out 90
     // We found that the encoder range is more negative out than in, but we cannot set this in the conversion factor
+    public static final double JointFPositionConversionFactor = 110./38.; //in -20, target in -20| out -58, target out 90
+    // We found that the encoder range is more negative out than in, but we cannot set this in the conversion factor
     public static final double RollerVelocityConversionFactor = 1.;
     public static final double jointForwardSoftLimit = 20.;
     public static final double jointReverseSoftLimit = -90.;
+    public static final double jointFForwardSoftLimit = 20.;
+    public static final double jointFReverseSoftLimit = -90.;
 
     //Joint Positions
     public static final double JointPickupPosition = -90.; //Degrees
     public static final double JointUpPosition = 20.; //Degrees
     public static final double JointAgitatePosition = -75.; //Degrees
+    public static final double JointFPickupPosition = -90.; //Degrees //TODO change the numbers for the follower motor
+    public static final double JointFUpPosition = 20.; //Degrees
+    public static final double JointFAgitatePosition = -75.; //Degrees
 
     //Rollers Speed
     public static final double IntakeSpeed = 0.75; //-1 to 1
@@ -221,8 +228,8 @@ public final class Constants {
 
   public static class ShooterConstants {
     public static final double shooterP = 0.0002;
-    public static final double shooterI = 0.00000015;
-    public static final double shooterD = 0.015;
+    public static final double shooterI = 0.00000055;
+    public static final double shooterD = 0.00006;
     public static final double shooterVelocityConversionFactor = 1;
     public static final double conveyorP = 0;
     public static final double conveyorI = 0;
@@ -239,12 +246,12 @@ public final class Constants {
 
     //Shooter Math Constants 
     public static final double gravity = 9.81; //m/s^2
-    public static final double h_shooter = 17; //inches //height as of 2/18/26
-    public static final double delta_H = Units.inchesToMeters(72.)-Units.inchesToMeters(h_shooter);// 72 - h_shooter
+    public static final double h_shooter = 17; //height in inches as of 2/18/26
+    public static final double delta_H = Units.inchesToMeters(72)-Units.inchesToMeters(h_shooter);// 72 - h_shooter
     public static final double shooter_angle_deg = 50; //Estimate TODO set real angle
     public static final double wheel_diameter_meter = Units.inchesToMeters(4.25);  
-    public static final double max_shooting_distance_meters = Units.feetToMeters(35.); //TODO find max shooting distance
-    public static final double velocity_fudge_factor = 1.15; //Typical range: 1.10–1.20
+    public static final double max_shooting_distance_meters = Units.feetToMeters(35); //TODO find max shooting distance
+    public static final double velocity_fudge_factor = 2.2; //Typical range for foam: 1.3–1.40
 
   }
 
@@ -270,11 +277,10 @@ public final class Constants {
     public static final int jointLead = 50;
     public static final int jointFollow = 52;
     //Shooter
-    public static final int leftShooter = 50;
-    public static final int centerShooter = 51;
-    public static final int rightShooter = 52;
+    public static final int leftShooter = 62;
+    public static final int centerShooter = 61;
+    public static final int rightShooter = 1000;
     public static final int conveyor = 1000;
-    public static final int feed = 61;
     //Climber
     public static final int climber = 70;
     public static final int climber_follower = 71;
@@ -320,7 +326,9 @@ public final class Constants {
     public static final int RESETENCODER          = 11; // A
     public static final int TEST_LOW_CONTROL      = 9;  // A
     public static final int TEST_HIGH_CONTROL     = 10; // A
-    public static final int TEST_CLMODE           = 2; //B
+    public static final int TEST_CLMODE           = 2;  // B
+    public static final int TEST_INTAKE_LEFT_JOINT= 3;  // B
+    public static final int TEST_INTAKE_RIGHT_JOINT=4;  // B
   }
 
   public static class CamConstants {
@@ -340,7 +348,7 @@ public final class Constants {
                                                         0,
                                                         0,
                                                         0,
-                                                        new Rotation3d(0.0,0.0,0.0));
+                                                        new Rotation3d(0.0,0.0,0.0)); //TODO: Add the real numbers
       public static final Transform3d robot_to_camera2 = new Transform3d(
                                                         0,
                                                         0,

@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.turnOnDrive();
   }
 
   boolean hubActive = true;
@@ -110,6 +111,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     CommandScheduler.getInstance().getActiveButtonLoop().clear();
+    m_robotContainer.turnOffDrive();
     testClimb=false;
     testIntakeRoller=false;
     testIntakeJoint=false;

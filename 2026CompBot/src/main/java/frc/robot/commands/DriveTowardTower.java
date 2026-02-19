@@ -62,7 +62,7 @@ public class DriveTowardTower extends Command{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // MrG asks, initialize set drive.brakemode. Do you want that to persist after this command ends? TODO
+    // MrG asks, initialize set drive.brakemode. Do you want that to persist after this command ends? 
   }
 
   // Continue until interrupted.
