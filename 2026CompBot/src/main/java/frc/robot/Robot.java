@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Seconds;
+
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -15,12 +17,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
-
+import frc.robot.util.Elastic;
+import frc.robot.util.HubTracker;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
   private final RobotContainer m_robotContainer;
   Joystick driverJoytick, mechJoytick1, mechJoytick2;
+  private Elastic.Notification notification = new Elastic.Notification();
   public Robot() {
     m_robotContainer = new RobotContainer();
     this.driverJoytick = m_robotContainer.getDriverJoystick();
@@ -68,6 +71,8 @@ public class Robot extends TimedRobot {
   boolean hubActive = true;
   int delay = 1;
   boolean dataSent = false;
+  boolean notificationSent = false;
+  
   @Override
   public void teleopPeriodic() {
     if (!dataSent){
@@ -80,27 +85,51 @@ public class Robot extends TimedRobot {
       dataSent = true;
      }
     }
-    double matchTime = DriverStation.getMatchTime();
+    /*double matchTime = DriverStation.getMatchTime();
     if (matchTime > 130) {
     // Transition shift, hub is active.
       hubActive = true;
     } else if (matchTime > 105) {
     // Shift 1
       hubActive = (1+delay)%2 ==1;
+      if((matchTime<109||matchTime>107) && !hubActive &&!notificationSent){ 
+        Elastic.sendNotification(notification.withLevel(Elastic.NotificationLevel.INFO)
+        .withTitle("Start Firing").withDisplaySeconds(3));
+      notificationSent=true;}
     } else if (matchTime > 80) {
     // Shift 2
       hubActive = (1+delay)%2 ==0;
+      notificationSent = false;
+      if((matchTime<84||matchTime>82) && !hubActive &&!notificationSent){ 
+        Elastic.sendNotification(notification.withLevel(Elastic.NotificationLevel.INFO)
+        .withTitle("Start Firing").withDisplaySeconds(3));
+      notificationSent=true;}
     } else if (matchTime > 55) {
     // Shift 3
       hubActive = (1+delay)%2 ==1;
+      notificationSent=false;
+      if((matchTime<59||matchTime>57) && !hubActive &&!notificationSent){ 
+        Elastic.sendNotification(notification.withLevel(Elastic.NotificationLevel.INFO)
+        .withTitle("Start Firing").withDisplaySeconds(3));
+      notificationSent=true;}
     } else if (matchTime > 30) {
     // Shift 4
       hubActive = (1+delay)%2 ==0;
+      if((matchTime<34||matchTime>32) && !hubActive){ 
+        Elastic.sendNotification(notification.withLevel(Elastic.NotificationLevel.INFO)
+        .withTitle("Start Firing").withDisplaySeconds(3));}
     } else {
     // End game, hub always active.
       hubActive = true;
-    } 
-    SmartDashboard.putBoolean("HubActive", hubActive);
+      Elastic.selectTab("EndGame");
+    } */
+   if(HubTracker.timeRemainingInCurrentShift().isPresent()){
+    SmartDashboard.putNumber("Time Until Shift", HubTracker.timeRemainingInCurrentShift().get().abs(Seconds));
+   }
+    if (HubTracker.getCurrentShift().isPresent()) if ( HubTracker.getCurrentShift().get().equals(HubTracker.Shift.ENDGAME)) Elastic.selectTab("EndGame");
+    SmartDashboard.putNumber("MatchTime", HubTracker.getMatchTime());
+    SmartDashboard.putBoolean("HubActive", HubTracker.isActive());
+    
   }
 
   @Override

@@ -185,7 +185,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(()->intakeSubsystem.goJoint(-0.3)))
         .onFalse(new InstantCommand(()->intakeSubsystem.goJoint(0)));
       new JoystickButton(mechJoytick1, 7)
-        .onTrue(new InstantCommand(()->intakeSubsystem.rollers(-.4)))
+        .onTrue(new InstantCommand(()->intakeSubsystem.rollers(-.49)))
         .onFalse(new InstantCommand(()->intakeSubsystem.rollers(0)));
     }
 
