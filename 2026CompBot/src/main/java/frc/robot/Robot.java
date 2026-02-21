@@ -86,16 +86,16 @@ public class Robot extends TimedRobot {
       hubActive = true;
     } else if (matchTime > 105) {
     // Shift 1
-      hubActive = (1+delay)%2 ==1;
+      hubActive = (1+delay)%2 == 1;
     } else if (matchTime > 80) {
     // Shift 2
-      hubActive = (1+delay)%2 ==0;
+      hubActive = (1+delay)%2 == 0;
     } else if (matchTime > 55) {
     // Shift 3
-      hubActive = (1+delay)%2 ==1;
+      hubActive = (1+delay)%2 == 1;
     } else if (matchTime > 30) {
     // Shift 4
-      hubActive = (1+delay)%2 ==0;
+      hubActive = (1+delay)%2 == 0;
     } else {
     // End game, hub always active.
       hubActive = true;

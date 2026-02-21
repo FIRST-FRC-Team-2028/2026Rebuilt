@@ -206,7 +206,7 @@ public final class Constants {
     public static final double jointD = 0.;
     public static final double JointPositionConversionFactor = 110./38.; //in -20, target in -20| out -58, target out 90
     // We found that the encoder range is more negative out than in, but we cannot set this in the conversion factor
-    public static final double JointFPositionConversionFactor = 110./38.; //in -20, target in -20| out -58, target out 90
+    public static final double JointFPositionConversionFactor =110./41.857;//103.8/31.8; //in -20, target in -20| out -15.76, target out 90
     // We found that the encoder range is more negative out than in, but we cannot set this in the conversion factor
     public static final double RollerVelocityConversionFactor = 1.;
     public static final double jointForwardSoftLimit = 20.;
