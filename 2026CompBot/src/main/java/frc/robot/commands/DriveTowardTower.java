@@ -27,7 +27,7 @@ public class DriveTowardTower extends Command{
    * Use camera position to align vertical post.
    * Maintain desired heading.
    * 
-   * End when robot is aligned with tower? or keep pushing toward tower in case climber tries to push away? TODO
+   * Don't end when robot is aligned with tower; keep pushing toward tower in case climber tries to push away?
    */
 
   /**Use PixyCamera trained for tower to get close enough to climb */
@@ -43,7 +43,7 @@ public class DriveTowardTower extends Command{
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-   drive.BreakMode();  //MrG asks why? TODO
+   drive.BreakMode();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -62,7 +62,7 @@ public class DriveTowardTower extends Command{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // MrG asks, initialize set drive.brakemode. Do you want that to persist after this command ends? 
+    drive.CoastMode();
   }
 
   // Continue until interrupted.

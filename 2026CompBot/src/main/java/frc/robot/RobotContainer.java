@@ -225,9 +225,11 @@ public class RobotContainer {
   public Optional<Alliance> getAlliance(){
     return alliance;
   }
+  /** disable drive defaultCommand  - for testing*/
   public void turnOffDrive(){
     driveSubsystem.removeDefaultCommand();
   }
+  /** restore drive defaultCommand  - from testing*/
   public void turnOnDrive(){
       driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driverJoytick));
   }

@@ -208,10 +208,9 @@ public final class Constants {
     // We found that the encoder range is more negative out than in, but we cannot set this in the conversion factor
     public static final double JointFPositionConversionFactor =110./41.857;//103.8/31.8; //in -20, target in -20| out -15.76, target out 90
     // We found that the encoder range is more negative out than in, but we cannot set this in the conversion factor
-    public static final double RollerVelocityConversionFactor = 1.;
     public static final double jointForwardSoftLimit = 20.;
     public static final double jointReverseSoftLimit = -90.;
-    public static final double jointFForwardSoftLimit = 20.;
+    public static final double jointFForwardSoftLimit = 20.; // TODO Have you tested and verified the conversion factor?
     public static final double jointFReverseSoftLimit = -90.;
 
     //Joint Positions
@@ -223,6 +222,7 @@ public final class Constants {
     public static final double JointFAgitatePosition = -75.; //Degrees
 
     //Rollers Speed
+    public static final double RollerVelocityConversionFactor = 1.;
     public static final double IntakeSpeed = 0.75; //-1 to 1
   }
 
