@@ -19,6 +19,8 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.util.Elastic;
 import frc.robot.util.HubTracker;
+import frc.robot.Constants.ShooterConstants;
+
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private final RobotContainer m_robotContainer;
@@ -160,6 +162,7 @@ public class Robot extends TimedRobot {
     if(mechJoytick1.getRawButtonPressed(Constants.OIConstants.TEST_INTAKE_JOINT)){
       testIntakeJoint=!testIntakeJoint;
       if(testIntakeJoint)SmartDashboard.putNumber("testP",Constants.IntakeConstants.jointP);
+      // Use typein to play with kP for the joint controllers
     }
     if(mechJoytick1.getRawButtonPressed(Constants.OIConstants.TEST_INTAKE_ROLLER)){
       testIntakeRoller=!testIntakeRoller;
@@ -169,6 +172,8 @@ public class Robot extends TimedRobot {
     }
     if(mechJoytick1.getRawButtonPressed(Constants.OIConstants.TEST_SHOOT)){
       testShoot=!testShoot;
+      if(testShoot)SmartDashboard.putNumber("testP",Constants.ShooterConstants.shooterShootSpeed); 
+      // Use typein to play with Shooter RPM
     }
     if(mechJoytick1.getRawButtonPressed(Constants.OIConstants.TEST_CLIMB)){
       testClimb=!testClimb;
@@ -223,12 +228,11 @@ public class Robot extends TimedRobot {
         }
         double testP = SmartDashboard.getNumber("testP",0.);
         m_robotContainer.getIntake().setJointPID(testP,0.,0.);
-    }
-      if(testIntakeRoller){
+     }
+     if(testIntakeRoller){
         if(vbus)m_robotContainer.getIntake().rollers(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
         testVal = m_robotContainer.getIntake().getRollerSpeed();
-      }
-      
+     }
     }
     if (Constants.SHOOTER_AVAILABLE){
        if(testConveyor){
@@ -237,6 +241,12 @@ public class Robot extends TimedRobot {
       }
       if(testShoot){
         if(vbus)m_robotContainer.getShoot().setShooterVbus(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
+        if (mechJoytick1.getRawButtonPressed(OIConstants.TEST_LOW_CONTROL)){
+          m_robotContainer.getShoot().setShooterSpeed(ShooterConstants.shooterShootSpeed);
+        }
+        if (mechJoytick1.getRawButtonPressed(OIConstants.TEST_HIGH_CONTROL)){
+          m_robotContainer.getShoot().setShooterSpeed(SmartDashboard.getNumber("testP",0.));
+        }
         testVal = m_robotContainer.getShoot().getShooterVelocity();
       }
     }
