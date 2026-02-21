@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -27,7 +28,7 @@ public class DriveToRangeAndShoot extends SequentialCommandGroup {
     addCommands(
                 Commands.parallel(
                   drive.pathfindToPose(drive.getTorange(alliance, ShooterConstants.OptimalRange, ShooterConstants.MinRange), 0),
-                  new WaitCommand(1.5)  //Gives 1.5 seconds to get there before spinning up wheels (Can be adjusted) TODO change to distance instead of time
+                  new WaitUntilCommand(()->drive.distToGo()<1)  //Waits until 1 meter away from the target to start spinning the shooter wheels
                   .andThen(new InstantCommand(()->shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed)))
                 ),
                 Commands.race(

@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.util.Elastic;
@@ -67,7 +68,11 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.configureBindings();
     m_robotContainer.turnOnDrive();
+    if (Constants.CLIMBER_AVAILABLE){
+      m_robotContainer.getClimber().MoveClimber(ClimberConstants.travelPosition);
+    }
   }
 
   boolean hubActive = true;
@@ -77,7 +82,7 @@ public class Robot extends TimedRobot {
   
   @Override
   public void teleopPeriodic() {
-    if (!dataSent){
+    /*if (!dataSent){
      String gameData = DriverStation.getGameSpecificMessage();
      if (!gameData.isEmpty()) {
       // if data is R and we are Red, we score in the first period
@@ -87,7 +92,7 @@ public class Robot extends TimedRobot {
       dataSent = true;
      }
     }
-    /*double matchTime = DriverStation.getMatchTime();
+    / matchTime = DriverStation.getMatchTime();
     if (matchTime > 130) {
     // Transition shift, hub is active.
       hubActive = true;
@@ -150,6 +155,7 @@ public class Robot extends TimedRobot {
     testShoot=false;
     SmartDashboard.putNumber("testP",0.);
     vbus = true;  // switch between vbus and closed loop
+    Elastic.selectTab("Test");
   }
 
   String onstring;

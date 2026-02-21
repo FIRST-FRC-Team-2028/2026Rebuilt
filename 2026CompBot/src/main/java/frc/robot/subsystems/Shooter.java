@@ -25,6 +25,7 @@ public class Shooter extends SubsystemBase {
   private final SparkMaxConfig  center_Config, left_Config; /*right_Config, conveyor_Config*/
   private final RelativeEncoder center_Encoder/*, conveyor_Encoder*/;
   private final SparkClosedLoopController center_ClosedLoopController/*, conveyor_ClosedLoopController*/;
+  double setShootSpeed;
   /** Manupulates scoring element: fuel
    * <p>Methods:<ul>
    * <li>{@code setShooterSpeed} - Sets the speed for the shooter using PID controller on velocity control type
@@ -102,9 +103,12 @@ public class Shooter extends SubsystemBase {
    */
   public void setShooterSpeed(double Speed){
     center_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
+    setShootSpeed = Speed;
   }
 
-  
+  public void incrementShootSpeed(double increment){
+    setShooterSpeed(setShootSpeed+increment);
+  }  
   /** Returns the RPM of the shooter wheels */
   public double getShooterVelocity(){
     return center_Encoder.getVelocity();

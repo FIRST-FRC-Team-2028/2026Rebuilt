@@ -36,10 +36,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
  *  FieldConstants
  */
 public final class Constants {
-  public static final boolean DRIVE_AVAILABLE = true;
+  public static final boolean DRIVE_AVAILABLE = false;
   public static final boolean CAMERA_AVAILABLE = false;
   public static final boolean SHOOTER_AVAILABLE = true;
-  public static final boolean INTAKE_AVAILABLE = true;
+  public static final boolean INTAKE_AVAILABLE = false;
   public static final boolean CLIMBER_AVAILABLE = false;
   public static final boolean PIXYCAM_AVAILABLE = false;
 
@@ -237,7 +237,8 @@ public final class Constants {
     public static final double conveyorVelocityConversionFactor = 1;
 
 
-    public static final double shooterShootSpeed = 1400.; //RPM
+    public static final double shooterShootSpeed = 2500.; //RPM
+    public static final double OptimalShootSpeed = 2800;
     public static final double feedShootSpeed = 200.; //RPM
     public static final double conveyorShootSpeed = 300.; //RPM
     
@@ -264,7 +265,7 @@ public final class Constants {
     public static final double reverseSoftLimit = 0;
     public static final double positionConversionFactor = 1;
     public static final double kRampRate = 1;
-    public static final double climbLevel2 = 0; //position for level1, Degrees
+    public static final double climbLevel2 = 0; //position for level2, Degrees
     public static final double climbLevel1 = 0; //position for level1, Degrees
     public static final double hookPosition = 0; //position to engage, Degrees
     public static final double travelPosition = 0;// retracted position, Degrees

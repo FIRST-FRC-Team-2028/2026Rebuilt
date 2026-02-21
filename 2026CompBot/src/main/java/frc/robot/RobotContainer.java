@@ -106,7 +106,7 @@ public class RobotContainer {
   }
 
   @SuppressWarnings("unused")
-  private void configureBindings() {
+  public void configureBindings() {
     CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
     if (Constants.DRIVE_AVAILABLE){
@@ -168,7 +168,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(()->shootingSubsystem.setShooterSpeed(5676)))
         .onFalse(new InstantCommand(()->shootingSubsystem.stopShooting()));
       new JoystickButton(mechJoytick1, 2) //Set Shooter MAX speed
-        .onTrue(new InstantCommand(()->shootingSubsystem.setShooterSpeed(2800)))
+        .onTrue(new InstantCommand(()->shootingSubsystem.setShooterSpeed(ShooterConstants.OptimalShootSpeed)))
         .onFalse(new InstantCommand(()->shootingSubsystem.stopShooting()));
       //new JoystickButton(mechJoytick1, 2)
       //  .onTrue(new AdvancedShoot(shootingSubsystem, 3));
@@ -179,15 +179,15 @@ public class RobotContainer {
     }
     if (Constants.INTAKE_AVAILABLE){
       new JoystickButton(mechJoytick1, 5)
-        .onTrue(new InstantCommand(()->intakeSubsystem.goJoint(0.3)))
-        .onFalse(new InstantCommand(()->intakeSubsystem.goJoint(0)));
+        .onTrue(new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition)));
       new JoystickButton(mechJoytick1, 6)
-        .onTrue(new InstantCommand(()->intakeSubsystem.goJoint(-0.3)))
-        .onFalse(new InstantCommand(()->intakeSubsystem.goJoint(0)));
+        .onTrue(new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition)));
       new JoystickButton(mechJoytick1, 7)
-        .onTrue(new InstantCommand(()->intakeSubsystem.rollers(-.49)))
+        .onTrue(new InstantCommand(()->intakeSubsystem.rollers(-.3)))
         .onFalse(new InstantCommand(()->intakeSubsystem.rollers(0)));
     }
+
+    //
 
   }
 
@@ -227,10 +227,14 @@ public class RobotContainer {
   }
   /** disable drive defaultCommand  - for testing*/
   public void turnOffDrive(){
-    driveSubsystem.removeDefaultCommand();
+    if (Constants.DRIVE_AVAILABLE){
+      driveSubsystem.removeDefaultCommand();
+    }
   }
   /** restore drive defaultCommand  - from testing*/
   public void turnOnDrive(){
+    if (Constants.DRIVE_AVAILABLE){
       driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driverJoytick));
+    }
   }
 }

@@ -311,7 +311,7 @@ public class Drivetrain extends SubsystemBase {
     return diff;
   }
 
-
+  VPose2d whereToGo;
   public Pose2d getTorange(Optional<Alliance> alliance, double MaxRange, double MinRange){
     VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
     VPose2d diff = getVecToHub(alliance);
@@ -320,10 +320,16 @@ public class Drivetrain extends SubsystemBase {
       diff = getVecToHub(alliance).scalarProd(-1);
       dist = diff.norm() - MinRange;
     }
-    VPose2d whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
+    whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
-    return new Pose2d(whereIam.X(), whereIam.Y(), new Rotation2d(Units.degreesToRadians(theta)));
+    return new Pose2d(whereToGo.X(), whereToGo.Y(), new Rotation2d(Units.degreesToRadians(theta)));
     
+  }
+
+  public double distToGo(){
+    VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
+    if (whereToGo == null) return 0.;
+    return whereToGo.minus(whereIam).norm();
   }
 
 

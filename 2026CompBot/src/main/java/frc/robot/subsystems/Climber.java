@@ -70,10 +70,10 @@ public class Climber extends SubsystemBase {
 
     this.alliance = alliance;
     whereToClimb = new SendableChooser<String>();
-      whereToClimb.setDefaultOption("Left L1", FieldConstants.LeftClimbPath);
-      whereToClimb.addOption("Right L1", FieldConstants.RightClimbPath);
-      //whereToClimb.addOption("Left L2", FieldConstants.redTowerLClimb);
-      //whereToClimb.addOption("Right L2", FieldConstants.redTowerRClimb);
+      whereToClimb.setDefaultOption("Left L1", FieldConstants.LeftClimbPath+",1");
+      whereToClimb.addOption("Right L1", FieldConstants.RightClimbPath+",1");
+      whereToClimb.addOption("Left L2", FieldConstants.LeftClimbPath+",2");
+      whereToClimb.addOption("Right L2", FieldConstants.RightClimbPath+",2");
     SmartDashboard.putData("Where To CLimb", whereToClimb);
   }
 
@@ -113,9 +113,16 @@ public class Climber extends SubsystemBase {
   public Command MoveClimber(double position){
     return new InstantCommand(()->setClimberPosition(position));
   }
-
+  /**Return the name of the Path that goes to the climb position selected on the Sendable Chooser */
   public String getWhereToClimb(){
-    return whereToClimb.getSelected();
+    String[] options = whereToClimb.getSelected().split(",");
+    return options[0];
   }
+  /**Return the Selected climb level from the Sendable Chooser in degrees */
+  public double getClimbLevel(){
+    String[] options = whereToClimb.getSelected().split(",");
+    return options[1]=="1"?ClimberConstants.climbLevel1:ClimberConstants.climbLevel2;
+  }
+
 
 }
