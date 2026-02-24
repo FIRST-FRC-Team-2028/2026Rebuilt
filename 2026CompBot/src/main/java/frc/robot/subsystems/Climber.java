@@ -16,6 +16,7 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SoftLimitConfig;
 
 import frc.robot.Constants.CANIDS;
 import frc.robot.Constants.ClimberConstants;
@@ -49,24 +50,25 @@ public class Climber extends SubsystemBase {
     climber_ClosedLoopController = climber.getClosedLoopController();
 
     climber_Config
-      .closedLoopRampRate(ClimberConstants.kRampRate)
+      //.closedLoopRampRate(ClimberConstants.kRampRate)
       .idleMode(IdleMode.kBrake);
+    climber_Config.encoder
+      .positionConversionFactor(ClimberConstants.positionConversionFactor); //Can't have negative conversion factor
     climber_Config.softLimit
       .forwardSoftLimit(ClimberConstants.forwardSoftLimit)
-      .reverseSoftLimit(ClimberConstants.reverseSoftLimit)
       .forwardSoftLimitEnabled(true)
+      .reverseSoftLimit(ClimberConstants.reverseSoftLimit)
       .reverseSoftLimitEnabled(true);
-    climber_Config.encoder
-      .positionConversionFactor(ClimberConstants.positionConversionFactor);
     climber_Config.closedLoop
       .pid(ClimberConstants.p, ClimberConstants.i, ClimberConstants.d);
-
+      
     follower_Config
-      .inverted(true)
-      .follow(climber);
+      .idleMode(IdleMode.kBrake)
+      .follow(climber, true);
 
     climber.configure(climber_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     follower.configure(follower_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    climber_Encoder.setPosition(ClimberConstants.travelPosition);
 
     this.alliance = alliance;
     whereToClimb = new SendableChooser<String>();
@@ -83,7 +85,6 @@ public class Climber extends SubsystemBase {
   }
   /**In Degrees */
   public void setClimberPosition(double Position){
-    Position = Units.degreesToRotations(Position);
     climber_ClosedLoopController.setSetpoint(Position, ControlType.kPosition);
   }
   /**Sets climber speed. Between -1 and 1 */
@@ -105,8 +106,9 @@ public class Climber extends SubsystemBase {
   public void switchSoftLimits(boolean enabled, boolean setPosition){
     climber_Config.softLimit.forwardSoftLimitEnabled(enabled);
     climber_Config.softLimit.reverseSoftLimitEnabled(enabled);
-    climber.configure(climber_Config, ResetMode.kResetSafeParameters, null);
+    climber.configure(climber_Config, ResetMode.kNoResetSafeParameters, null);
     if (setPosition) climber_Encoder.setPosition(ClimberConstants.travelPosition);
+    System.out.println("SwitchSL");
   }
 
   /**Set the position of the climber in degrees */

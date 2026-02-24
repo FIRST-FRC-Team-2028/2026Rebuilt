@@ -34,6 +34,7 @@ public class Intake extends SubsystemBase {
   private final RelativeEncoder rollers_Encoder;
   private final RelativeEncoder joint_Encoder, jointF_Encoder;
   private final SparkClosedLoopController joint_Controller, jointF_Controller;
+  boolean intakeIn;
   /** Picks up the scoring element: fuel
    * <p>Methods: <ul>
    * <li>{@code rollers} - Sets the rollers to a speed
@@ -169,11 +170,23 @@ public class Intake extends SubsystemBase {
    public Command runIntake(double speed){
     return new InstantCommand(()->rollers(speed));
   }
+  boolean intakeOn = false;
+  public Command toggleRunIntake(double speed){
+    if (intakeOn) return stopIntake();
+    return runIntake(speed);
+  }
 
   /** Stops the rollers
    */
   public Command stopIntake(){
     return new InstantCommand(()->rollers.stopMotor());
+  }
+
+  public Command toggleJointPosition(){
+    double deadband = 3; //degrees
+    if (getJointPosition() > IntakeConstants.JointUpPosition-deadband && getJointPosition2() > IntakeConstants.JointUpPosition-deadband && getJointPosition()<IntakeConstants.JointUpPosition+deadband && getJointPosition2()<IntakeConstants.JointUpPosition+deadband){
+      return new InstantCommand(()->setJointPosition(IntakeConstants.JointPickupPosition));
+    } else return new InstantCommand(()->setJointPosition(IntakeConstants.JointUpPosition));
   }
 
   public void resetJointEncoder(){

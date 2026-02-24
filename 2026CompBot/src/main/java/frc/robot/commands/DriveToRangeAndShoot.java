@@ -34,7 +34,7 @@ public class DriveToRangeAndShoot extends SequentialCommandGroup {
                 Commands.race(
                   new WaitCommand(5), //Gives 5 seconds to shoot (Estimate)
                   Commands.parallel(
-                    new Shoot(shooter),
+                    new Shoot(shooter, ShooterConstants.OptimalShootSpeed),
                     new AgitateIntake(intake)
                   )
                 )

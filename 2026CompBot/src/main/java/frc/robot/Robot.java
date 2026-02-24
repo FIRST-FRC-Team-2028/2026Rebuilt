@@ -195,19 +195,21 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("testMode",onstring);
 
     if (Constants.CLIMBER_AVAILABLE){
-      if(testIntakeJoint){
+      if(testClimb){
         if (mechJoytick1.getRawButtonPressed(OIConstants.SOFTLIMIT_DISABLE)){
           m_robotContainer.getClimber().switchSoftLimits(false, false);
         }
         if (mechJoytick1.getRawButtonPressed(OIConstants.SOFTLIMIT_ENABLE)){
           m_robotContainer.getClimber().switchSoftLimits(true, true);
         }
-        if(vbus)m_robotContainer.getClimber().setClimberSpeed(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT)*.3);
+        if(vbus)m_robotContainer.getClimber().setClimberSpeed(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT)*1.);
         testVal = m_robotContainer.getClimber().getClimberPosition();
         if (mechJoytick1.getRawButtonPressed(OIConstants.RESETENCODER)){
           m_robotContainer.getClimber().switchSoftLimits(true, true);  
         // yeah there is already a special button for this, but this is consistent with other functionality and doesn't hurt anything
         }
+        if (mechJoytick1.getRawButtonPressed(9)) m_robotContainer.getClimber().setClimberPosition(ClimberConstants.hookPosition);
+        if (mechJoytick1.getRawButtonPressed(10)) m_robotContainer.getClimber().setClimberPosition(ClimberConstants.travelPosition);
       }
     }
     if (Constants.INTAKE_AVAILABLE){

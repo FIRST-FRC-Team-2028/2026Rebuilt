@@ -14,21 +14,22 @@ public class Shoot extends Command {
   double shootSpeedDeadband = 100;
   boolean shooting = false;
   double shotCount = 0;
-  double velocityIncrease = 50;
+  double velocityIncrease = 50, speed;
   /** Runs procedure to Shoot
    * <p> Presumes non-negligible time for shooter wheels to get to speed.
    * <p> Presumes this Command is controlled by holding a button, 
    * and ends when button is released.
    */
-  public Shoot(Shooter shooter) {
+  public Shoot(Shooter shooter, double speed) {
     this.shooter = shooter;
+    this.speed = speed;
     addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed);
+    shooter.setShooterSpeed(speed);
     shotCount = 0;
     shooting = false;
   }

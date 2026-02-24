@@ -38,9 +38,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 public final class Constants {
   public static final boolean DRIVE_AVAILABLE = false;
   public static final boolean CAMERA_AVAILABLE = false;
-  public static final boolean SHOOTER_AVAILABLE = true;
+  public static final boolean SHOOTER_AVAILABLE = false;
   public static final boolean INTAKE_AVAILABLE = false;
-  public static final boolean CLIMBER_AVAILABLE = false;
+  public static final boolean CLIMBER_AVAILABLE = true;
   public static final boolean PIXYCAM_AVAILABLE = false;
 
 
@@ -223,7 +223,7 @@ public final class Constants {
 
     //Rollers Speed
     public static final double RollerVelocityConversionFactor = 1.;
-    public static final double IntakeSpeed = 0.75; //-1 to 1
+    public static final double IntakeSpeed = -0.39; //-1 to 1
   }
 
   public static class ShooterConstants {
@@ -258,16 +258,16 @@ public final class Constants {
 
   public static class ClimberConstants {
 
-    public static final double p = 0;
+    public static final double p = .1;
     public static final double i = 0;
     public static final double d = 0;
-    public static final double forwardSoftLimit = 0;
-    public static final double reverseSoftLimit = 0;
-    public static final double positionConversionFactor = 1;
+    public static final double forwardSoftLimit = -20;
+    public static final double reverseSoftLimit = -40;
+    public static final double positionConversionFactor = (78.)/(74953.-15479.);
     public static final double kRampRate = 1;
     public static final double climbLevel2 = 0; //position for level2, Degrees
-    public static final double climbLevel1 = 0; //position for level1, Degrees
-    public static final double hookPosition = 0; //position to engage, Degrees
+    public static final double climbLevel1 = -123; //position for level1, Degrees
+    public static final double hookPosition = -78; //position to engage, Degrees
     public static final double travelPosition = 0;// retracted position, Degrees
 
   }
@@ -283,8 +283,8 @@ public final class Constants {
     public static final int rightShooter = 1000;
     public static final int conveyor = 1000;
     //Climber
-    public static final int climber = 70;
-    public static final int climber_follower = 71;
+    public static final int climber = 61; //70
+    public static final int climber_follower = 62; //71
     
   }
 
@@ -403,7 +403,8 @@ public final class Constants {
     public static final String RightClimbPath = "Drive Right Climb"; 
     public static final Pose2d NeutralZoneLeft = new Pose2d(6.5, 5.5, new Rotation2d(0)); //Meters (NOT MEASURED FROM SOMETHING)
     public static final Pose2d NeutralZoneRight = new Pose2d(6.5, 2.5, new Rotation2d(0)); //Meters (NOT MEASURED FROM SOMETHING)
-
+    public static final Pose2d AllianceZoneLeft = new Pose2d(3, 5.5, new Rotation2d(0)); //Meters (NOT MEASURED FROM SOMETHING)
+    public static final Pose2d AllianeZoneRight = new Pose2d(3, 2.5, new Rotation2d(0)); //Meters (NOT MEASURED FROM SOMETHING)
 
   }
 
