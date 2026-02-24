@@ -108,7 +108,9 @@ public class Intake extends SubsystemBase {
   }
   public double getRollerSpeed(){return rollers_Encoder.getVelocity();}
 
-  /**make joint motor move Vbus - for testing */
+  /**make joint motor move Vbus - for testing 
+   * @param speed  neg makes arm extend
+  */
   public void goJoint(double speed){
     jointLead.set(speed);
     jointFollow.set(speed);
@@ -130,6 +132,10 @@ public class Intake extends SubsystemBase {
   public double getJointPosition2() {
     return jointF_Encoder.getPosition();
   }
+  /**Dis/En able softlimits
+   * @param offon true to enable, false to disable
+   * @param resetZero true to reset encoder (typically only used when re-enabling soft limits)
+  */
   public void switchSoftLimits(boolean offon, boolean resetZero){
     joint_Config.softLimit.forwardSoftLimitEnabled(offon);
     joint_Config.softLimit.reverseSoftLimitEnabled(offon);
@@ -184,7 +190,10 @@ public class Intake extends SubsystemBase {
 
   public Command toggleJointPosition(){
     double deadband = 3; //degrees
-    if (getJointPosition() > IntakeConstants.JointUpPosition-deadband && getJointPosition2() > IntakeConstants.JointUpPosition-deadband && getJointPosition()<IntakeConstants.JointUpPosition+deadband && getJointPosition2()<IntakeConstants.JointUpPosition+deadband){
+    if (getJointPosition()  > IntakeConstants.JointUpPosition-deadband 
+     && getJointPosition2() > IntakeConstants.JointUpPosition-deadband 
+     && getJointPosition()  < IntakeConstants.JointUpPosition+deadband 
+     && getJointPosition2() < IntakeConstants.JointUpPosition+deadband){
       return new InstantCommand(()->setJointPosition(IntakeConstants.JointPickupPosition));
     } else return new InstantCommand(()->setJointPosition(IntakeConstants.JointUpPosition));
   }
