@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import java.util.Optional;
+import java.util.Set;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,7 +28,7 @@ public class DriveToRangeAndShoot extends SequentialCommandGroup {
 
     addCommands(
                 Commands.parallel(
-                  drive.pathfindToPose(drive.getTorange(alliance, ShooterConstants.OptimalRange, ShooterConstants.MinRange), 0),
+                  Commands.defer(()->drive.pathfindToPose(drive.getTorange(alliance, ShooterConstants.OptimalRange, ShooterConstants.MinRange), 0), Set.of(drive)),
                   new WaitUntilCommand(()->drive.distToGo()<1)  //Waits until 1 meter away from the target to start spinning the shooter wheels
                   .andThen(new InstantCommand(()->shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed)))
                 ),

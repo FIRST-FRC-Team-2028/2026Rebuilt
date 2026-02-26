@@ -212,14 +212,17 @@ public final class Constants {
     public static final double jointReverseSoftLimit = -90.;
     public static final double jointFForwardSoftLimit = 20.; // TODO Have you tested and verified the conversion factor?
     public static final double jointFReverseSoftLimit = -90.;
+    public static final double JointPastFramePosition = 0;
 
     //Joint Positions
     public static final double JointPickupPosition = -90.; //Degrees
     public static final double JointUpPosition = 20.; //Degrees
     public static final double JointAgitatePosition = -75.; //Degrees
+    public static final double JointClimbPosition = -90;
     public static final double JointFPickupPosition = -90.; //Degrees //TODO change the numbers for the follower motor
     public static final double JointFUpPosition = 20.; //Degrees
     public static final double JointFAgitatePosition = -75.; //Degrees
+    public static final double JointFClimbPosition = -90;
 
     //Rollers Speed
     public static final double RollerVelocityConversionFactor = 1.;
@@ -269,6 +272,7 @@ public final class Constants {
     public static final double climbLevel1 = -123; //position for level1, Degrees
     public static final double hookPosition = -78; //position to engage, Degrees
     public static final double travelPosition = 0;// retracted position, Degrees
+    public static final double sendOutIntakePose = -180; //Position to extend the intake on a level 2 climb. The climber is not completely inside the frame perimiter.
 
   }
 

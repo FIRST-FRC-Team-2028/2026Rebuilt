@@ -11,15 +11,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 3.0
+            "name": "PathfindToClimbLeftPath"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PathfindToClimbLeftPath"
+            "name": "Climb"
           }
         }
       ]

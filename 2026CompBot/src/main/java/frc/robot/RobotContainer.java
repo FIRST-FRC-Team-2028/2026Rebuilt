@@ -33,6 +33,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.AdvancedShoot;
 import frc.robot.commands.AgitateIntake;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveToRangeAndShoot;
 import frc.robot.commands.MoveClimber;
 import frc.robot.commands.Shoot;
 import frc.robot.subsystems.AprilTags;
@@ -83,12 +84,12 @@ public class RobotContainer {
     } else driveSubsystem = null;
 
     if (Constants.DRIVE_AVAILABLE){
-       NamedCommands.registerCommand("Drive To Shoot", Commands.defer(
-          ()->driveSubsystem.pathfindToPose(driveSubsystem.getTorange(alliance, 2.25, 1.5), 0), Set.of(driveSubsystem)).alongWith(new InstantCommand(()->System.out.println("Working"))));
+       NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance));
       NamedCommands.registerCommand("PathfindToClimbLeftPath", driveSubsystem.pathfindToPath("Drive Climb Left"));
       NamedCommands.registerCommand("PathfindToClimbRightPath", driveSubsystem.pathfindToPath("Drive Climb Right"));
       if (Constants.INTAKE_AVAILABLE){
         NamedCommands.registerCommand("Intake Out", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition)));
+        NamedCommands.registerCommand("Intae In", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition)));
         NamedCommands.registerCommand("Run Intake", intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed));
         if (Constants.SHOOTER_AVAILABLE){
           NamedCommands.registerCommand("Shoot Sequence", new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
@@ -96,7 +97,7 @@ public class RobotContainer {
         }
       }
       if(Constants.CLIMBER_AVAILABLE){
-        NamedCommands.registerCommand("Climb", null);
+        NamedCommands.registerCommand("Climb", new MoveClimber(climberSubsystem, intakeSubsystem, true));
       }
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
         (stream) -> PathPlannerConstants.isCompetition
@@ -193,9 +194,11 @@ public class RobotContainer {
       if (Constants.DRIVE_AVAILABLE){
         new JoystickButton(driverJoytick, OIConstants.kResetGyro)
           .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
-        new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
+        /*new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
           .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPose(
-            driveSubsystem.getTorange(alliance, ShooterConstants.OptimalRange, ShooterConstants.MinRange), 0), Set.of(driveSubsystem)));
+            driveSubsystem.getTorange(alliance, ShooterConstants.OptimalRange, ShooterConstants.MinRange), 0), Set.of(driveSubsystem)));*/
+        new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
+          .whileTrue(new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance));
         new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose)
           .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(mechTargetPose, 0, mechPathName), Set.of(driveSubsystem)));
       //Game Mech Set Target Buttons
@@ -220,7 +223,7 @@ public class RobotContainer {
       }
       if (Constants.CLIMBER_AVAILABLE){
         new JoystickButton(mechJoytick2, 7)
-          .onTrue(new MoveClimber(climberSubsystem));
+          .onTrue(new MoveClimber(climberSubsystem, intakeSubsystem, false));
       }
       if (Constants.SHOOTER_AVAILABLE){
         new JoystickButton(mechJoytick2, 2)

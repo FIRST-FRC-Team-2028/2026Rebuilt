@@ -34,7 +34,7 @@ public class Intake extends SubsystemBase {
   private final RelativeEncoder rollers_Encoder;
   private final RelativeEncoder joint_Encoder, jointF_Encoder;
   private final SparkClosedLoopController joint_Controller, jointF_Controller;
-  boolean intakeIn;
+  boolean intakeout;
   /** Picks up the scoring element: fuel
    * <p>Methods: <ul>
    * <li>{@code rollers} - Sets the rollers to a speed
@@ -99,7 +99,10 @@ public class Intake extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    if (getJointPosition()<IntakeConstants.JointPastFramePosition) intakeout = true; else intakeout = false;
+
+  }
     // This method will be called once per scheduler run
   
   /** Set the rollers to a speed between -1 and 1 */
@@ -157,6 +160,9 @@ public class Intake extends SubsystemBase {
     jointF_Config.closedLoop
       .pid(p,i,d);
     jointFollow.configure(jointF_Config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+  }
+  public boolean getIntakeOut(){
+    return intakeout;
   }
 
   /** Runs the rollers at {@code .5} speed */
