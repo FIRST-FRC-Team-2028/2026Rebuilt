@@ -87,7 +87,8 @@ public class Climber extends SubsystemBase {
   public void setClimberPosition(double Position){
     climber_ClosedLoopController.setSetpoint(Position, ControlType.kPosition);
   }
-  /**Sets climber speed. Between -1 and 1 */
+  /**Sets climber vbus. 
+   * @param speed  Between -1 and 1, negative makes robot go up */
   public void setClimberSpeed(double speed){
     climber.set(speed);
   }
