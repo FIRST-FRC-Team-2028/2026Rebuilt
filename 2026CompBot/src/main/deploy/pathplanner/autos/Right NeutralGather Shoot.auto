@@ -7,13 +7,13 @@
         {
           "type": "named",
           "data": {
-            "name": "PathfindToLeftPathfindToCenter"
+            "name": "PathfindToRightPathfindToCenter"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Neutral To Left Shoot"
+            "pathName": "Neutral To Right Shoot"
           }
         },
         {
@@ -25,7 +25,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PathfindToClimbLeftPath"
+            "name": "PathfindToClimbRightPath"
           }
         },
         {

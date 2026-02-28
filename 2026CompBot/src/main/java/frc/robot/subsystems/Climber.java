@@ -53,7 +53,7 @@ public class Climber extends SubsystemBase {
       //.closedLoopRampRate(ClimberConstants.kRampRate)
       .idleMode(IdleMode.kBrake);
     climber_Config.encoder
-      .positionConversionFactor(ClimberConstants.positionConversionFactor); //Can't have negative conversion factor
+      .positionConversionFactor(ClimberConstants.positionConversionFactor);
     climber_Config.softLimit
       .forwardSoftLimit(ClimberConstants.forwardSoftLimit)
       .forwardSoftLimitEnabled(true)
@@ -61,7 +61,7 @@ public class Climber extends SubsystemBase {
       .reverseSoftLimitEnabled(true);
     climber_Config.closedLoop
       .pid(ClimberConstants.p, ClimberConstants.i, ClimberConstants.d);
-      
+
     follower_Config
       .idleMode(IdleMode.kBrake)
       .follow(climber, true);

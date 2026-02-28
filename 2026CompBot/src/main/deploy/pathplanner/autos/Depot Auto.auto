@@ -7,13 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PathfindToLeftPathfindToCenter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Neutral To Left Shoot"
+            "name": "PathfindToDepot"
           }
         },
         {

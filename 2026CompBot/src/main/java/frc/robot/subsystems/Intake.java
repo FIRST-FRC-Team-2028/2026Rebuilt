@@ -184,8 +184,16 @@ public class Intake extends SubsystemBase {
   }
   boolean intakeOn = false;
   public Command toggleRunIntake(double speed){
-    if (intakeOn) return stopIntake();
+    if (intakeOn){
+      intakeOn = false;
+    return stopIntake();
+    } else{
+    intakeOn = true;
     return runIntake(speed);
+    }
+  }
+  public Command moveintake(double degrees){
+    return new InstantCommand(()->setJointPosition(degrees));
   }
 
   /** Stops the rollers

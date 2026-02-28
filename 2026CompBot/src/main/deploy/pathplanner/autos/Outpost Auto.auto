@@ -7,13 +7,13 @@
         {
           "type": "named",
           "data": {
-            "name": "PathfindToLeftPathfindToCenter"
+            "name": "PathfindToOutpost"
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Neutral To Left Shoot"
+            "waitTime": 2.0
           }
         },
         {
@@ -25,7 +25,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PathfindToClimbLeftPath"
+            "name": "PathfindToClimbRightPath"
           }
         },
         {

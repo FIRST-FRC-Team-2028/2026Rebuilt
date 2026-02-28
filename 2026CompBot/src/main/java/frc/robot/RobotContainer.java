@@ -54,7 +54,7 @@ public class RobotContainer {
   private  SendableChooser<Command> autoChooser = null;
   Pose2d mechTargetPose;
   String mechPathName;
-  boolean compButtons = false; //Temporary until we switch button boards
+  boolean compButtons = true; //Temporary until we switch button boards
 
   // Joysticks
     private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
@@ -87,10 +87,16 @@ public class RobotContainer {
        NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance));
       NamedCommands.registerCommand("PathfindToClimbLeftPath", driveSubsystem.pathfindToPath("Drive Climb Left"));
       NamedCommands.registerCommand("PathfindToClimbRightPath", driveSubsystem.pathfindToPath("Drive Climb Right"));
+      NamedCommands.registerCommand("PathfindToLeftPathfindToCenter", driveSubsystem.pathfindToPath("Left Pathfind To Center"));
+      NamedCommands.registerCommand("PathfindToRightPathfindToCenter", driveSubsystem.pathfindToPath("Right Pathfind To Center"));
+      NamedCommands.registerCommand("PathfindToDepot", driveSubsystem.pathfindToPath("Pathfind To Deopt"));
+      NamedCommands.registerCommand("PathfindToOutpost", driveSubsystem.pathfindToPath("Drive To Outpost"));
+
       if (Constants.INTAKE_AVAILABLE){
         NamedCommands.registerCommand("Intake Out", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition)));
-        NamedCommands.registerCommand("Intae In", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition)));
+        NamedCommands.registerCommand("Intake In", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition)));
         NamedCommands.registerCommand("Run Intake", intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed));
+        NamedCommands.registerCommand("Stop Intake", intakeSubsystem.stopIntake());
         if (Constants.SHOOTER_AVAILABLE){
           NamedCommands.registerCommand("Shoot Sequence", new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
           //NamedCommands.registerCommand("Advanced Shoot Sequence", new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
@@ -217,9 +223,10 @@ public class RobotContainer {
        }
       if (Constants.INTAKE_AVAILABLE){
         new JoystickButton(mechJoytick2, 1)
-          .onTrue(intakeSubsystem.toggleJointPosition());
+          .onTrue(intakeSubsystem.moveintake(IntakeConstants.JointPickupPosition));
         new JoystickButton(mechJoytick2, 6)
-          .onTrue(intakeSubsystem.toggleRunIntake(IntakeConstants.IntakeSpeed));
+          .onTrue(intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed))
+          .onFalse(intakeSubsystem.runIntake(0));
       }
       if (Constants.CLIMBER_AVAILABLE){
         new JoystickButton(mechJoytick2, 7)
@@ -227,7 +234,7 @@ public class RobotContainer {
       }
       if (Constants.SHOOTER_AVAILABLE){
         new JoystickButton(mechJoytick2, 2)
-          .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
+          .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed)/*.alongWith(new AgitateIntake(intakeSubsystem))*/);
         new JoystickButton(mechJoytick2, 8)
           .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
         new JoystickButton(mechJoytick2, 3)

@@ -305,7 +305,7 @@ public class Drivetrain extends SubsystemBase {
 
   public VPose2d getVecToHub(Optional<Alliance> alliance){
     VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
-    VPose2d diff = new VPose2d(null);
+    VPose2d diff = new VPose2d(getPoseEstimatorPose());
     if(alliance.get() == Alliance.Red){diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
     if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
     return diff;

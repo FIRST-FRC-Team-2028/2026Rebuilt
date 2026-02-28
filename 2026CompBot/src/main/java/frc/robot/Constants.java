@@ -36,10 +36,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
  *  FieldConstants
  */
 public final class Constants {
-  public static final boolean DRIVE_AVAILABLE = false;
+  public static final boolean DRIVE_AVAILABLE = true;
   public static final boolean CAMERA_AVAILABLE = false;
-  public static final boolean SHOOTER_AVAILABLE = false;
-  public static final boolean INTAKE_AVAILABLE = false;
+  public static final boolean SHOOTER_AVAILABLE = true;
+  public static final boolean INTAKE_AVAILABLE = true;
   public static final boolean CLIMBER_AVAILABLE = true;
   public static final boolean PIXYCAM_AVAILABLE = false;
 
@@ -201,26 +201,26 @@ public final class Constants {
 
   public static class IntakeConstants {
     //Configs
-    public static final double jointP = 0.01;
+    public static final double jointP = 0.012;
     public static final double jointI = 0.;
     public static final double jointD = 0.;
     public static final double JointPositionConversionFactor = 110./38.; //in -20, target in -20| out -58, target out 90
     // We found that the encoder range is more negative out than in, but we cannot set this in the conversion factor
     public static final double JointFPositionConversionFactor =110./41.857;//103.8/31.8; //in -20, target in -20| out -15.76, target out 90
     // We found that the encoder range is more negative out than in, but we cannot set this in the conversion factor
-    public static final double jointForwardSoftLimit = 20.;
+    public static final double jointForwardSoftLimit = 36.;
     public static final double jointReverseSoftLimit = -90.;
-    public static final double jointFForwardSoftLimit = 20.; // TODO Have you tested and verified the conversion factor?
+    public static final double jointFForwardSoftLimit = 36.; // TODO Have you tested and verified the conversion factor?
     public static final double jointFReverseSoftLimit = -90.;
     public static final double JointPastFramePosition = 0;
 
     //Joint Positions
     public static final double JointPickupPosition = -90.; //Degrees
-    public static final double JointUpPosition = 20.; //Degrees
+    public static final double JointUpPosition = 36.; //Degrees
     public static final double JointAgitatePosition = -75.; //Degrees
     public static final double JointClimbPosition = -90;
     public static final double JointFPickupPosition = -90.; //Degrees //TODO change the numbers for the follower motor
-    public static final double JointFUpPosition = 20.; //Degrees
+    public static final double JointFUpPosition = 36.; //Degrees
     public static final double JointFAgitatePosition = -75.; //Degrees
     public static final double JointFClimbPosition = -90;
 
@@ -232,7 +232,7 @@ public final class Constants {
   public static class ShooterConstants {
     public static final double shooterP = 0.0002;
     public static final double shooterI = 0.00000055;
-    public static final double shooterD = 0.00006;
+    public static final double shooterD = 0.000065;
     public static final double shooterVelocityConversionFactor = 1;
     public static final double conveyorP = 0;
     public static final double conveyorI = 0;
@@ -243,7 +243,7 @@ public final class Constants {
     public static final double shooterShootSpeed = 2500.; //RPM
     public static final double OptimalShootSpeed = 2800;
     public static final double feedShootSpeed = 200.; //RPM
-    public static final double conveyorShootSpeed = 300.; //RPM
+    public static final double conveyorShootSpeed = .5; //RPM
     
     public static final double OptimalRange = 2.5;  //Meters
     public static final double MinRange = 1.5;      //Meters
@@ -264,9 +264,9 @@ public final class Constants {
     public static final double p = .1;
     public static final double i = 0;
     public static final double d = 0;
-    public static final double forwardSoftLimit = -20;
-    public static final double reverseSoftLimit = -40;
-    public static final double positionConversionFactor = (78.)/(74953.-15479.);
+    public static final double forwardSoftLimit = 30;
+    public static final double reverseSoftLimit = 5;
+    public static final double positionConversionFactor = 90./58910.;//(78.)/(74953.-15479.);
     public static final double kRampRate = 1;
     public static final double climbLevel2 = 0; //position for level2, Degrees
     public static final double climbLevel1 = -123; //position for level1, Degrees
@@ -276,19 +276,19 @@ public final class Constants {
 
   }
 
-  public static class CANIDS {
+  public static class CANIDS { //as of 2/27/26
     //Intake
     public static final int roller = 60;
     public static final int jointLead = 50;
-    public static final int jointFollow = 52;
+    public static final int jointFollow = 51;
     //Shooter
     public static final int leftShooter = 62;
     public static final int centerShooter = 61;
-    public static final int rightShooter = 1000;
-    public static final int conveyor = 1000;
+    //public static final int rightShooter = 1000;
+    public static final int conveyor = 52;
     //Climber
-    public static final int climber = 61; //70
-    public static final int climber_follower = 62; //71
+    public static final int climber = 53; 
+    public static final int climber_follower = 54 ; 
     
   }
 
