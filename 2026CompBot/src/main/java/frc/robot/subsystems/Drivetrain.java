@@ -307,19 +307,15 @@ public class Drivetrain extends SubsystemBase {
     VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
     VPose2d diff = new VPose2d(getPoseEstimatorPose());
     if(alliance.get() == Alliance.Red){diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
-    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dRedHub.minus(whereIam);}
+    if (alliance.get() == Alliance.Blue) {diff = FieldConstants.VPose2dBlueHub.minus(whereIam);}
     return diff;
   }
 
   VPose2d whereToGo;
-  public Pose2d getTorange(Optional<Alliance> alliance, double MaxRange, double MinRange){
+  public Pose2d getTorange(Optional<Alliance> alliance, double MaxRange){
     VPose2d whereIam = new VPose2d(getPoseEstimatorPose());
     VPose2d diff = getVecToHub(alliance);
     double dist = diff.norm() - MaxRange;
-    if (dist<0){      //Allows robot to travel backwards if too close
-      diff = getVecToHub(alliance).scalarProd(-1);
-      dist = diff.norm() - MinRange;
-    }
     whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
     return new Pose2d(whereToGo.X(), whereToGo.Y(), new Rotation2d(Units.degreesToRadians(theta)));
@@ -370,6 +366,8 @@ public class Drivetrain extends SubsystemBase {
       return AutoBuilder.pathfindToPose(targetPose, PathPlannerConstants.pathConstraints, goalEndVelocity);
     } else {
       PathPlannerPath path;
+      System.out.println(pathname);
+
       try{
         path = PathPlannerPath.fromPathFile(pathname);
         return AutoBuilder.pathfindThenFollowPath(path, PathPlannerConstants.pathConstraints);

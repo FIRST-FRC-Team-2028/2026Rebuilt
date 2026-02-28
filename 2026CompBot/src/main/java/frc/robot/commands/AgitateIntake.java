@@ -11,7 +11,7 @@ import frc.robot.subsystems.Intake;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AgitateIntake extends Command {
   private final Intake intake;
-  double deadband = 5; //Degrees
+  double deadband = 3; //Degrees
   double setPoint = IntakeConstants.JointPickupPosition;
   /** Shake hopper
    * <p> Presumes this Command is controlled by holding a button,

@@ -37,7 +37,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
  */
 public final class Constants {
   public static final boolean DRIVE_AVAILABLE = true;
-  public static final boolean CAMERA_AVAILABLE = false;
+  public static final boolean CAMERA_AVAILABLE = true;
   public static final boolean SHOOTER_AVAILABLE = true;
   public static final boolean INTAKE_AVAILABLE = true;
   public static final boolean CLIMBER_AVAILABLE = true;
@@ -193,7 +193,7 @@ public final class Constants {
   public static final double kMaxRotationalVelocity = 5.0; // 2023 Competion Robot // max 5.0
   public static final double kRotateToZero = -2;
   public static final PIDConstants translationConstants = 
-    new PIDConstants(6.0, 1.6, 1);     //d:.475
+    new PIDConstants(6.8, 1.6, 1);     //d:.475
   public static final PIDConstants rotationConstants = 
     new PIDConstants(2.9,0.,0.);       
 
@@ -231,8 +231,8 @@ public final class Constants {
 
   public static class ShooterConstants {
     public static final double shooterP = 0.0002;
-    public static final double shooterI = 0.00000055;
-    public static final double shooterD = 0.000065;
+    public static final double shooterI = 0.00000050;
+    public static final double shooterD = 0.00007;
     public static final double shooterVelocityConversionFactor = 1;
     public static final double conveyorP = 0;
     public static final double conveyorI = 0;
@@ -241,9 +241,9 @@ public final class Constants {
 
 
     public static final double shooterShootSpeed = 2500.; //RPM
-    public static final double OptimalShootSpeed = 2800;
+    public static final double OptimalShootSpeed = 2700;
     public static final double feedShootSpeed = 200.; //RPM
-    public static final double conveyorShootSpeed = .5; //RPM
+    public static final double conveyorShootSpeed = .15; //RPM
     
     public static final double OptimalRange = 2.5;  //Meters
     public static final double MinRange = 1.5;      //Meters
@@ -264,15 +264,15 @@ public final class Constants {
     public static final double p = .1;
     public static final double i = 0;
     public static final double d = 0;
-    public static final double forwardSoftLimit = 30;
-    public static final double reverseSoftLimit = 5;
-    public static final double positionConversionFactor = 90./58910.;//(78.)/(74953.-15479.);
+    public static final double forwardSoftLimit = 490;
+    public static final double reverseSoftLimit = 0;
+    public static final double positionConversionFactor = 1.;//(78.)/(74953.-15479.);
     public static final double kRampRate = 1;
-    public static final double climbLevel2 = 0; //position for level2, Degrees
-    public static final double climbLevel1 = -123; //position for level1, Degrees
+    public static final double climbLevel2 = 480; //position for level2, Degrees
+    public static final double climbLevel1 = 342+40; //position for level1, Degrees
     public static final double hookPosition = -78; //position to engage, Degrees
     public static final double travelPosition = 0;// retracted position, Degrees
-    public static final double sendOutIntakePose = -180; //Position to extend the intake on a level 2 climb. The climber is not completely inside the frame perimiter.
+    public static final double sendOutIntakePose = 305; //Position to extend the intake on a level 2 climb. The climber is not completely inside the frame perimiter.
 
   }
 
@@ -342,7 +342,7 @@ public final class Constants {
       //public static final double camera_Height_Meters = Units.inchesToMeters(7.);
       //public static final double target_Height_Meters = Units.inchesToMeters(78.);
 
-      public static final double camera_Height_Meters = Units.inchesToMeters(7);
+      public static final double camera_Height_Meters = Units.inchesToMeters(18.75);
       public static final double target_Height_Meters = Units.inchesToMeters(12);
       public static final double camera_Pitch_Radians = Units.degreesToRadians(-4.727443456);
       //public static final double tag_Follow_P = 1.75;
@@ -350,10 +350,10 @@ public final class Constants {
       public static final double drive_Range_Meters = 1;
 
       public static final Transform3d robot_to_camera = new Transform3d(
-                                                        0,
-                                                        0,
-                                                        0,
-                                                        new Rotation3d(0.0,0.0,0.0)); //TODO: Add the real numbers
+                                                        Units.inchesToMeters(-27.), //11 in fudge
+                                                        Units.inchesToMeters(-11.5),//-11.5
+                                                        Units.inchesToMeters(0.),//18.75
+                                                        new Rotation3d(0.0,11.,0.0)); //TODO: Add the real numbers
       public static final Transform3d robot_to_camera2 = new Transform3d(
                                                         0,
                                                         0,

@@ -19,6 +19,7 @@ import com.revrobotics.spark.SparkFlex;
 //import com.revrobotics.spark.config.EncoderConfig;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -101,7 +102,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     if (getJointPosition()<IntakeConstants.JointPastFramePosition) intakeout = true; else intakeout = false;
-
+    //SmartDashboard.putBoolean("Intake On", intakeOn);
   }
     // This method will be called once per scheduler run
   
@@ -170,6 +171,17 @@ public class Intake extends SubsystemBase {
   public boolean getIntakeOut(){
     return intakeout;
   }
+  public void toggleIntakeWheels(double speed){
+    if (intakeOn){
+      intakeOn = false;
+      System.out.println("STOP WHEELS");
+     rollers.stopMotor();
+    } else{
+    intakeOn = true;
+    System.out.println("START WHEELS");
+    rollers.set(speed);
+    }
+  }
 
   /** Runs the rollers at {@code .5} speed */
   public Command runIntake(){
@@ -186,10 +198,12 @@ public class Intake extends SubsystemBase {
   public Command toggleRunIntake(double speed){
     if (intakeOn){
       intakeOn = false;
-    return stopIntake();
+      System.out.println("STOP WHEELS");
+    return new InstantCommand(()->rollers.stopMotor());
     } else{
     intakeOn = true;
-    return runIntake(speed);
+    System.out.println("START WHEELS");
+    return new InstantCommand(()->rollers(speed));
     }
   }
   public Command moveintake(double degrees){
@@ -208,8 +222,9 @@ public class Intake extends SubsystemBase {
      && getJointPosition2() > IntakeConstants.JointUpPosition-deadband 
      && getJointPosition()  < IntakeConstants.JointUpPosition+deadband 
      && getJointPosition2() < IntakeConstants.JointUpPosition+deadband){
+      System.out.println("INTAKE IS IN");
       return new InstantCommand(()->setJointPosition(IntakeConstants.JointPickupPosition));
-    } else return new InstantCommand(()->setJointPosition(IntakeConstants.JointUpPosition));
+    } else System.out.println("INTAKE IS IN"); return new InstantCommand(()->setJointPosition(IntakeConstants.JointUpPosition));
   }
 
   public void resetJointEncoder(){

@@ -82,6 +82,8 @@ public class AprilTags extends SubsystemBase {
         isEstimated=true;
       } else isEstimated = false;
     }
+    //SmartDashboard.putNumber("Robot X Pos", estimatedPose3d.getX());
+    //SmartDashboard.putNumber("Robot Y Pos", estimatedPose3d.getY());
 
     /*for (var results2: camera2.getAllUnreadResults()){
        estimatedPose2 = poseEstimator2.estimateCoprocMultiTagPose(results2);

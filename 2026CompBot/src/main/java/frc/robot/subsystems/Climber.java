@@ -72,15 +72,16 @@ public class Climber extends SubsystemBase {
 
     this.alliance = alliance;
     whereToClimb = new SendableChooser<String>();
-      whereToClimb.setDefaultOption("Left L1", FieldConstants.LeftClimbPath+",1");
-      whereToClimb.addOption("Right L1", FieldConstants.RightClimbPath+",1");
-      whereToClimb.addOption("Left L2", FieldConstants.LeftClimbPath+",2");
-      whereToClimb.addOption("Right L2", FieldConstants.RightClimbPath+",2");
+      whereToClimb.setDefaultOption("Drive Climb Left, L1", FieldConstants.LeftClimbPath+",1");
+      whereToClimb.addOption("Drive Climb Right, L1", FieldConstants.RightClimbPath+",1");
+      whereToClimb.addOption("Drive Climb Left, L2", FieldConstants.LeftClimbPath+",2");
+      whereToClimb.addOption("Drive Climb Right, L2", FieldConstants.RightClimbPath+",2");
     SmartDashboard.putData("Where To CLimb", whereToClimb);
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("BlueAlliance?", alliance.get()== Alliance.Blue);
     // This method will be called once per scheduler run
   }
   /**In Degrees */
@@ -94,7 +95,7 @@ public class Climber extends SubsystemBase {
   }
   /**Returns position in degrees*/
   public double getClimberPosition(){
-    return Units.rotationsToDegrees(climber_Encoder.getPosition());
+    return climber_Encoder.getPosition();
   }
   /**Returns output current in amps */
   public double getClimberCurrent(){
