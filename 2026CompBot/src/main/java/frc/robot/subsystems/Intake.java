@@ -102,6 +102,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     if (getJointPosition()<IntakeConstants.JointPastFramePosition) intakeout = true; else intakeout = false;
+    SmartDashboard.putNumber("Joint Pose", getJointPosition());
     //SmartDashboard.putBoolean("Intake On", intakeOn);
   }
     // This method will be called once per scheduler run
@@ -218,13 +219,12 @@ public class Intake extends SubsystemBase {
 
   public Command toggleJointPosition(){
     double deadband = 3; //degrees
-    if (getJointPosition()  > IntakeConstants.JointUpPosition-deadband 
+    /*if (getJointPosition()  > IntakeConstants.JointUpPosition-deadband 
      && getJointPosition2() > IntakeConstants.JointUpPosition-deadband 
      && getJointPosition()  < IntakeConstants.JointUpPosition+deadband 
-     && getJointPosition2() < IntakeConstants.JointUpPosition+deadband){
-      System.out.println("INTAKE IS IN");
+     && getJointPosition2() < IntakeConstants.JointUpPosition+deadband)*/if (!intakeout){
       return new InstantCommand(()->setJointPosition(IntakeConstants.JointPickupPosition));
-    } else System.out.println("INTAKE IS IN"); return new InstantCommand(()->setJointPosition(IntakeConstants.JointUpPosition));
+    } else return new InstantCommand(()->setJointPosition(IntakeConstants.JointUpPosition));
   }
 
   public void resetJointEncoder(){

@@ -232,7 +232,7 @@ public class RobotContainer {
       }
       if (Constants.CLIMBER_AVAILABLE){
         new JoystickButton(mechJoytick2, 7)
-          .onTrue(new MoveClimber(climberSubsystem, intakeSubsystem, true));
+          .onTrue(new MoveClimber(climberSubsystem, intakeSubsystem, false));
       }
       if (Constants.SHOOTER_AVAILABLE){
         new JoystickButton(mechJoytick2, 2)

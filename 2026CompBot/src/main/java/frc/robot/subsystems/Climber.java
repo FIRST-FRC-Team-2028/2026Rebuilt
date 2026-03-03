@@ -81,7 +81,7 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("BlueAlliance?", alliance.get()== Alliance.Blue);
+    //SmartDashboard.putBoolean("BlueAlliance?", alliance.get()== Alliance.Blue);
     // This method will be called once per scheduler run
   }
   /**In Degrees */
@@ -125,7 +125,8 @@ public class Climber extends SubsystemBase {
   /**Return the Selected climb level from the Sendable Chooser in degrees */
   public double getClimbLevel(){
     String[] options = whereToClimb.getSelected().split(",");
-    return options[1]=="1"?ClimberConstants.climbLevel1:ClimberConstants.climbLevel2;
+    System.err.println(options[1].equals("1"));
+    return options[1].equals("1")?ClimberConstants.climbLevel1:ClimberConstants.climbLevel2;
   }
 
 

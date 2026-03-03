@@ -24,9 +24,30 @@ import frc.robot.subsystems.Shooter;
 public class DriveToRangeAndShoot extends SequentialCommandGroup {
   /** Creates a new DriveToRangeAndShoot. */
   public DriveToRangeAndShoot(Drivetrain drive, Shooter shooter, Intake intake, Optional<Alliance> alliance) {
-    // Use addRequirements() here to declare subsystem dependencies.
-
+    
     addCommands(
+               Commands.parallel(
+                  Commands.defer(()->drive.pathfindToPose(drive.getTorange(alliance, ShooterConstants.OptimalRange), 0), Set.of(drive))
+                  ,new WaitUntilCommand(()->drive.distToGo()<1)  //Waits until 1 meter away from the target to start spinning the shooter wheels
+                  .andThen(new InstantCommand(()->shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed)))
+                ).unless(()->drive.distToGo()<0.5),
+                Commands.parallel(    //TODO Test aim command
+                  new AimCommand(drive, alliance),
+                  new WaitUntilCommand(()->drive.distToGo()<1)  //Waits until 1 meter away from the target to start spinning the shooter wheels
+                    .andThen(new InstantCommand(()->shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed)))
+                ).onlyIf(()->drive.distToGo()<0.5),
+                Commands.race(
+                  new WaitCommand(4), //Gives 4 seconds to shoot (Estimate)
+                  Commands.parallel(
+                    new Shoot(shooter, ShooterConstants.OptimalShootSpeed),
+                    new AgitateIntake(intake)
+                  )
+                )
+
+
+    );  
+
+        /*addCommands(
                 Commands.parallel(
                   Commands.defer(()->drive.pathfindToPose(drive.getTorange(alliance, ShooterConstants.OptimalRange), 0), Set.of(drive))
                   ,new WaitUntilCommand(()->drive.distToGo()<1)  //Waits until 1 meter away from the target to start spinning the shooter wheels
@@ -41,7 +62,8 @@ public class DriveToRangeAndShoot extends SequentialCommandGroup {
                 )
 
 
-    );  
+    );  */
+
 
   }
 
