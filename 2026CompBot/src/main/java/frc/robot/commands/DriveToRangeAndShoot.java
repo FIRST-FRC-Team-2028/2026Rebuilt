@@ -30,12 +30,12 @@ public class DriveToRangeAndShoot extends SequentialCommandGroup {
                   Commands.defer(()->drive.pathfindToPose(drive.getTorange(alliance, ShooterConstants.OptimalRange), 0), Set.of(drive))
                   ,new WaitUntilCommand(()->drive.distToGo()<1)  //Waits until 1 meter away from the target to start spinning the shooter wheels
                   .andThen(new InstantCommand(()->shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed)))
-                ).unless(()->drive.distToGo()<0.5),
+                ).unless(()->drive.distToGo()<0.25),
                 Commands.parallel(    //TODO Test aim command
                   new AimCommand(drive, alliance),
                   new WaitUntilCommand(()->drive.distToGo()<1)  //Waits until 1 meter away from the target to start spinning the shooter wheels
                     .andThen(new InstantCommand(()->shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed)))
-                ).onlyIf(()->drive.distToGo()<0.5),
+                ).onlyIf(()->drive.distToGo()<0.25),
                 Commands.race(
                   new WaitCommand(4), //Gives 4 seconds to shoot (Estimate)
                   Commands.parallel(

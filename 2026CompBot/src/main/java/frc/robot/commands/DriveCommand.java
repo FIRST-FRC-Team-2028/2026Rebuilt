@@ -17,6 +17,7 @@ import frc.robot.subsystems.Drivetrain;
 public class DriveCommand extends Command {
   private SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   double smoothedXSpeed, smoothedYSpeed, smoothedTurningSpeed;
+  boolean robotOrient = false;
   private final Joystick driverJoytick;
   Drivetrain drivetrain;
   /** Creates a new DriveCommand. */
@@ -55,8 +56,8 @@ public class DriveCommand extends Command {
     turningSpeed = smoothedTurningSpeed;
     
     ChassisSpeeds chassisSpeeds;
-    //if (driverJoytick.getRawButton(OIConstants.kDriverRobotOrientedButtonIdx)) { //Following Minibot
-    if (!driverJoytick.getRawButton(OIConstants.kDriverRobotOrientedButton)) { //normal use
+    if(driverJoytick.getRawButtonPressed(OIConstants.kDriverRobotOrientedButton)) robotOrient=!robotOrient;
+    if (!robotOrient) { //normal use
     // Relative to field
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                    xSpeed, ySpeed, turningSpeed, drivetrain.getRotation2d());

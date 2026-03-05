@@ -201,7 +201,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     //Configs
-    public static final double jointP = 0.0125;
+    public static final double jointP = 0.0127;
     public static final double jointI = 0.;
     public static final double jointD = 0.;
     public static final double JointPositionConversionFactor = 110./38.; //in -20, target in -20| out -58, target out 90
@@ -209,20 +209,20 @@ public final class Constants {
     public static final double JointFPositionConversionFactor =110./41.857;//103.8/31.8; //in -20, target in -20| out -15.76, target out 90
     // We found that the encoder range is more negative out than in, but we cannot set this in the conversion factor
     public static final double jointForwardSoftLimit = 36.;
-    public static final double jointReverseSoftLimit = -90.;
+    public static final double jointReverseSoftLimit = -100.;
     public static final double jointFForwardSoftLimit = 36.; // TODO Have you tested and verified the conversion factor?
-    public static final double jointFReverseSoftLimit = -90.;
+    public static final double jointFReverseSoftLimit = -100.;
     public static final double JointPastFramePosition = 0;
 
     //Joint Positions
-    public static final double JointPickupPosition = -90.; //Degrees
+    public static final double JointPickupPosition = -100.; //Degrees
     public static final double JointUpPosition = 36.; //Degrees
     public static final double JointAgitatePosition = -75.; //Degrees
-    public static final double JointClimbPosition = -90;
-    public static final double JointFPickupPosition = -90.; //Degrees //TODO change the numbers for the follower motor
+    public static final double JointClimbPosition = -100;
+    public static final double JointFPickupPosition = -100.; //Degrees //TODO change the numbers for the follower motor
     public static final double JointFUpPosition = 36.; //Degrees
     public static final double JointFAgitatePosition = -75.; //Degrees
-    public static final double JointFClimbPosition = -90;
+    public static final double JointFClimbPosition = -100;
 
     //Rollers Speed
     public static final double RollerVelocityConversionFactor = 1.;
@@ -307,7 +307,7 @@ public final class Constants {
     public static final int kDriveToShootRange =         3;
     public static final int kDriveToMechPose =           4;
 
-    public static final int kDriverRobotOrientedButton = 6;
+    public static final int kDriverRobotOrientedButton = 10;  //press in right stick
     //Game Mech 1 Buttons
     public static final int kShoot =                     1;
     public static final int kIntake =                    3;
