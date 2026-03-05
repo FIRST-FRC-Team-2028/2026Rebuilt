@@ -165,23 +165,23 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_CLMODE)) vbus=!vbus;
     SmartDashboard.putBoolean("vbus",vbus);
-    if(mechJoytick1.getRawButtonPressed(Constants.OIConstants.TEST_INTAKE_JOINT)){
+    if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_INTAKE_JOINT)){
       testIntakeJoint=!testIntakeJoint;
       if(testIntakeJoint)SmartDashboard.putNumber("testP",Constants.IntakeConstants.jointP);
       // Use typein to play with kP for the joint controllers
     }
-    if(mechJoytick1.getRawButtonPressed(Constants.OIConstants.TEST_INTAKE_ROLLER)){
+    if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_INTAKE_ROLLER)){
       testIntakeRoller=!testIntakeRoller;
     }
-    if(mechJoytick1.getRawButtonPressed(Constants.OIConstants.TEST_CONVEYOR)){
+    if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_CONVEYOR)){
       testConveyor=!testConveyor;
     }
-    if(mechJoytick1.getRawButtonPressed(Constants.OIConstants.TEST_SHOOT)){
+    if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_SHOOT)){
       testShoot=!testShoot;
       if(testShoot)SmartDashboard.putNumber("testP",Constants.ShooterConstants.shooterShootSpeed); 
       // Use typein to play with Shooter RPM
     }
-    if(mechJoytick1.getRawButtonPressed(Constants.OIConstants.TEST_CLIMB)){
+    if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_CLIMB)){
       testClimb=!testClimb;
     }
     onstring="";
@@ -196,19 +196,19 @@ public class Robot extends TimedRobot {
 
     if (Constants.CLIMBER_AVAILABLE){
       if(testClimb){
-        if (mechJoytick1.getRawButtonPressed(OIConstants.SOFTLIMIT_DISABLE)){
+        if (mechJoytick2.getRawButtonPressed(OIConstants.SOFTLIMIT_DISABLE)){
           m_robotContainer.getClimber().switchSoftLimits(false, false);
         }
-        if (mechJoytick1.getRawButtonPressed(OIConstants.SOFTLIMIT_ENABLE)){
+        if (mechJoytick2.getRawButtonPressed(OIConstants.SOFTLIMIT_ENABLE)){
           m_robotContainer.getClimber().switchSoftLimits(true, true);
         }
         if(vbus)m_robotContainer.getClimber().setClimberSpeed(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT)*1.);
         testVal = m_robotContainer.getClimber().getClimberPosition();
-        if (mechJoytick1.getRawButtonPressed(OIConstants.RESETENCODER)){
+        if (mechJoytick2.getRawButtonPressed(OIConstants.RESETENCODER)){
           m_robotContainer.getClimber().switchSoftLimits(true, true);  
         // yeah there is already a special button for this, but this is consistent with other functionality and doesn't hurt anything
         }
-        if (mechJoytick1.getRawButtonPressed(9)) m_robotContainer.getClimber().setClimberPosition(ClimberConstants.hookPosition);
+        if (mechJoytick2.getRawButtonPressed(9)) m_robotContainer.getClimber().setClimberPosition(ClimberConstants.hookPosition);
         if (mechJoytick1.getRawButtonPressed(10)) m_robotContainer.getClimber().setClimberPosition(ClimberConstants.travelPosition);
       }
     }
@@ -217,20 +217,20 @@ public class Robot extends TimedRobot {
         if(vbus)m_robotContainer.getIntake().goJoint(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT)*.3);
         testVal = m_robotContainer.getIntake().getJointPosition();
         testVal2 = m_robotContainer.getIntake().getJointPosition2();
-        if (mechJoytick1.getRawButtonPressed(OIConstants.SOFTLIMIT_DISABLE)){
+        if (mechJoytick2.getRawButtonPressed(OIConstants.SOFTLIMIT_DISABLE)){
           m_robotContainer.getIntake().switchSoftLimits(false, false);
         }
-        if (mechJoytick1.getRawButtonPressed(OIConstants.SOFTLIMIT_ENABLE)){
+        if (mechJoytick2.getRawButtonPressed(OIConstants.SOFTLIMIT_ENABLE)){
           m_robotContainer.getIntake().switchSoftLimits(true, true);
         }
-        if (mechJoytick1.getRawButtonPressed(OIConstants.RESETENCODER)){
+        if (mechJoytick2.getRawButtonPressed(OIConstants.RESETENCODER)){
           m_robotContainer.getIntake().resetJointEncoder();
         }
-        if (mechJoytick1.getRawButtonPressed(OIConstants.TEST_LOW_CONTROL)){
+        if (mechJoytick2.getRawButtonPressed(OIConstants.TEST_LOW_CONTROL)){
           m_robotContainer.getIntake().setJointPosition(IntakeConstants.JointUpPosition);
           m_robotContainer.getIntake().setJointIdleMode(IdleMode.kBrake);
         }
-        if (mechJoytick1.getRawButtonPressed(OIConstants.TEST_HIGH_CONTROL)){
+        if (mechJoytick2.getRawButtonPressed(OIConstants.TEST_HIGH_CONTROL)){
           m_robotContainer.getIntake().setJointPosition(IntakeConstants.JointPickupPosition);
           m_robotContainer.getIntake().setJointIdleMode(IdleMode.kCoast);
         }
@@ -249,10 +249,10 @@ public class Robot extends TimedRobot {
       }
       if(testShoot){
         if(vbus)m_robotContainer.getShoot().setShooterVbus(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
-        if (mechJoytick1.getRawButtonPressed(OIConstants.TEST_LOW_CONTROL)){
+        if (mechJoytick2.getRawButtonPressed(OIConstants.TEST_LOW_CONTROL)){
           m_robotContainer.getShoot().setShooterSpeed(ShooterConstants.shooterShootSpeed);
         }
-        if (mechJoytick1.getRawButtonPressed(OIConstants.TEST_HIGH_CONTROL)){
+        if (mechJoytick2.getRawButtonPressed(OIConstants.TEST_HIGH_CONTROL)){
           m_robotContainer.getShoot().setShooterSpeed(SmartDashboard.getNumber("testP",0.));
         }
         testVal = m_robotContainer.getShoot().getShooterVelocity();

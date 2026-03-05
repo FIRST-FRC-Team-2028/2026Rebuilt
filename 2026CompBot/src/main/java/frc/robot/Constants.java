@@ -321,17 +321,17 @@ public final class Constants {
 
     // testMode buttons
     public static final int RIGHTSTICKVERT        = 5;  // driver
-    public static final int TEST_INTAKE_ROLLER    = 1;  // A
-    public static final int TEST_INTAKE_JOINT     = 2;  // A
-    public static final int TEST_CLIMB            = 3;  // A
-    public static final int TEST_SHOOT            = 4;  // A
-    public static final int TEST_CONVEYOR         = 5;  // A
-    public static final int SOFTLIMIT_DISABLE     = 6;  // A
-    public static final int SOFTLIMIT_ENABLE      = 7;  // A
-    public static final int RESETENCODER          = 11; // A
-    public static final int TEST_LOW_CONTROL      = 9;  // A
-    public static final int TEST_HIGH_CONTROL     = 10; // A
-    public static final int TEST_CLMODE           = 2;  // B
+    public static final int TEST_INTAKE_ROLLER    = 6;  // A
+    public static final int TEST_INTAKE_JOINT     = 7;  // A
+    public static final int TEST_CLIMB            = 8;  // A
+    public static final int TEST_SHOOT            = 9;  // A
+    public static final int TEST_CONVEYOR         = 10;  // A
+    public static final int SOFTLIMIT_DISABLE     = 2;  // A
+    public static final int SOFTLIMIT_ENABLE      = 3;  // A
+    public static final int RESETENCODER          = 4; // A
+    public static final int TEST_LOW_CONTROL      = 11;  // A
+    public static final int TEST_HIGH_CONTROL     = 5; // A
+    public static final int TEST_CLMODE           = 1;  // A
     public static final int TEST_INTAKE_LEFT_JOINT= 3;  // B
     public static final int TEST_INTAKE_RIGHT_JOINT=4;  // B
   }
