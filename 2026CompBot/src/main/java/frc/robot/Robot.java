@@ -52,6 +52,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    if(m_robotContainer.getAlliance().get()==Alliance.Blue)m_robotContainer.getDrivetrain().setGyro(m_robotContainer.getDrivetrain().getPoseEstimatorPose().getRotation().getDegrees());
+    if(m_robotContainer.getAlliance().get()==Alliance.Red)m_robotContainer.getDrivetrain().setGyro(m_robotContainer.getDrivetrain().getPoseEstimatorPose().getRotation().getDegrees()+180);
+
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {

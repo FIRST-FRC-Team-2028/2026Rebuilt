@@ -70,8 +70,12 @@ public class Intake extends SubsystemBase {
     jointF_Config.encoder
       .positionConversionFactor(IntakeConstants.JointFPositionConversionFactor);
     joint_Config.closedLoop
+      .maxOutput(.3)
+      .minOutput(-.5)
       .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
     jointF_Config.closedLoop
+      .maxOutput(.3)
+      .minOutput(-.5)
       .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
     joint_Config.softLimit
       .forwardSoftLimit(IntakeConstants.jointForwardSoftLimit)  // forward is retracted

@@ -201,7 +201,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     //Configs
-    public static final double jointP = 0.0127;
+    public static final double jointP = 0.06;
     public static final double jointI = 0.;
     public static final double jointD = 0.;
     public static final double JointPositionConversionFactor = 110./38.; //in -20, target in -20| out -58, target out 90
@@ -215,13 +215,13 @@ public final class Constants {
     public static final double JointPastFramePosition = 0;
 
     //Joint Positions
-    public static final double JointPickupPosition = -100.; //Degrees
+    public static final double JointPickupPosition = -96.; //Degrees
     public static final double JointUpPosition = 36.; //Degrees
-    public static final double JointAgitatePosition = -75.; //Degrees
+    public static final double JointAgitatePosition = -55.; //Degrees
     public static final double JointClimbPosition = -100;
-    public static final double JointFPickupPosition = -100.; //Degrees //TODO change the numbers for the follower motor
+    public static final double JointFPickupPosition = -96.; //Degrees //TODO change the numbers for the follower motor
     public static final double JointFUpPosition = 36.; //Degrees
-    public static final double JointFAgitatePosition = -75.; //Degrees
+    public static final double JointFAgitatePosition = -55.; //Degrees
     public static final double JointFClimbPosition = -100;
 
     //Rollers Speed
@@ -243,7 +243,7 @@ public final class Constants {
     public static final double shooterShootSpeed = 2500.; //RPM
     public static final double OptimalShootSpeed = 2700;
     public static final double feedShootSpeed = 200.; //RPM
-    public static final double conveyorShootSpeed = .15; //RPM
+    public static final double conveyorShootSpeed = .3; // vbus
     
     public static final double OptimalRange = 2.5;  //Meters
     public static final double MinRange = 1.5;      //Meters

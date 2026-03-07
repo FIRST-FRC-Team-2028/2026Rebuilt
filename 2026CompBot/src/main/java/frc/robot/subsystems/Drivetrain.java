@@ -190,6 +190,9 @@ public class Drivetrain extends SubsystemBase {
   public void resetGyro(){
     m_gyro.reset();
   }
+  public void setGyro(double angle){
+    m_gyro.setYaw(angle);
+  }
 
   public Rotation2d getHeading() {
     return m_gyro.getRotation2d();
@@ -318,6 +321,7 @@ public class Drivetrain extends SubsystemBase {
     double dist = diff.norm() - MaxRange;
     whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
+    if (alliance.get()==Alliance.Red) theta=+180;
     return new Pose2d(whereToGo.X(), whereToGo.Y(), new Rotation2d(Units.degreesToRadians(theta)));
     
   }
