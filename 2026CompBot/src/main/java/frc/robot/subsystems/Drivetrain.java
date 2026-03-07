@@ -321,6 +321,7 @@ public class Drivetrain extends SubsystemBase {
     double dist = diff.norm() - MaxRange;
     whereToGo = whereIam.plus(diff.unit().scalarProd(dist));
     double theta = Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
+    if (alliance.get()==Alliance.Red) theta=+180;
     return new Pose2d(whereToGo.X(), whereToGo.Y(), new Rotation2d(Units.degreesToRadians(theta)));
     
   }

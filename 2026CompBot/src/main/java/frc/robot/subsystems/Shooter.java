@@ -114,13 +114,18 @@ public class Shooter extends SubsystemBase {
     return center_Encoder.getVelocity();
   }
 
-  /** Sets the speed for the conveyor using PID controller on velocity
-   * @param Speed in RPM
+  /** Sets the vbus "speed" for the conveyor
+   * @param Speed [-1, 1]]
    */
   public void setConveyorSpeed(double Speed){
     conveyor.set(Speed);
     //conveyor_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
   }
+
+  /** 
+   * @return unscaled motor velocity
+   */
+  public double getConveyorSpeed(){return conveyor_Encoder.getVelocity();}
   
 
   /** Stops all of the motors involved with shooting */

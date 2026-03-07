@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Seconds;
 
+import org.ietf.jgss.Oid;
+
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -186,15 +188,17 @@ public class Robot extends TimedRobot {
     }
     if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_CLIMB)){
       testClimb=!testClimb;
+      if(testShoot)SmartDashboard.putNumber("testP",Constants.ClimberConstants.hookPosition); 
+      // Use typein to play with Shooter RPM
     }
     onstring="";
     testVal=0.;
     testVal2 = 0.;
-    if (testIntakeJoint) onstring+=" Joint ";
-    if (testClimb)       onstring+=" Climb ";
-    if (testConveyor)    onstring+=" Conveyor ";
-    if (testIntakeRoller)onstring+=" Roller ";
-    if (testShoot)       onstring+=" Shoot ";
+    if (testIntakeJoint) onstring+=" Joint, ";
+    if (testClimb)       onstring+=" Climb, ";
+    if (testConveyor)    onstring+=" Conveyor, ";
+    if (testIntakeRoller)onstring+=" Roller, ";
+    if (testShoot)       onstring+=" Shoot, ";
     SmartDashboard.putString("testMode",onstring);
 
     if (Constants.CLIMBER_AVAILABLE){
@@ -211,8 +215,10 @@ public class Robot extends TimedRobot {
           m_robotContainer.getClimber().switchSoftLimits(true, true);  
         // yeah there is already a special button for this, but this is consistent with other functionality and doesn't hurt anything
         }
-        if (mechJoytick2.getRawButtonPressed(9)) m_robotContainer.getClimber().setClimberPosition(ClimberConstants.hookPosition);
-        if (mechJoytick1.getRawButtonPressed(10)) m_robotContainer.getClimber().setClimberPosition(ClimberConstants.travelPosition);
+        double testP = SmartDashboard.getNumber("testP",ClimberConstants.hookPosition);
+        //if (mechJoytick2.getRawButtonPressed(OIConstants.TEST_HIGH_CONTROL)) m_robotContainer.getClimber().setClimberPosition(testP);
+        if (mechJoytick2.getRawButtonPressed(OIConstants.TEST_HIGH_CONTROL)) m_robotContainer.getClimber().setClimberPosition(ClimberConstants.hookPosition);
+        if (mechJoytick2.getRawButtonPressed(OIConstants.TEST_LOW_CONTROL)) m_robotContainer.getClimber().setClimberPosition(ClimberConstants.travelPosition);
       }
     }
     if (Constants.INTAKE_AVAILABLE){
@@ -247,8 +253,8 @@ public class Robot extends TimedRobot {
     }
     if (Constants.SHOOTER_AVAILABLE){
        if(testConveyor){
-        //if(vbus)m_robotContainer.getShoot().goConvey(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
-        //testVal = m_robotContainer.getShoot().getConveySpeed();
+        if(vbus)m_robotContainer.getShoot().setConveyorSpeed(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT)*.4);
+        testVal = m_robotContainer.getShoot().getConveyorSpeed();
       }
       if(testShoot){
         if(vbus)m_robotContainer.getShoot().setShooterVbus(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
