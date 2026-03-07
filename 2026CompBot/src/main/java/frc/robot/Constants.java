@@ -201,7 +201,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     //Configs
-    public static final double jointP = 0.0127;
+    public static final double jointP = 0.06;
     public static final double jointI = 0.;
     public static final double jointD = 0.;
     public static final double JointPositionConversionFactor = 110./38.; //in -20, target in -20| out -58, target out 90
@@ -213,15 +213,16 @@ public final class Constants {
     public static final double jointFForwardSoftLimit = 36.; // TODO Have you tested and verified the conversion factor?
     public static final double jointFReverseSoftLimit = -100.;
     public static final double JointPastFramePosition = 0;
+    public static final double kRampRate = 0.5;
 
     //Joint Positions
-    public static final double JointPickupPosition = -100.; //Degrees
+    public static final double JointPickupPosition = -96.; //Degrees
     public static final double JointUpPosition = 36.; //Degrees
-    public static final double JointAgitatePosition = -75.; //Degrees
+    public static final double JointAgitatePosition = -55.; //Degrees
     public static final double JointClimbPosition = -100;
-    public static final double JointFPickupPosition = -100.; //Degrees //TODO change the numbers for the follower motor
+    public static final double JointFPickupPosition = -96.; //Degrees //TODO change the numbers for the follower motor
     public static final double JointFUpPosition = 36.; //Degrees
-    public static final double JointFAgitatePosition = -75.; //Degrees
+    public static final double JointFAgitatePosition = -55.; //Degrees
     public static final double JointFClimbPosition = -100;
 
     //Rollers Speed
@@ -243,9 +244,9 @@ public final class Constants {
     public static final double shooterShootSpeed = 2500.; //RPM
     public static final double OptimalShootSpeed = 2700;
     public static final double feedShootSpeed = 200.; //RPM
-    public static final double conveyorShootSpeed = .15; //RPM
+    public static final double conveyorShootSpeed = .3; //RPM
     
-    public static final double OptimalRange = 2.5;  //Meters
+    public static final double OptimalRange = 2.65;  //Meters
     public static final double MinRange = 1.5;      //Meters
 
     //Shooter Math Constants 
@@ -264,15 +265,15 @@ public final class Constants {
     public static final double p = .1;
     public static final double i = 0;
     public static final double d = 0;
-    public static final double forwardSoftLimit = 480;
+    public static final double forwardSoftLimit = 300;
     public static final double reverseSoftLimit = 0;
     public static final double positionConversionFactor = 1.;//(78.)/(74953.-15479.);
     public static final double kRampRate = 1;
-    public static final double climbLevel2 = 475; //position for level2, Degrees
-    public static final double climbLevel1 = 350; //position for level1, Degrees
-    public static final double hookPosition = 171; //position to engage, Degrees
+    public static final double climbLevel2 = 300; //position for level2, Degrees
+    public static final double climbLevel1 = 200; //position for level1, Degrees
+    public static final double hookPosition = 92; //position to engage, Degrees
     public static final double travelPosition = 0;// retracted position, Degrees
-    public static final double sendOutIntakePose = 375; //Position to extend the intake on a level 2 climb. The climber is not completely inside the frame perimiter.
+    public static final double sendOutIntakePose = 240; //Position to extend the intake on a level 2 climb. The climber is not completely inside the frame perimiter.
 
   }
 

@@ -119,7 +119,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
 
-    if (!compButtons){
+    /*if (!compButtons){
       if (Constants.DRIVE_AVAILABLE){
         new JoystickButton(driverJoytick, OIConstants.kResetGyro)
           .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
@@ -158,7 +158,7 @@ public class RobotContainer {
           .onTrue(intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed))
           .onFalse(intakeSubsystem.stopIntake()); */
 
-      }
+      /*}
 
       if (Constants.CLIMBER_AVAILABLE){
         /*new JoystickButton(mechJoytick1, OIConstants.kClimberHook)
@@ -166,7 +166,7 @@ public class RobotContainer {
 
         new JoystickButton(mechJoytick1, OIConstants.kClimberClimb)
           .onTrue(climberSubsystem.MoveClimber(ClimberConstants.climbPosition));*/
-        new JoystickButton(mechJoytick1, 1)
+       /* new JoystickButton(mechJoytick1, 1)
           .onTrue(new InstantCommand(()-> climberSubsystem.setClimberSpeed(.3)))
           .onFalse(new InstantCommand(()-> climberSubsystem.setClimberSpeed(0)));
         new JoystickButton(mechJoytick1, 2)
@@ -197,7 +197,7 @@ public class RobotContainer {
           .onTrue(new InstantCommand(()->intakeSubsystem.rollers(-.3)))
           .onFalse(new InstantCommand(()->intakeSubsystem.rollers(0)));
       }
-  }
+  }*/
 
     if (compButtons){//Temporary until we switch button boards
       if (Constants.DRIVE_AVAILABLE){
@@ -236,13 +236,13 @@ public class RobotContainer {
       }
       if (Constants.SHOOTER_AVAILABLE){
         new JoystickButton(mechJoytick2, 2)
-          .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed)/*.alongWith(new AgitateIntake(intakeSubsystem))*/);
+          .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
         new JoystickButton(mechJoytick2, 8)
           .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
         new JoystickButton(mechJoytick2, 3)
           .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(50)));
         new JoystickButton(mechJoytick2, 9)
-          .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(50)));
+          .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(-50)));
       }
     
     }

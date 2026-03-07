@@ -50,6 +50,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    if (m_robotContainer.getAlliance().get()==Alliance.Blue)m_robotContainer.getDrivetrain().setGyro(m_robotContainer.getDrivetrain().getPoseEstimatorPose().getRotation().getDegrees());
+    if (m_robotContainer.getAlliance().get()==Alliance.Red)m_robotContainer.getDrivetrain().setGyro(m_robotContainer.getDrivetrain().getPoseEstimatorPose().getRotation().getDegrees()+180);
+
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
@@ -131,12 +134,12 @@ public class Robot extends TimedRobot {
       Elastic.selectTab("EndGame");
     } */
    if(HubTracker.timeRemainingInCurrentShift().isPresent()){
-    SmartDashboard.putNumber("Time Until Shift", HubTracker.timeRemainingInCurrentShift().get().abs(Seconds));
+    SmartDashboard.putNumber("Time Until Shift", Math.round(HubTracker.timeRemainingInCurrentShift().get().abs(Seconds)*100)/100); //Rounds to 2 decimal places
    }
     if (HubTracker.getCurrentShift().isPresent()) if ( HubTracker.getCurrentShift().get().equals(HubTracker.Shift.ENDGAME)) Elastic.selectTab("EndGame");
-    SmartDashboard.putNumber("MatchTime", HubTracker.getMatchTime());
+    SmartDashboard.putNumber("MatchTime", Math.round((160-HubTracker.getMatchTime())*100)/100); //Rounds to 2 decimal places
     SmartDashboard.putBoolean("HubActive", HubTracker.isActive());
-    
+     
   }
 
   @Override

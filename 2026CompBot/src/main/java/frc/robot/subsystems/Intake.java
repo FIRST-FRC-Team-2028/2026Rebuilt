@@ -61,8 +61,10 @@ public class Intake extends SubsystemBase {
       .velocityConversionFactor(IntakeConstants.RollerVelocityConversionFactor);
 
     joint_Config
+      .closedLoopRampRate(IntakeConstants.kRampRate)
       .idleMode(IdleMode.kCoast);
     jointF_Config
+      .closedLoopRampRate(IntakeConstants.kRampRate)
       .idleMode(IdleMode.kCoast)
       .inverted(true);
     joint_Config.encoder
@@ -70,8 +72,12 @@ public class Intake extends SubsystemBase {
     jointF_Config.encoder
       .positionConversionFactor(IntakeConstants.JointFPositionConversionFactor);
     joint_Config.closedLoop
+      .maxOutput(.3)
+      .minOutput(-.5)
       .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
     jointF_Config.closedLoop
+      .maxOutput(.3)
+      .minOutput(-.5)
       .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
     joint_Config.softLimit
       .forwardSoftLimit(IntakeConstants.jointForwardSoftLimit)  // forward is retracted
@@ -127,6 +133,7 @@ public class Intake extends SubsystemBase {
    * where positive is retracted, negative is deployed
    */
   public void setJointPosition(double position){
+    
     joint_Controller.setSetpoint(position, ControlType.kPosition);
     jointF_Controller.setSetpoint(position, ControlType.kPosition);
   }  
@@ -218,11 +225,8 @@ public class Intake extends SubsystemBase {
   }
 
   public Command toggleJointPosition(){
-    double deadband = 3; //degrees
-    /*if (getJointPosition()  > IntakeConstants.JointUpPosition-deadband 
-     && getJointPosition2() > IntakeConstants.JointUpPosition-deadband 
-     && getJointPosition()  < IntakeConstants.JointUpPosition+deadband 
-     && getJointPosition2() < IntakeConstants.JointUpPosition+deadband)*/if (!intakeout){
+
+   if (!intakeout){
       return new InstantCommand(()->setJointPosition(IntakeConstants.JointPickupPosition));
     } else return new InstantCommand(()->setJointPosition(IntakeConstants.JointUpPosition));
   }

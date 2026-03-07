@@ -74,8 +74,8 @@ public class Climber extends SubsystemBase {
     whereToClimb = new SendableChooser<String>();
       whereToClimb.setDefaultOption("Drive Climb Left, L1", FieldConstants.LeftClimbPath+",1");
       whereToClimb.addOption("Drive Climb Right, L1", FieldConstants.RightClimbPath+",1");
-      whereToClimb.addOption("Drive Climb Left, L2", FieldConstants.LeftClimbPath+",2");
-      whereToClimb.addOption("Drive Climb Right, L2", FieldConstants.RightClimbPath+",2");
+      //whereToClimb.addOption("Drive Climb Left, L2", FieldConstants.LeftClimbPath+",2");
+      //whereToClimb.addOption("Drive Climb Right, L2", FieldConstants.RightClimbPath+",2");
     SmartDashboard.putData("Where To CLimb", whereToClimb);
   }
 
