@@ -88,7 +88,7 @@ public class Shooter extends SubsystemBase {
  @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Shooter Speed (RPM)", center_Encoder.getVelocity());
+    SmartDashboard.putNumber("voltage", centerShooter.getAppliedOutput());
   }
   /** Set the speed for the shooter using VBUS - test control */
   public void setShooterVbus(double Speed){

@@ -133,7 +133,6 @@ public class Intake extends SubsystemBase {
    * where positive is retracted, negative is deployed
    */
   public void setJointPosition(double position){
-    
     joint_Controller.setSetpoint(position, ControlType.kPosition);
     jointF_Controller.setSetpoint(position, ControlType.kPosition);
   }  
@@ -225,8 +224,11 @@ public class Intake extends SubsystemBase {
   }
 
   public Command toggleJointPosition(){
-
-   if (!intakeout){
+    double deadband = 3; //degrees
+    /*if (getJointPosition()  > IntakeConstants.JointUpPosition-deadband 
+     && getJointPosition2() > IntakeConstants.JointUpPosition-deadband 
+     && getJointPosition()  < IntakeConstants.JointUpPosition+deadband 
+     && getJointPosition2() < IntakeConstants.JointUpPosition+deadband)*/if (!intakeout){
       return new InstantCommand(()->setJointPosition(IntakeConstants.JointPickupPosition));
     } else return new InstantCommand(()->setJointPosition(IntakeConstants.JointUpPosition));
   }

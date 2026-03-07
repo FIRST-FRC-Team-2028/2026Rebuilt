@@ -23,26 +23,26 @@ import frc.robot.subsystems.Shooter;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveToRangeAndShoot extends SequentialCommandGroup {
   /** Creates a new DriveToRangeAndShoot. */
-  public DriveToRangeAndShoot(Drivetrain drive, Shooter shooter, Intake intake, Optional<Alliance> alliance) {
+  public DriveToRangeAndShoot(Drivetrain drive, Shooter shooter, Intake intake, Optional<Alliance> alliance, boolean auto) {
     
     addCommands(
                Commands.parallel(
                   Commands.defer(()->drive.pathfindToPose(drive.getTorange(alliance, ShooterConstants.OptimalRange), 0), Set.of(drive))
                   ,new WaitUntilCommand(()->drive.distToGo()<1)  //Waits until 1 meter away from the target to start spinning the shooter wheels
                   .andThen(new InstantCommand(()->shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed)))
-                ).unless(()->drive.distToGo()<0.175),
-                Commands.parallel(    //TODO Test aim command
-                  new AimCommand(drive, alliance),
-                  new WaitUntilCommand(()->drive.distToGo()<1)  //Waits until 1 meter away from the target to start spinning the shooter wheels
-                    .andThen(new InstantCommand(()->shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed)))
-                ).onlyIf(()->drive.distToGo()<0.175),
+                ),
+                  new AimCommand(drive, alliance),      
                 Commands.race(
                   new WaitCommand(4), //Gives 4 seconds to shoot (Estimate)
                   Commands.parallel(
                     new Shoot(shooter, ShooterConstants.OptimalShootSpeed),
                     new AgitateIntake(intake)
                   )
-                )
+                ).onlyIf(()->auto),
+                Commands.parallel(
+                    new Shoot(shooter, ShooterConstants.OptimalShootSpeed),
+                    new AgitateIntake(intake)
+                  ).onlyIf(()->!auto)
 
 
     );  

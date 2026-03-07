@@ -29,7 +29,7 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterSpeed(speed+(4.5*velocityIncrease));
+    shooter.setShooterSpeed(speed+(5.5*velocityIncrease));
     shotCount = 0;
     shooting = false;
   }
@@ -38,9 +38,9 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     if (!shooting){
-      if(shooter.getShooterVelocity()> speed+(4.5*velocityIncrease)-shootSpeedDeadband){
+      if(shooter.getShooterVelocity()> speed+(5.5*velocityIncrease)-shootSpeedDeadband){
         shooter.setConveyorSpeed(ShooterConstants.conveyorShootSpeed);
-        shooter.setShooterSpeed(speed-.5*velocityIncrease);
+        shooter.setShooterSpeed(speed-.0*velocityIncrease);
       shooting = true;
       }
     }

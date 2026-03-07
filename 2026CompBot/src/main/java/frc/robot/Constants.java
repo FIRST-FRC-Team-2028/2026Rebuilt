@@ -214,7 +214,6 @@ public final class Constants {
     public static final double jointFReverseSoftLimit = -100.;
     public static final double JointPastFramePosition = 0;
     public static final double kRampRate = 0.5;
-
     //Joint Positions
     public static final double JointPickupPosition = -96.; //Degrees
     public static final double JointUpPosition = 36.; //Degrees
@@ -244,9 +243,9 @@ public final class Constants {
     public static final double shooterShootSpeed = 2500.; //RPM
     public static final double OptimalShootSpeed = 2700;
     public static final double feedShootSpeed = 200.; //RPM
-    public static final double conveyorShootSpeed = .3; //RPM
+    public static final double conveyorShootSpeed = .65; // vbus
     
-    public static final double OptimalRange = 2.65;  //Meters
+    public static final double OptimalRange = 2.5;  //Meters
     public static final double MinRange = 1.5;      //Meters
 
     //Shooter Math Constants 

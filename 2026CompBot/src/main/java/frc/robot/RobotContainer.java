@@ -11,6 +11,7 @@ import java.util.jar.Attributes.Name;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.FieldCentric;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
@@ -84,7 +85,7 @@ public class RobotContainer {
     } else driveSubsystem = null;
 
     if (Constants.DRIVE_AVAILABLE){
-       NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance));
+       NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true));
       NamedCommands.registerCommand("PathfindToClimbLeftPath", driveSubsystem.pathfindToPath("Drive Left Climb"));
       NamedCommands.registerCommand("PathfindToClimbRightPath", driveSubsystem.pathfindToPath("Drive Right Path"));
       NamedCommands.registerCommand("PathfindToLeftPathfindToCenter", driveSubsystem.pathfindToPath("Left Pathfind To Center"));
@@ -93,6 +94,7 @@ public class RobotContainer {
       NamedCommands.registerCommand("PathfindToOutpost", driveSubsystem.pathfindToPath("Drive To Outpost"));
 
       if (Constants.INTAKE_AVAILABLE){
+        new EventTrigger("Intake Out");
         NamedCommands.registerCommand("Intake Out", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition)));
         NamedCommands.registerCommand("Intake In", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition)));
         NamedCommands.registerCommand("Run Intake", intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed));
@@ -199,7 +201,7 @@ public class RobotContainer {
       }
   }*/
 
-    */if (compButtons){//Temporary until we switch button boards
+    if (compButtons){//Temporary until we switch button boards
       if (Constants.DRIVE_AVAILABLE){
         new JoystickButton(driverJoytick, OIConstants.kResetGyro)
           .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
@@ -207,7 +209,7 @@ public class RobotContainer {
           .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPose(
             driveSubsystem.getTorange(alliance, ShooterConstants.OptimalRange, ShooterConstants.MinRange), 0), Set.of(driveSubsystem)));*/
         new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
-          .whileTrue(new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance));
+          .whileTrue(new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, false));
         new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose)
           .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(mechTargetPose, 0, mechPathName), Set.of(driveSubsystem)));
       //Game Mech Set Target Buttons
@@ -237,6 +239,8 @@ public class RobotContainer {
       if (Constants.SHOOTER_AVAILABLE){
         new JoystickButton(mechJoytick2, 2)
           .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
+        new JoystickButton(mechJoytick2, 4)
+          .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed));
         new JoystickButton(mechJoytick2, 8)
           .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
         new JoystickButton(mechJoytick2, 3)

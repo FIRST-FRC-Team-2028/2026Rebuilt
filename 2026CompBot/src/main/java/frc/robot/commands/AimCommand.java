@@ -19,7 +19,7 @@ public class AimCommand extends Command {
   private final Drivetrain drive;
   private Optional<Alliance> alliance;
   private PIDController controller;
-  double targetTheta, kP=1./10., kI, kD, theta, speed, deadband = 5;
+  double targetTheta, kP=1./10., kI, kD, theta, speed, deadband = 4;
   /** Creates a new AimCommand. */
   public AimCommand(Drivetrain drive, Optional<Alliance> alliance) {
     this.drive = drive;
