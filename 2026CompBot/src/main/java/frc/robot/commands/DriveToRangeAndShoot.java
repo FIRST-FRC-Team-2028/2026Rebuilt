@@ -23,7 +23,7 @@ import frc.robot.subsystems.Shooter;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveToRangeAndShoot extends SequentialCommandGroup {
   /** Creates a new DriveToRangeAndShoot. */
-  public DriveToRangeAndShoot(Drivetrain drive, Shooter shooter, Intake intake, Optional<Alliance> alliance, boolean auto) {
+  public DriveToRangeAndShoot(Drivetrain drive, Shooter shooter, Intake intake, Optional<Alliance> alliance, boolean auto, double time) {
     
     addCommands(
                Commands.parallel(
@@ -33,7 +33,7 @@ public class DriveToRangeAndShoot extends SequentialCommandGroup {
                 ),
                   new AimCommand(drive, alliance),      
                 Commands.race(
-                  new WaitCommand(4), //Gives 4 seconds to shoot (Estimate)
+                  new WaitCommand(time), //Gives 4 seconds to shoot (Estimate)
                   Commands.parallel(
                     new Shoot(shooter, ShooterConstants.OptimalShootSpeed),
                     new AgitateIntake(intake)

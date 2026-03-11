@@ -85,7 +85,7 @@ public class RobotContainer {
     } else driveSubsystem = null;
 
     if (Constants.DRIVE_AVAILABLE){
-       NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true));
+       NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true, 10));
       NamedCommands.registerCommand("PathfindToClimbLeftPath", driveSubsystem.pathfindToPath("Drive Left Climb"));
       NamedCommands.registerCommand("PathfindToClimbRightPath", driveSubsystem.pathfindToPath("Drive Right Path"));
       NamedCommands.registerCommand("PathfindToLeftPathfindToCenter", driveSubsystem.pathfindToPath("Left Pathfind To Center"));
@@ -105,7 +105,9 @@ public class RobotContainer {
         }
       }
       if(Constants.CLIMBER_AVAILABLE){
-        NamedCommands.registerCommand("Climb", new MoveClimber(climberSubsystem, intakeSubsystem, true));
+        //NamedCommands.registerCommand("Climb", new MoveClimber(climberSubsystem, intakeSubsystem, true));
+        NamedCommands.registerCommand("Climb", new InstantCommand(()->System.out.println("climb")));
+
       }
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
         (stream) -> PathPlannerConstants.isCompetition
@@ -209,7 +211,7 @@ public class RobotContainer {
           .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPose(
             driveSubsystem.getTorange(alliance, ShooterConstants.OptimalRange, ShooterConstants.MinRange), 0), Set.of(driveSubsystem)));*/
         new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
-          .whileTrue(new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, false));
+          .whileTrue(new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, false, 4));
         new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose)
           .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(mechTargetPose, 0, mechPathName), Set.of(driveSubsystem)));
       //Game Mech Set Target Buttons
