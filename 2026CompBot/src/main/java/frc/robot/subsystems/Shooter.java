@@ -6,6 +6,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
+
+import java.lang.invoke.VolatileCallSite;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -21,11 +24,12 @@ import frc.robot.Constants.CANIDS;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
-  private final SparkMax centerShooter, leftShooter, /*rightShooter,*/ conveyor;
-  private final SparkMaxConfig  center_Config, left_Config, /*right_Config,*/ conveyor_Config;
+  private final SparkMax centerShooter, leftShooter, rightShooter, rightShooter2, conveyor;
+  private final SparkMaxConfig  center_Config, left_Config, right_Config, conveyor_Config;
   private final RelativeEncoder center_Encoder, conveyor_Encoder;
   private final SparkClosedLoopController center_ClosedLoopController, conveyor_ClosedLoopController;
   double setShootSpeed;
+  double[] voltages = {0,0,0,0};
   /** Manupulates scoring element: fuel
    * <p>Methods:<ul>
    * <li>{@code setShooterSpeed} - Sets the speed for the shooter using PID controller on velocity control type
@@ -46,12 +50,13 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     leftShooter = new SparkMax(CANIDS.leftShooter, MotorType.kBrushless);
     centerShooter = new SparkMax(CANIDS.centerShooter, MotorType.kBrushless);
-    //rightShooter = new SparkMax(CANIDS.rightShooter, MotorType.kBrushless);
+    rightShooter = new SparkMax(CANIDS.rightShooter, MotorType.kBrushless);
+    rightShooter2 = new SparkMax(CANIDS.rightShooter2, MotorType.kBrushless);
     conveyor = new SparkMax(CANIDS.conveyor, MotorType.kBrushless);
 
     left_Config = new SparkMaxConfig();
     center_Config = new SparkMaxConfig();
-    //right_Config = new SparkMaxConfig();
+    right_Config = new SparkMaxConfig();
     conveyor_Config = new SparkMaxConfig();
 
     center_Encoder = centerShooter.getEncoder();
@@ -68,8 +73,8 @@ public class Shooter extends SubsystemBase {
     center_Config.closedLoop
       .pid(ShooterConstants.shooterP, ShooterConstants.shooterI, ShooterConstants.shooterD);
     
-    left_Config.idleMode(IdleMode.kCoast).follow(CANIDS.centerShooter);
-    //right_Config.follow(CANIDS.centerShooter);
+    left_Config.idleMode(IdleMode.kCoast).follow(CANIDS.centerShooter, false);
+    right_Config.idleMode(IdleMode.kCoast).follow(CANIDS.centerShooter, true);
 
     conveyor_Config
       .idleMode(IdleMode.kCoast);
@@ -81,14 +86,17 @@ public class Shooter extends SubsystemBase {
 
     leftShooter.configure(left_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     centerShooter.configure(center_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    //rightShooter.configure(right_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    rightShooter.configure(right_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    rightShooter2.configure(right_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     conveyor.configure(conveyor_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
  @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("voltage", centerShooter.getAppliedOutput());
+    //SmartDashboard.putNumber("voltage", centerShooter.getAppliedOutput());
+    SmartDashboard.putNumber("Shooter Speed", center_Encoder.getVelocity());
+    
   }
   /** Set the speed for the shooter using VBUS - test control */
   public void setShooterVbus(double Speed){
@@ -132,6 +140,14 @@ public class Shooter extends SubsystemBase {
   public void stopShooting(){
     centerShooter.stopMotor();
     conveyor.stopMotor();
+  }
+
+  public double[] getCurrent(){
+    voltages[0] = centerShooter.getOutputCurrent();
+    voltages[1] = leftShooter.getOutputCurrent();
+    voltages[2] = rightShooter.getOutputCurrent();
+    voltages[3] = rightShooter2.getOutputCurrent();
+    return voltages;
   }
 
 

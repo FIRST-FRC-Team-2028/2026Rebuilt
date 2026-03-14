@@ -85,7 +85,6 @@ public class RobotContainer {
     } else driveSubsystem = null;
 
     if (Constants.DRIVE_AVAILABLE){
-       NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true, 10));
       NamedCommands.registerCommand("PathfindToClimbLeftPath", driveSubsystem.pathfindToPath("Drive Left Climb"));
       NamedCommands.registerCommand("PathfindToClimbRightPath", driveSubsystem.pathfindToPath("Drive Right Path"));
       NamedCommands.registerCommand("PathfindToLeftPathfindToCenter", driveSubsystem.pathfindToPath("Left Pathfind To Center"));
@@ -101,6 +100,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Stop Intake", intakeSubsystem.stopIntake());
         if (Constants.SHOOTER_AVAILABLE){
           NamedCommands.registerCommand("Shoot Sequence", new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
+          NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true, 10));
           //NamedCommands.registerCommand("Advanced Shoot Sequence", new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
         }
       }
@@ -123,86 +123,6 @@ public class RobotContainer {
     CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
 
-    /*if (!compButtons){
-      if (Constants.DRIVE_AVAILABLE){
-        new JoystickButton(driverJoytick, OIConstants.kResetGyro)
-          .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
-        new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
-          .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPose(
-              driveSubsystem.getTorange(alliance, ShooterConstants.OptimalRange), 0), Set.of(driveSubsystem)));
-        new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose)
-        .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(mechTargetPose, 0, mechPathName), Set.of(driveSubsystem)));
-        //Game Mech Set Target Buttons
-        new JoystickButton(mechJoytick1, 90) //Outpost
-          .onTrue(new InstantCommand(()->mechPathName=FieldConstants.OutpostPath));
-        new JoystickButton(mechJoytick1, 90) //Climb
-          .onTrue(new InstantCommand(()->mechPathName=climberSubsystem.getWhereToClimb()));
-        new JoystickButton(mechJoytick1, 90) //Neutral Zone Left
-          .onTrue(new InstantCommand(()->mechPathName=FieldConstants.noPath).alongWith(new InstantCommand(()->mechTargetPose=FieldConstants.NeutralZoneLeft)));
-        new JoystickButton(mechJoytick1, 90) //Neutral Zone Right
-          .onTrue(new InstantCommand(()->mechPathName=FieldConstants.noPath).alongWith(new InstantCommand(()->mechTargetPose=FieldConstants.NeutralZoneRight)));
-
-        if (Constants.CLIMBER_AVAILABLE){
-          new JoystickButton(mechJoytick2, OIConstants.kDriveToClimb) //Drive to the selected Climb Location
-            .whileTrue(
-              Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(new Pose2d(), 0, climberSubsystem.getWhereToClimb()), Set.of(driveSubsystem))
-          );}
-      }
-
-      if (Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
-        /*new JoystickButton(mechJoytick1, OIConstants.kShoot)
-          .whileTrue(new Shoot(shootingSubsystem)
-          .alongWith(new AgitateIntake(intakeSubsystem)));
-
-        new JoystickButton(mechJoytick1, OIConstants.kAdvancedShoot)
-          .whileTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm())
-          .alongWith(new AgitateIntake(intakeSubsystem)));*/
-
-        /* new JoystickButton(mechJoytick1, OIConstants.kIntake)
-          .onTrue(intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed))
-          .onFalse(intakeSubsystem.stopIntake()); */
-
-      /*}
-
-      if (Constants.CLIMBER_AVAILABLE){
-        /*new JoystickButton(mechJoytick1, OIConstants.kClimberHook)
-          .onTrue(climberSubsystem.MoveClimber(ClimberConstants.hookPosition));
-
-        new JoystickButton(mechJoytick1, OIConstants.kClimberClimb)
-          .onTrue(climberSubsystem.MoveClimber(ClimberConstants.climbPosition));*/
-       /* new JoystickButton(mechJoytick1, 1)
-          .onTrue(new InstantCommand(()-> climberSubsystem.setClimberSpeed(.3)))
-          .onFalse(new InstantCommand(()-> climberSubsystem.setClimberSpeed(0)));
-        new JoystickButton(mechJoytick1, 2)
-          .onTrue(new InstantCommand(()-> climberSubsystem.setClimberSpeed(-.3)))
-          .onFalse(new InstantCommand(()-> climberSubsystem.setClimberSpeed(0)));
-      
-      }
-      if (Constants.SHOOTER_AVAILABLE){
-        new JoystickButton(mechJoytick1, 1) //Set Shooter MAX speed
-          .onTrue(new InstantCommand(()->shootingSubsystem.setShooterSpeed(5676)))
-          .onFalse(new InstantCommand(()->shootingSubsystem.stopShooting()));
-        new JoystickButton(mechJoytick1, 2) //Set Shooter MAX speed
-          .onTrue(new InstantCommand(()->shootingSubsystem.setShooterSpeed(ShooterConstants.OptimalShootSpeed)))
-          .onFalse(new InstantCommand(()->shootingSubsystem.stopShooting()));
-        //new JoystickButton(mechJoytick1, 2)
-        //  .onTrue(new AdvancedShoot(shootingSubsystem, 3));
-        new JoystickButton(mechJoytick1, 3)
-          .whileTrue(new AdvancedShoot(shootingSubsystem, Units.feetToMeters(15)));
-              new JoystickButton(mechJoytick1, 4)
-          .whileTrue(new AdvancedShoot(shootingSubsystem, Units.feetToMeters(10)));
-      }
-      if (Constants.INTAKE_AVAILABLE){
-        new JoystickButton(mechJoytick1, 5)
-          .onTrue(new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition)));
-        new JoystickButton(mechJoytick1, 6)
-          .onTrue(new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition)));
-        new JoystickButton(mechJoytick1, 7)
-          .onTrue(new InstantCommand(()->intakeSubsystem.rollers(-.3)))
-          .onFalse(new InstantCommand(()->intakeSubsystem.rollers(0)));
-      }
-  }*/
-
     if (compButtons){//Temporary until we switch button boards
       if (Constants.DRIVE_AVAILABLE){
         new JoystickButton(driverJoytick, OIConstants.kResetGyro)
@@ -210,8 +130,10 @@ public class RobotContainer {
         /*new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
           .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPose(
             driveSubsystem.getTorange(alliance, ShooterConstants.OptimalRange, ShooterConstants.MinRange), 0), Set.of(driveSubsystem)));*/
-        new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
-          .whileTrue(new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, false, 4));
+        if(Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
+          new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
+            .whileTrue(new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, false, 4));
+        }
         new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose)
           .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(mechTargetPose, 0, mechPathName), Set.of(driveSubsystem)));
       //Game Mech Set Target Buttons
@@ -228,6 +150,7 @@ public class RobotContainer {
         new JoystickButton(mechJoytick1, 6) //Outpost
           .onTrue(new InstantCommand(()->mechPathName=FieldConstants.OutpostPath));
        }
+
       if (Constants.INTAKE_AVAILABLE){
         new JoystickButton(mechJoytick2, 1)
           .onTrue(Commands.defer(()->intakeSubsystem.toggleJointPosition(), Set.of(intakeSubsystem)));
@@ -239,16 +162,29 @@ public class RobotContainer {
           .onTrue(new MoveClimber(climberSubsystem, intakeSubsystem, false));
       }
       if (Constants.SHOOTER_AVAILABLE){
-        new JoystickButton(mechJoytick2, 2)
-          .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
+        if(Constants.INTAKE_AVAILABLE){
+          new JoystickButton(mechJoytick2, 2)
+            .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed)
+                          .alongWith(new AgitateIntake(intakeSubsystem)));
+        } else
+           new JoystickButton(mechJoytick2, 2)
+            .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed));
         new JoystickButton(mechJoytick2, 4)
           .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed));
-        new JoystickButton(mechJoytick2, 8)
-          .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
+        if(Constants.DRIVE_AVAILABLE){
+          if(Constants.INTAKE_AVAILABLE){
+            new JoystickButton(mechJoytick2, 8)
+            .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
+          } else
+            new JoystickButton(mechJoytick2, 8)
+              .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm())); 
+        }
         new JoystickButton(mechJoytick2, 3)
           .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(50)));
         new JoystickButton(mechJoytick2, 9)
           .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(-50)));
+        new JoystickButton(mechJoytick2, 5)
+          .onTrue(new Shoot(shootingSubsystem, 4250));
       }
     
     }

@@ -166,14 +166,20 @@ public class Robot extends TimedRobot {
   String onstring;
   double testVal=0.;
   double testVal2 = 0.;
+  double[] dummu = {0.,0.,0.,0.};
+  double[] testVal3;
+  String chrString = "";
   @Override
   public void testPeriodic() {
     if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_CLMODE)) vbus=!vbus;
     SmartDashboard.putBoolean("vbus",vbus);
     if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_INTAKE_JOINT)){
       testIntakeJoint=!testIntakeJoint;
-      if(testIntakeJoint)SmartDashboard.putNumber("testP",Constants.IntakeConstants.jointP);
-      // Use typein to play with kP for the joint controllers
+      if(testIntakeJoint){
+        SmartDashboard.putNumber("testP",Constants.IntakeConstants.jointP);
+        // Use typein to play with kP for the joint controllers
+        m_robotContainer.getIntake().disAbort();
+      }
     }
     if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_INTAKE_ROLLER)){
       testIntakeRoller=!testIntakeRoller;
@@ -183,7 +189,9 @@ public class Robot extends TimedRobot {
     }
     if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_SHOOT)){
       testShoot=!testShoot;
-      if(testShoot)SmartDashboard.putNumber("testP",Constants.ShooterConstants.shooterShootSpeed); 
+      if(testShoot){
+        SmartDashboard.putNumber("testP",Constants.ShooterConstants.shooterShootSpeed); 
+      }
       // Use typein to play with Shooter RPM
     }
     if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_CLIMB)){
@@ -245,6 +253,10 @@ public class Robot extends TimedRobot {
         }
         double testP = SmartDashboard.getNumber("testP",0.);
         m_robotContainer.getIntake().setJointPID(testP,0.,0.);
+        chrString = String.format("% 6.2f, ", m_robotContainer.getIntake().getCurrent()[0]);
+        chrString += String.format("% 6.2f, ", m_robotContainer.getIntake().getCurrent()[1]);
+        chrString += String.format("% 6.2f, ", m_robotContainer.getIntake().getCurrent()[2]); // abort = 1.:true
+        SmartDashboard.putString("Current (Center, Left, Right, Right2)", chrString);
      }
      if(testIntakeRoller){
         if(vbus)m_robotContainer.getIntake().rollers(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
@@ -265,6 +277,11 @@ public class Robot extends TimedRobot {
           m_robotContainer.getShoot().setShooterSpeed(SmartDashboard.getNumber("testP",0.));
         }
         testVal = m_robotContainer.getShoot().getShooterVelocity();
+        chrString = String.format("% 6.2f, ", m_robotContainer.getShoot().getCurrent()[0]);
+        chrString += String.format("% 6.2f, ", m_robotContainer.getShoot().getCurrent()[1]);
+        chrString += String.format("% 6.2f, ", m_robotContainer.getShoot().getCurrent()[2]);
+        chrString += String.format("% 6.2f, ", m_robotContainer.getShoot().getCurrent()[3]);
+        SmartDashboard.putString("Current (Center, Left, Right, Right2)", chrString);
       }
     }
     if (Constants.PIXYCAM_AVAILABLE){

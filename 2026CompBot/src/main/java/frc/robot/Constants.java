@@ -40,7 +40,7 @@ public final class Constants {
   public static final boolean CAMERA_AVAILABLE = true;
   public static final boolean SHOOTER_AVAILABLE = true;
   public static final boolean INTAKE_AVAILABLE = true;
-  public static final boolean CLIMBER_AVAILABLE = true;
+  public static final boolean CLIMBER_AVAILABLE = false;
   public static final boolean PIXYCAM_AVAILABLE = false;
 
 
@@ -230,9 +230,9 @@ public final class Constants {
   }
 
   public static class ShooterConstants {
-    public static final double shooterP = 0.0002;
-    public static final double shooterI = 0.00000050;
-    public static final double shooterD = 0.00007;
+    public static final double shooterP = 0.0002; //0.0002
+    public static final double shooterI = 0.0000003;//0.0000005
+    public static final double shooterD = 0.0002; //0.00007
     public static final double shooterVelocityConversionFactor = 1;
     public static final double conveyorP = 0;
     public static final double conveyorI = 0;
@@ -241,18 +241,17 @@ public final class Constants {
 
 
     public static final double shooterShootSpeed = 2500.; //RPM
-    public static final double OptimalShootSpeed = 2700;
-    public static final double feedShootSpeed = 200.; //RPM
-    public static final double conveyorShootSpeed = .65; // vbus
+    public static final double OptimalShootSpeed = 2485;
+    public static final double conveyorShootSpeed = .85; // vbus
     
-    public static final double OptimalRange = 2.5;  //Meters
-    public static final double MinRange = 1.5;      //Meters
+    public static final double OptimalRange =Units.inchesToMeters(58.5);  //In
+    //public static final double MinRange = 1.5;      //Meters
 
     //Shooter Math Constants 
     public static final double gravity = 9.81; //m/s^2
     public static final double h_shooter = 17; //height in inches as of 2/18/26
     public static final double delta_H = Units.inchesToMeters(72)-Units.inchesToMeters(h_shooter);// 72 - h_shooter
-    public static final double shooter_angle_deg = 50; //Estimate TODO set real angle
+    public static final double shooter_angle_deg = 80; //Estimate TODO set real angle
     public static final double wheel_diameter_meter = Units.inchesToMeters(4.25);  
     public static final double max_shooting_distance_meters = Units.feetToMeters(35); //TODO find max shooting distance
     public static final double velocity_fudge_factor = 2.2; //Typical range for foam: 1.3–1.40
@@ -276,19 +275,20 @@ public final class Constants {
 
   }
 
-  public static class CANIDS { //as of 2/27/26
+  public static class CANIDS { //as of 3/13/26
     //Intake
     public static final int roller = 60;
-    public static final int jointLead = 50;
-    public static final int jointFollow = 51;
+    public static final int jointLead = 61;
+    public static final int jointFollow = 62;
     //Shooter
-    public static final int leftShooter = 62;
-    public static final int centerShooter = 61;
-    //public static final int rightShooter = 1000;
-    public static final int conveyor = 52;
+    public static final int leftShooter = 52;
+    public static final int centerShooter = 51;
+    public static final int rightShooter = 53;
+    public static final int rightShooter2 = 54;
+    public static final int conveyor = 55;
     //Climber
-    public static final int climber = 53; 
-    public static final int climber_follower = 54 ; 
+    public static final int climber = 999; 
+    public static final int climber_follower = 998; 
     
   }
 
@@ -308,14 +308,31 @@ public final class Constants {
     public static final int kDriveToMechPose =           4;
 
     public static final int kDriverRobotOrientedButton = 10;  //press in right stick
-    //Game Mech 1 Buttons
-    public static final int kShoot =                     1;
-    public static final int kIntake =                    3;
+    /*
+          1              /\               2 |
+                        /  \                |
+                        \  /                |  mech1
+          3              \/               4 |
+                                            |
+                            5           | 6 |
+       
+         1           2   3          4     5 |
+                                            |  mech2
+         6    7      8   9         10    11 |
+     */
+    //Game Mech 2 Buttons
+    public static final int kShoot =                     2;
+    public static final int kIntake =                    1;
     public static final int kAdvancedShoot =             2;
     public static final int kClimberHook =               4;
     public static final int kClimberClimb =              5;
-    //Game Mech 2 Buttons
-    public static final int kDriveToClimb =              1; 
+    //Game Mech 1 Buttons
+    public static final int kDriveToNeutralLeft =        1;
+    public static final int kDriveToNeutralRight =       2;
+    public static final int kDriveToTrenchLeft =         3;
+    public static final int kDriveToTrenchRight =        4;
+    public static final int kDriveToClimb =              5;
+    public static final int kDriveToOutpost =            6; 
 
     public static final double kDeadband = 0.075;
 
@@ -350,10 +367,10 @@ public final class Constants {
       public static final double drive_Range_Meters = 1;
 
       public static final Transform3d robot_to_camera = new Transform3d(
-                                                        Units.inchesToMeters(-27.), //11 in fudge
+                                                        Units.inchesToMeters(-10.25), //
                                                         Units.inchesToMeters(-11.5),//-11.5
                                                         Units.inchesToMeters(0.),//18.75
-                                                        new Rotation3d(0.0,11.,0.0)); //TODO: Add the real numbers
+                                                        new Rotation3d(0.0,34.,0.0)); //TODO: Add the real numbers
       public static final Transform3d robot_to_camera2 = new Transform3d(
                                                         0,
                                                         0,
