@@ -119,7 +119,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
 
-    if (compButtons){//Temporary until we switch button boards
+    //if (compButtons){//Temporary until we switch button boards
       if (Constants.DRIVE_AVAILABLE){
         new JoystickButton(driverJoytick, OIConstants.kResetGyro)
           .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
@@ -183,7 +183,7 @@ public class RobotContainer {
           .onTrue(new Shoot(shootingSubsystem, 4250));
       }
     
-    }
+    //}
   }
 
   public Command getAutonomousCommand() {
