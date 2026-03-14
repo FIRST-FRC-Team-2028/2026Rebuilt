@@ -36,7 +36,7 @@ public class Intake extends SubsystemBase {
   private final RelativeEncoder joint_Encoder, jointF_Encoder;
   private final SparkClosedLoopController joint_Controller, jointF_Controller;
   boolean intakeout;
-  private boolean abort = true;
+  private boolean abort = true, abortR = true;
   /** Picks up the scoring element: fuel
    * <p>Methods: <ul>
    * <li>{@code rollers} - Sets the rollers to a speed
@@ -104,26 +104,31 @@ public class Intake extends SubsystemBase {
     joint_Encoder.setPosition(IntakeConstants.jointForwardSoftLimit);
     jointF_Encoder.setPosition(IntakeConstants.jointForwardSoftLimit);
     abort = false;
+    abortR = false;
   }
 
-  final private double BAD_CURRENT=25.;  // amps
+  //final private double BAD_CURRENT=25.;  // amps
   @Override
   public void periodic() {
     if (getJointPosition()<IntakeConstants.JointPastFramePosition) intakeout = true; else intakeout = false;
     SmartDashboard.putNumber("Joint Pose", getJointPosition());
     //SmartDashboard.putBoolean("Intake On", intakeOn);
-    if(jointLead.getOutputCurrent()>BAD_CURRENT 
-    || jointFollow.getOutputCurrent() >BAD_CURRENT){
+    if(jointLead.getOutputCurrent()>Constants.BAD_CURRENT_550 
+    || jointFollow.getOutputCurrent() >Constants.BAD_CURRENT_550){
       jointLead.stopMotor();
       jointFollow.stopMotor();
       abort = true;
+    }
+    if(rollers.getOutputCurrent() >Constants.BAD_CURRENT_Vortex){
+      rollers.stopMotor();
+      abortR = true;
     }
   }
     // This method will be called once per scheduler run
   
   /** Set the rollers to a speed between -1 and 1 */
   public void rollers(double speed){
-    rollers.set(speed);
+    if (!abortR)rollers.set(speed);
   }
   public double getRollerSpeed(){return rollers_Encoder.getVelocity();}
 
@@ -136,14 +141,15 @@ public class Intake extends SubsystemBase {
       jointFollow.set(speed);
     }
   }
-  private double[] currents={0.,0.,0.};
+  private double[] currents={0.,0.,0.,0.};
   public double[] getCurrent(){
     currents[0]=jointLead.getOutputCurrent();
     currents[1]=jointFollow.getOutputCurrent();
     currents[2] = abort?1.:0.;  // abort = 1.: true
+    currents[3] = rollers.getOutputCurrent();
     return currents;
   }
-  public void disAbort(){abort=false;}
+  public void disAbort(){abort=false;abortR=false;}
   public void goJointF(double speed){
     if (!abort)
     jointFollow.set(speed);
@@ -207,7 +213,7 @@ public class Intake extends SubsystemBase {
     } else{
     intakeOn = true;
     System.out.println("START WHEELS");
-    rollers.set(speed);
+    rollers(speed);
     }
   }
 

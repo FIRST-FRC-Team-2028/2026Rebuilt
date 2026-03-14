@@ -43,6 +43,10 @@ public final class Constants {
   public static final boolean CLIMBER_AVAILABLE = false;
   public static final boolean PIXYCAM_AVAILABLE = false;
 
+  public static final double BAD_CURRENT_550 = 80.;  // Amps, stall current is 100
+  public static final double BAD_CURRENT_Vortex = 200.;  // Amps, stall current is 211
+  public static final double BAD_CURRENT_1650 = 95.;  // Amps, empirical stall current is 105
+
 
 
   public static final class ModuleConstants {

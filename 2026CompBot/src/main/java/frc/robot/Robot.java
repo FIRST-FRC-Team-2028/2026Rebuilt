@@ -183,9 +183,11 @@ public class Robot extends TimedRobot {
     }
     if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_INTAKE_ROLLER)){
       testIntakeRoller=!testIntakeRoller;
+      if(testIntakeRoller)  m_robotContainer.getIntake().disAbort();
     }
     if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_CONVEYOR)){
       testConveyor=!testConveyor;
+      if(testConveyor)  m_robotContainer.getShoot().disAbort();
     }
     if(mechJoytick2.getRawButtonPressed(Constants.OIConstants.TEST_SHOOT)){
       testShoot=!testShoot;
@@ -261,12 +263,17 @@ public class Robot extends TimedRobot {
      if(testIntakeRoller){
         if(vbus)m_robotContainer.getIntake().rollers(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));
         testVal = m_robotContainer.getIntake().getRollerSpeed();
+        chrString = String.format("% 6.2f, ", m_robotContainer.getIntake().getCurrent()[3]);
+        SmartDashboard.putString("Current (Center, Left, Right, Right2)", chrString);
      }
     }
     if (Constants.SHOOTER_AVAILABLE){
        if(testConveyor){
         if(vbus)m_robotContainer.getShoot().setConveyorSpeed(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT)*.4);
         testVal = m_robotContainer.getShoot().getConveyorSpeed();
+        chrString = String.format("% 6.2f, ", m_robotContainer.getShoot().getCurrentC()[0]);
+        chrString = String.format("% 6.2f, ", m_robotContainer.getShoot().getCurrentC()[1]);
+        SmartDashboard.putString("Current (Center, Left, Right, Right2)", chrString);
       }
       if(testShoot){
         if(vbus)m_robotContainer.getShoot().setShooterVbus(driverJoytick.getRawAxis(OIConstants.RIGHTSTICKVERT));

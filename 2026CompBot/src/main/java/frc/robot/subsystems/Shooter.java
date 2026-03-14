@@ -21,6 +21,7 @@ import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIDS;
+import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
@@ -30,6 +31,7 @@ public class Shooter extends SubsystemBase {
   private final SparkClosedLoopController center_ClosedLoopController, conveyor_ClosedLoopController;
   double setShootSpeed;
   double[] voltages = {0,0,0,0};
+  private boolean abortR = true;
   /** Manupulates scoring element: fuel
    * <p>Methods:<ul>
    * <li>{@code setShooterSpeed} - Sets the speed for the shooter using PID controller on velocity control type
@@ -89,14 +91,19 @@ public class Shooter extends SubsystemBase {
     rightShooter.configure(right_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     rightShooter2.configure(right_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     conveyor.configure(conveyor_Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    abortR=false;
   }
 
+  //final private double BAD_CURRENT = 25.;  //Amps
  @Override
   public void periodic() {
     // This method will be called once per scheduler run
     //SmartDashboard.putNumber("voltage", centerShooter.getAppliedOutput());
     SmartDashboard.putNumber("Shooter Speed", center_Encoder.getVelocity());
-    
+    if (conveyor.getOutputCurrent() > Constants.BAD_CURRENT_550) {
+      abortR=true;
+      conveyor.stopMotor();
+    }
   }
   /** Set the speed for the shooter using VBUS - test control */
   public void setShooterVbus(double Speed){
@@ -126,7 +133,7 @@ public class Shooter extends SubsystemBase {
    * @param Speed [-1, 1]]
    */
   public void setConveyorSpeed(double Speed){
-    conveyor.set(Speed);
+    if(!abortR)conveyor.set(Speed);
     //conveyor_ClosedLoopController.setSetpoint(Speed, ControlType.kVelocity);
   }
 
@@ -134,6 +141,9 @@ public class Shooter extends SubsystemBase {
    * @return unscaled motor velocity
    */
   public double getConveyorSpeed(){return conveyor_Encoder.getVelocity();}
+
+  /** reenable conveyor after abort */
+  public void disAbort(){abortR=false;}
   
 
   /** Stops all of the motors involved with shooting */
@@ -142,6 +152,18 @@ public class Shooter extends SubsystemBase {
     conveyor.stopMotor();
   }
 
+  /** monitor the current draw of the conveyor motor
+   * @return [current(amps), abort status(0=operational)]
+   */
+  public double[] getCurrentC(){
+    voltages[0] = conveyor.getOutputCurrent();
+    voltages[1] = abortR?1.:0.;
+    return voltages;
+  }
+
+  /** monitor shooter motor current
+   * @return [Leader, left follower, right follower1, rightfollower2]
+   */
   public double[] getCurrent(){
     voltages[0] = centerShooter.getOutputCurrent();
     voltages[1] = leftShooter.getOutputCurrent();
