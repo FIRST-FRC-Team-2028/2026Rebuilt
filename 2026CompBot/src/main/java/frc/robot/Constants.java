@@ -41,6 +41,7 @@ public final class Constants {
   public static final boolean SHOOTER_AVAILABLE = true;
   public static final boolean INTAKE_AVAILABLE = true;
   public static final boolean CLIMBER_AVAILABLE = false;
+  public static final boolean CLIMBER_AVAILABLE = false;
   public static final boolean PIXYCAM_AVAILABLE = false;
 
 
@@ -309,29 +310,30 @@ public final class Constants {
 
     public static final int kDriverRobotOrientedButton = 10;  //press in right stick
     /*
-          1              /\               2 |
-                        /  \                |
-                        \  /                |  mech1
-          3              \/               4 |
-                                            |
-                            5           | 6 |
-       
-         1           2   3          4     5 |
-                                            |  mech2
-         6    7      8   9         10    11 |
+            1             ^               2
+                         / \
+                         \ /                              Mech 1
+            3             v               4
+
+                        |  5  |           |  6  |
+     -----------------------------------------------------
+       1            2      3        4        5
+                                                          Mech 2
+       6     7      8      9       10       11
+     
      */
     //Game Mech 2 Buttons
-    public static final int kShoot =                     2;
-    public static final int kIntake =                    1;
+    public static final int kShoot =                     1;
+    public static final int kIntake =                    3;
     public static final int kAdvancedShoot =             2;
     public static final int kClimberHook =               4;
     public static final int kClimberClimb =              5;
     //Game Mech 1 Buttons
-    public static final int kDriveToNeutralLeft =        1;
-    public static final int kDriveToNeutralRight =       2;
-    public static final int kDriveToTrenchLeft =         3;
-    public static final int kDriveToTrenchRight =        4;
-    public static final int kDriveToClimb =              5;
+    //public static final int kDriveToClimb =              1;
+    public static final int kDriveToNeutralLeft =        1; 
+    public static final int kDriveToNeutralRight =       2; 
+    public static final int kDriveToAllianceLeft =       3; 
+    public static final int kDriveToAllianceRight =      4; 
     public static final int kDriveToOutpost =            6; 
 
     public static final double kDeadband = 0.075;

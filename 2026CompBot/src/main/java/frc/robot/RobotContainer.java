@@ -41,7 +41,6 @@ import frc.robot.subsystems.AprilTags;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.PixyCamReader;
 import frc.robot.subsystems.Shooter;
 
 public class RobotContainer {
@@ -50,12 +49,10 @@ public class RobotContainer {
   private final Shooter shootingSubsystem;
   private final Intake intakeSubsystem;
   private final Climber climberSubsystem;
-  private final PixyCamReader pixy;
   public static Optional<Alliance> alliance = DriverStation.getAlliance();
   private  SendableChooser<Command> autoChooser = null;
   Pose2d mechTargetPose;
   String mechPathName;
-  boolean compButtons = true; //Temporary until we switch button boards
 
   // Joysticks
     private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
@@ -76,9 +73,7 @@ public class RobotContainer {
     if (Constants.CLIMBER_AVAILABLE){
       climberSubsystem = new Climber(alliance);
     } else climberSubsystem = null;
-    if (Constants.PIXYCAM_AVAILABLE){
-      pixy = new PixyCamReader();
-    } else pixy = null;
+
     if (Constants.DRIVE_AVAILABLE){
       driveSubsystem = new Drivetrain(aprilSubsystem);
       driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driverJoytick));
@@ -94,6 +89,7 @@ public class RobotContainer {
 
       if (Constants.INTAKE_AVAILABLE){
         new EventTrigger("Intake Out");
+        new EventTrigger("Intake In");
         NamedCommands.registerCommand("Intake Out", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition)));
         NamedCommands.registerCommand("Intake In", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition)));
         NamedCommands.registerCommand("Run Intake", intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed));
@@ -190,7 +186,7 @@ public class RobotContainer {
     }
   }
 
-   public Command getAutonomousCommand() {
+  public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   } 
   public Drivetrain getDrivetrain(){
@@ -204,9 +200,6 @@ public class RobotContainer {
   }
   public Climber getClimber(){
     return climberSubsystem;
-  }
-  public PixyCamReader getPixyCam(){
-    return pixy;
   }
   public AprilTags getAprilTags(){
     return aprilSubsystem;
