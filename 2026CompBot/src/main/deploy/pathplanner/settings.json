@@ -4,6 +4,7 @@
   "holonomicMode": true,
   "pathFolders": [
     "Autos and Auto Pathfinds",
+    "Trench Paths",
     "Pathfind To Paths"
   ],
   "autoFolders": [],

@@ -423,6 +423,10 @@ public final class Constants {
     public static final String OutpostPath = "Drive To Outpost";
     public static final String LeftClimbPath = "Drive Left Climb";
     public static final String RightClimbPath = "Drive Right Climb"; 
+    public static final String NeutralToAllianceTrenchL = "Neutral To Alliance TrenchL";
+    public static final String NeutralToAllianceTrenchR = "Neutral To Alliance TrenchR";
+    public static final String AllianceToNeutralTrenchL = "Alliance To Neutral TrenchL";
+    public static final String AllianceToNeutralTrenchR = "Alliance To Neutral TrenchR";
     public static final Pose2d NeutralZoneLeft = new Pose2d(6.5, 5.5, new Rotation2d(0)); //Meters (NOT MEASURED FROM SOMETHING)
     public static final Pose2d NeutralZoneRight = new Pose2d(6.5, 2.5, new Rotation2d(0)); //Meters (NOT MEASURED FROM SOMETHING)
     public static final Pose2d AllianceZoneLeft = new Pose2d(3, 5.5, new Rotation2d(0)); //Meters (NOT MEASURED FROM SOMETHING)

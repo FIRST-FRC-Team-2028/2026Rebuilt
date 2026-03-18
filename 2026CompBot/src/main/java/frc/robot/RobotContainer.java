@@ -80,17 +80,25 @@ public class RobotContainer {
     } else driveSubsystem = null;
 
     if (Constants.DRIVE_AVAILABLE){
-       NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true, 10));
+      NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true, 10));
       NamedCommands.registerCommand("PathfindToClimbLeftPath", driveSubsystem.pathfindToPath("Drive Left Climb"));
       NamedCommands.registerCommand("PathfindToClimbRightPath", driveSubsystem.pathfindToPath("Drive Right Path"));
       NamedCommands.registerCommand("PathfindToLeftPathfindToCenter", driveSubsystem.pathfindToPath("Left Pathfind To Center"));
       NamedCommands.registerCommand("PathfindToRightPathfindToCenter", driveSubsystem.pathfindToPath("Right Pathfind To Center"));
       NamedCommands.registerCommand("PathfindToDepot", driveSubsystem.pathfindToPath("Pathfind To Deopt"));
       NamedCommands.registerCommand("PathfindToOutpost", driveSubsystem.pathfindToPath("Drive To Outpost"));
+      NamedCommands.registerCommand("PathfindToRightTrenchPath1", driveSubsystem.pathfindToPath("Right Trench Path1"));
+      NamedCommands.registerCommand("PathfindToRightTrenchPath2", driveSubsystem.pathfindToPath("Right Trench Path2"));
+      NamedCommands.registerCommand("PathfindToLeftTrenchPath1", driveSubsystem.pathfindToPath("Left Trench Path1"));
+      NamedCommands.registerCommand("PathfindToLeftTrenchPath2", driveSubsystem.pathfindToPath("Left Trench Path2"));
+
+
+
 
       if (Constants.INTAKE_AVAILABLE){
         new EventTrigger("Intake Out");
         new EventTrigger("Intake In");
+        new EventTrigger("Intake On");
         NamedCommands.registerCommand("Intake Out", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition)));
         NamedCommands.registerCommand("Intake In", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition)));
         NamedCommands.registerCommand("Run Intake", intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed));
@@ -129,14 +137,22 @@ public class RobotContainer {
       new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose)
         .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(mechTargetPose, 0, mechPathName), Set.of(driveSubsystem)));
       //Game Mech Set Target Buttons
-      new JoystickButton(mechJoytick1, OIConstants.kDriveToNeutralLeft) //Neutral Zone Left
+      /*new JoystickButton(mechJoytick1, OIConstants.kDriveToNeutralLeft) //Neutral Zone Left
         .onTrue(new InstantCommand(()->mechPathName=FieldConstants.noPath).alongWith(new InstantCommand(()->mechTargetPose=FieldConstants.NeutralZoneLeft)));
       new JoystickButton(mechJoytick1, OIConstants.kDriveToNeutralRight) //Neutral Zone Right
         .onTrue(new InstantCommand(()->mechPathName=FieldConstants.noPath).alongWith(new InstantCommand(()->mechTargetPose=FieldConstants.NeutralZoneRight)));
       new JoystickButton(mechJoytick1, OIConstants.kDriveToAllianceLeft) // Alliance Zone Left
         .onTrue(new InstantCommand(()->mechPathName=FieldConstants.noPath).alongWith(new InstantCommand(()->mechTargetPose=FieldConstants.AllianceZoneLeft)));
       new JoystickButton(mechJoytick1, OIConstants.kDriveToAllianceRight) // Alliance Zone Right
-        .onTrue(new InstantCommand(()->mechPathName=FieldConstants.noPath).alongWith(new InstantCommand(()->mechTargetPose=FieldConstants.AllianeZoneRight)));
+        .onTrue(new InstantCommand(()->mechPathName=FieldConstants.noPath).alongWith(new InstantCommand(()->mechTargetPose=FieldConstants.AllianeZoneRight)));*/
+      new JoystickButton(mechJoytick1, OIConstants.kDriveToNeutralLeft) //Neutral Zone Left
+        .onTrue(new InstantCommand(()->mechPathName=FieldConstants.AllianceToNeutralTrenchL));
+      new JoystickButton(mechJoytick1, OIConstants.kDriveToNeutralRight) //Neutral Zone Right
+        .onTrue(new InstantCommand(()->mechPathName=FieldConstants.AllianceToNeutralTrenchR));
+      new JoystickButton(mechJoytick1, OIConstants.kDriveToAllianceLeft) // Alliance Zone Left
+        .onTrue(new InstantCommand(()->mechPathName=FieldConstants.NeutralToAllianceTrenchL));
+      new JoystickButton(mechJoytick1, OIConstants.kDriveToAllianceRight) // Alliance Zone Right
+        .onTrue(new InstantCommand(()->mechPathName=FieldConstants.NeutralToAllianceTrenchR));
       /* if (Constants.CLIMBER_AVAILABLE) new JoystickButton(mechJoytick1, 5) //Climb
         .onTrue(new InstantCommand(()->mechPathName=climberSubsystem.getWhereToClimb())); */
       new JoystickButton(mechJoytick1, OIConstants.kDriveToOutpost) //Outpost

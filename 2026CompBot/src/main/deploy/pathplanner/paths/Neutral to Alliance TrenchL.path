@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.54922891566265,
-        "y": 4.056855421686747
+        "x": 6.12,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9263493975903616,
-        "y": 4.045927710843373
+        "x": 5.916691919191919,
+        "y": 7.619482323232324
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.975638554216867,
-        "y": 3.7399518072289153
+        "x": 3.872424242424242,
+        "y": 7.4
       },
       "prevControl": {
-        "x": 2.8061445783132526,
-        "y": 3.729024096385541
+        "x": 4.122141276855351,
+        "y": 7.388108712646138
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 10.0
+    "velocity": 2.0,
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Trench Paths",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 1.0,
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
