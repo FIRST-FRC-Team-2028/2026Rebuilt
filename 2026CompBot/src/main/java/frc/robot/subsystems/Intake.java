@@ -36,6 +36,7 @@ public class Intake extends SubsystemBase {
   private final RelativeEncoder joint_Encoder, jointF_Encoder;
   private final SparkClosedLoopController joint_Controller, jointF_Controller;
   boolean intakeout;
+  private boolean abort = true, abortR = true;
   /** Picks up the scoring element: fuel
    * <p>Methods: <ul>
    * <li>{@code rollers} - Sets the rollers to a speed
@@ -72,12 +73,12 @@ public class Intake extends SubsystemBase {
     jointF_Config.encoder
       .positionConversionFactor(IntakeConstants.JointFPositionConversionFactor);
     joint_Config.closedLoop
-      .maxOutput(.3)
-      .minOutput(-.5)
+      .maxOutput(.25) //.3
+      .minOutput(-.4) //-.5
       .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
     jointF_Config.closedLoop
-      .maxOutput(.3)
-      .minOutput(-.5)
+      .maxOutput(.25) //.3
+      .minOutput(-.4) //-.5
       .pid(IntakeConstants.jointP, IntakeConstants.jointI, IntakeConstants.jointD);
     joint_Config.softLimit
       .forwardSoftLimit(IntakeConstants.jointForwardSoftLimit)  // forward is retracted
@@ -102,20 +103,32 @@ public class Intake extends SubsystemBase {
     jointF_Controller = jointFollow.getClosedLoopController();
     joint_Encoder.setPosition(IntakeConstants.jointForwardSoftLimit);
     jointF_Encoder.setPosition(IntakeConstants.jointForwardSoftLimit);
-
+    abort = false;
+    abortR = false;
   }
 
+  //final private double BAD_CURRENT=25.;  // amps
   @Override
   public void periodic() {
     if (getJointPosition()<IntakeConstants.JointPastFramePosition) intakeout = true; else intakeout = false;
     SmartDashboard.putNumber("Joint Pose", getJointPosition());
     //SmartDashboard.putBoolean("Intake On", intakeOn);
+    if(jointLead.getOutputCurrent()>Constants.BAD_CURRENT_550 
+    || jointFollow.getOutputCurrent() >Constants.BAD_CURRENT_550){
+      jointLead.stopMotor();
+      jointFollow.stopMotor();
+      abort = true;
+    }
+    if(rollers.getOutputCurrent() >Constants.BAD_CURRENT_Vortex){
+      rollers.stopMotor();
+      abortR = true;
+    }
   }
     // This method will be called once per scheduler run
   
   /** Set the rollers to a speed between -1 and 1 */
   public void rollers(double speed){
-    rollers.set(speed);
+    if (!abortR)rollers.set(speed);
   }
   public double getRollerSpeed(){return rollers_Encoder.getVelocity();}
 
@@ -123,18 +136,32 @@ public class Intake extends SubsystemBase {
    * @param speed  neg makes arm extend
   */
   public void goJoint(double speed){
-    jointLead.set(speed);
-    jointFollow.set(speed);
+    if(!abort){
+      jointLead.set(speed);
+      jointFollow.set(speed);
+    }
   }
+  private double[] currents={0.,0.,0.,0.};
+  public double[] getCurrent(){
+    currents[0]=jointLead.getOutputCurrent();
+    currents[1]=jointFollow.getOutputCurrent();
+    currents[2] = abort?1.:0.;  // abort = 1.: true
+    currents[3] = rollers.getOutputCurrent();
+    return currents;
+  }
+  public void disAbort(){abort=false;abortR=false;}
   public void goJointF(double speed){
+    if (!abort)
     jointFollow.set(speed);
   }
   /** Sets the position of the Joint in degrees
    * where positive is retracted, negative is deployed
    */
   public void setJointPosition(double position){
-    joint_Controller.setSetpoint(position, ControlType.kPosition);
-    jointF_Controller.setSetpoint(position, ControlType.kPosition);
+    if (!abort){
+      joint_Controller.setSetpoint(position, ControlType.kPosition);
+      jointF_Controller.setSetpoint(position, ControlType.kPosition);
+    }
   }  
   /**Returns the joint position in degrees */
   public double getJointPosition() {
@@ -186,7 +213,7 @@ public class Intake extends SubsystemBase {
     } else{
     intakeOn = true;
     System.out.println("START WHEELS");
-    rollers.set(speed);
+    rollers(speed);
     }
   }
 

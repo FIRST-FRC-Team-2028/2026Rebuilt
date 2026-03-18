@@ -105,6 +105,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Stop Intake", intakeSubsystem.stopIntake());
         if (Constants.SHOOTER_AVAILABLE){
           NamedCommands.registerCommand("Shoot Sequence", new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
+          NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true, 10));
           //NamedCommands.registerCommand("Advanced Shoot Sequence", new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
         }
       }
@@ -127,15 +128,19 @@ public class RobotContainer {
     CommandScheduler.getInstance().getActiveButtonLoop().clear();
 
 
-    
-
-    if (Constants.DRIVE_AVAILABLE){
+    //if (compButtons){//Temporary until we switch button boards
+      if (Constants.DRIVE_AVAILABLE){
         new JoystickButton(driverJoytick, OIConstants.kResetGyro)
           .onTrue(new InstantCommand(()->driveSubsystem.resetGyro()));
-      new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
-        .whileTrue(new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, false, 4));
-      new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose)
-        .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(mechTargetPose, 0, mechPathName), Set.of(driveSubsystem)));
+        /*new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
+          .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPose(
+            driveSubsystem.getTorange(alliance, ShooterConstants.OptimalRange, ShooterConstants.MinRange), 0), Set.of(driveSubsystem)));*/
+        if(Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
+          new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
+            .whileTrue(new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, false, 4));
+        }
+        new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose)
+          .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(mechTargetPose, 0, mechPathName), Set.of(driveSubsystem)));
       //Game Mech Set Target Buttons
       /*new JoystickButton(mechJoytick1, OIConstants.kDriveToNeutralLeft) //Neutral Zone Left
         .onTrue(new InstantCommand(()->mechPathName=FieldConstants.noPath).alongWith(new InstantCommand(()->mechTargetPose=FieldConstants.NeutralZoneLeft)));
@@ -178,17 +183,23 @@ public class RobotContainer {
   
         new JoystickButton(mechJoytick2, 4)
           .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed));
-      if (Constants.INTAKE_AVAILABLE){
-        new JoystickButton(mechJoytick2, 8)
-          .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
-      } else
-        new JoystickButton(mechJoytick2, 8)
-          .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()));
+        if(Constants.DRIVE_AVAILABLE){
+          if(Constants.INTAKE_AVAILABLE){
+            new JoystickButton(mechJoytick2, 8)
+            .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
+          } else
+            new JoystickButton(mechJoytick2, 8)
+              .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm())); 
+        }
         new JoystickButton(mechJoytick2, 3)
           .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(50)));
         new JoystickButton(mechJoytick2, 9)
           .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(-50)));
-    }  
+        new JoystickButton(mechJoytick2, 5)
+          .onTrue(new Shoot(shootingSubsystem, 4250));
+      }
+    
+    //}
   }
 
   public Command getAutonomousCommand() {
