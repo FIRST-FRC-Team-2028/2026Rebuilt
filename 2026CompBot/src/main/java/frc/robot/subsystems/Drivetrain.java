@@ -262,10 +262,10 @@ public class Drivetrain extends SubsystemBase {
         m_poseEstimator.addVisionMeasurement(
                   aprilSubsystem.getEstimatedPose3d().toPose2d(), aprilSubsystem.estimatedPoseTime); 
       }
-      /*if (aprilSubsystem.isPoseEstimated2()) {
-        m_poseEstimator.addVisionMeasurement(         FOR SECOND CAMERA
+      if (aprilSubsystem.isPoseEstimated2()) {
+        m_poseEstimator.addVisionMeasurement(        
                   aprilSubsystem.getEstimatedPose3d2().toPose2d(), aprilSubsystem.estimatedPoseTime2);
-      }*/
+      }
           
     }
     SmartDashboard.putNumber("Robot X Pos", m_poseEstimator.getEstimatedPosition().getX());

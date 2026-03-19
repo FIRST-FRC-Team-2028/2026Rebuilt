@@ -80,7 +80,8 @@ public class AprilTags extends SubsystemBase {
         estimatedPoseTime = estimatedPose.get().timestampSeconds;
         estimatedPose3d = estimatedPose.get().estimatedPose;
         isEstimated=true;
-      } else isEstimated = false;
+    } else isEstimated = false;
+
     }
     //SmartDashboard.putNumber("Robot X Pos", estimatedPose3d.getX());
     //SmartDashboard.putNumber("Robot Y Pos", estimatedPose3d.getY());
@@ -91,12 +92,14 @@ public class AprilTags extends SubsystemBase {
         estimatedPoseTime2 = estimatedPose2.get().timestampSeconds;
         estimatedPose3d2 = estimatedPose2.get().estimatedPose;
         isEstimated2 = true;  
-      } else if (estimatedPose2.isPresent()) {  //If multi tag isn't present, use average best targets
+      } else{  //If multi tag isn't present, use average best targets
         estimatedPose2 = poseEstimator2.estimateAverageBestTargetsPose(results2);
+        if (estimatedPose2.isPresent()){
         estimatedPoseTime2 = estimatedPose2.get().timestampSeconds;
         estimatedPose3d2 = estimatedPose2.get().estimatedPose;
+        }
         isEstimated2=true;
-      } else isEstimated2 = false;
+      } if (!estimatedPose2.isPresent()) isEstimated2 = false;
     }
     
   }
@@ -105,6 +108,12 @@ public class AprilTags extends SubsystemBase {
    */
   public boolean isPoseEstimated(){
     return isEstimated;
+  }
+  /** Gets the boolean to determine if a pose is estimated
+   * @return If a pose is estimated
+   */
+  public boolean isPoseEstimated2(){
+    return isEstimated2;
   }
 
   /** Gets the Pose3d of the position estimated by the pose estimator
@@ -120,12 +129,12 @@ public class AprilTags extends SubsystemBase {
   public double getTimeStamp(){
     return estimatedPoseTime;
   }
-  /*public Pose3d getEstimatedPose3d2(){
+  public Pose3d getEstimatedPose3d2(){
     return estimatedPose3d2;
   }
-  public double getTimeStamp2(){  TODO 2nd Camera?
+  public double getTimeStamp2(){  
     return estimatedPoseTime2;
-  }*/
+  }
   
   /** Gets the magnitude of the distance vector with the X, Y, and Z components
    * @param target the target that the distance is found

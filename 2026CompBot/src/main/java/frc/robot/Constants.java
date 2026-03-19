@@ -43,7 +43,7 @@ public final class Constants {
   public static final boolean CLIMBER_AVAILABLE = false;
   public static final boolean PIXYCAM_AVAILABLE = false;
 
-  public static final double BAD_CURRENT_550 = 80.;  // Amps, stall current is 100
+  public static final double BAD_CURRENT_550 = 100.;  // Amps, stall current is 100
   public static final double BAD_CURRENT_Vortex = 200.;  // Amps, stall current is 211
   public static final double BAD_CURRENT_1650 = 95.;  // Amps, empirical stall current is 105
 
@@ -184,7 +184,7 @@ public final class Constants {
   public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
   public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 1.8;
 
-  public static final double kFineControlSpeed = .5;
+  public static final double kFineControlSpeed = .3;
   public static final double kFasterSpeed = .4;
 
   public static final String kAbsEncoderMagnetOffsetKey = "kAbsEncoderMagnetOffsetKey";
@@ -219,18 +219,18 @@ public final class Constants {
     public static final double JointPastFramePosition = 0;
     public static final double kRampRate = 0.5;
     //Joint Positions
-    public static final double JointPickupPosition = -96.; //Degrees
+    public static final double JointPickupPosition = -100.; //Degrees
     public static final double JointUpPosition = 36.; //Degrees
     public static final double JointAgitatePosition = -55.; //Degrees
     public static final double JointClimbPosition = -100;
-    public static final double JointFPickupPosition = -96.; //Degrees //TODO change the numbers for the follower motor
+    public static final double JointFPickupPosition = -90.; //Degrees //TODO change the numbers for the follower motor
     public static final double JointFUpPosition = 36.; //Degrees
-    public static final double JointFAgitatePosition = -55.; //Degrees
+    public static final double JointFAgitatePosition = -50.; //Degrees
     public static final double JointFClimbPosition = -100;
 
     //Rollers Speed
     public static final double RollerVelocityConversionFactor = 1.;
-    public static final double IntakeSpeed = -0.39; //-1 to 1
+    public static final double IntakeSpeed = -0.4; //-1 to 1  was -.39 on 3/18
   }
 
   public static class ShooterConstants {
@@ -246,9 +246,9 @@ public final class Constants {
 
     public static final double shooterShootSpeed = 2500.; //RPM
     public static final double OptimalShootSpeed = 2485;
-    public static final double conveyorShootSpeed = .85; // vbus
+    public static final double conveyorShootSpeed = .95; // vbus
     
-    public static final double OptimalRange =Units.inchesToMeters(58.5);  //In
+    public static final double OptimalRange =Units.feetToMeters(4);  //feet
     //public static final double MinRange = 1.5;      //Meters
 
     //Shooter Math Constants 
@@ -359,8 +359,8 @@ public final class Constants {
   }
 
   public static class CamConstants {
-    public static final String camera_name = "Camera_Module_v2";
-    public static final String camera_name2 = "IDK";
+    public static final String camera_name = "Camera_Module_v2(1)";
+    public static final String camera_name2 = "Camera_Module_v2(2)";
       //public static final double camera_Height_Meters = Units.inchesToMeters(7.);
       //public static final double target_Height_Meters = Units.inchesToMeters(78.);
 
@@ -372,15 +372,15 @@ public final class Constants {
       public static final double drive_Range_Meters = 1;
 
       public static final Transform3d robot_to_camera = new Transform3d(
-                                                        Units.inchesToMeters(-10.25), //
+                                                        Units.inchesToMeters(-10.25), //-10.25
                                                         Units.inchesToMeters(-11.5),//-11.5
                                                         Units.inchesToMeters(0.),//18.75
-                                                        new Rotation3d(0.0,34.,0.0)); //TODO: Add the real numbers
+                                                        new Rotation3d(0.0,0.,0.0)); //TODO: Add the real numbers
       public static final Transform3d robot_to_camera2 = new Transform3d(
+                                                        -12.325,
+                                                        11.25,
                                                         0,
-                                                        0,
-                                                        0,
-                                                        new Rotation3d(0.0,0.0,0.0));
+                                                        new Rotation3d(.0,0.0,0.0));
 
       public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
       public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
@@ -427,10 +427,10 @@ public final class Constants {
     public static final String OutpostPath = "Drive To Outpost";
     public static final String LeftClimbPath = "Drive Left Climb";
     public static final String RightClimbPath = "Drive Right Climb"; 
-    public static final String NeutralToAllianceTrenchL = "Neutral To Alliance TrenchL";
-    public static final String NeutralToAllianceTrenchR = "Neutral To Alliance TrenchR";
-    public static final String AllianceToNeutralTrenchL = "Alliance To Neutral TrenchL";
-    public static final String AllianceToNeutralTrenchR = "Alliance To Neutral TrenchR";
+    public static final String NeutralToAllianceTrenchL = "Neutral to Alliance TrenchL";
+    public static final String NeutralToAllianceTrenchR = "Neutral to Alliance TrenchR";
+    public static final String AllianceToNeutralTrenchL = "Alliance to Neutral TrenchL";
+    public static final String AllianceToNeutralTrenchR = "Alliance to Neutral TrenchR";
     public static final Pose2d NeutralZoneLeft = new Pose2d(6.5, 5.5, new Rotation2d(0)); //Meters (NOT MEASURED FROM SOMETHING)
     public static final Pose2d NeutralZoneRight = new Pose2d(6.5, 2.5, new Rotation2d(0)); //Meters (NOT MEASURED FROM SOMETHING)
     public static final Pose2d AllianceZoneLeft = new Pose2d(3, 5.5, new Rotation2d(0)); //Meters (NOT MEASURED FROM SOMETHING)

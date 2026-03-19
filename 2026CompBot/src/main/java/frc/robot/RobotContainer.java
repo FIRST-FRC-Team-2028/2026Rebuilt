@@ -96,11 +96,11 @@ public class RobotContainer {
 
 
       if (Constants.INTAKE_AVAILABLE){
-        new EventTrigger("Intake Out");
-        new EventTrigger("Intake In");
-        new EventTrigger("Intake On");
-        NamedCommands.registerCommand("Intake Out", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition)));
-        NamedCommands.registerCommand("Intake In", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition)));
+        new EventTrigger("Intake Out").onTrue(new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition, IntakeConstants.JointFPickupPosition)));
+        new EventTrigger("Intake In").onTrue(new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition, IntakeConstants.JointFUpPosition)));
+        new EventTrigger("Run Intake").onTrue(intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed));
+        NamedCommands.registerCommand("Intake Out", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition, IntakeConstants.JointFPickupPosition)));
+        NamedCommands.registerCommand("Intake In", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition, IntakeConstants.JointFUpPosition)));
         NamedCommands.registerCommand("Run Intake", intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed));
         NamedCommands.registerCommand("Stop Intake", intakeSubsystem.stopIntake());
         if (Constants.SHOOTER_AVAILABLE){
@@ -168,6 +168,11 @@ public class RobotContainer {
         .onTrue(Commands.defer(()->intakeSubsystem.toggleJointPosition(), Set.of(intakeSubsystem)));
       new JoystickButton(mechJoytick2, 6)
         .onTrue(new InstantCommand(()->intakeSubsystem.toggleIntakeWheels(IntakeConstants.IntakeSpeed)));
+      new JoystickButton(mechJoytick2, 5)
+        .onTrue(new InstantCommand(()->intakeSubsystem.resetAbort())
+        .andThen(new InstantCommand(()->shootingSubsystem.resetAbort())));
+      new JoystickButton(mechJoytick2, 10)
+        .onTrue(new InstantCommand(() -> intakeSubsystem.moveintake(0., 0.)));
     }
     /* if (Constants.CLIMBER_AVAILABLE && Constants.INTAKE_AVAILABLE){
       new JoystickButton(mechJoytick2, 7)
@@ -195,8 +200,8 @@ public class RobotContainer {
           .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(50)));
         new JoystickButton(mechJoytick2, 9)
           .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(-50)));
-        new JoystickButton(mechJoytick2, 5)
-          .onTrue(new Shoot(shootingSubsystem, 4250));
+        //new JoystickButton(mechJoytick2, 5)
+        //  .onTrue(new Shoot(shootingSubsystem, 4250));
       }
     
     //}

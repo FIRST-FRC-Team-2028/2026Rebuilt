@@ -13,6 +13,7 @@ public class AgitateIntake extends Command {
   private final Intake intake;
   double deadband = 5; //Degrees
   double setPoint = IntakeConstants.JointPickupPosition;
+  double setpointF = IntakeConstants.JointFPickupPosition;
   /** Shake hopper
    * <p> Presumes this Command is controlled by holding a button,
    * and ends when button is released.
@@ -20,13 +21,13 @@ public class AgitateIntake extends Command {
    */
   public AgitateIntake(Intake intake) {
     this.intake = intake;
-    addRequirements(intake);
+    //addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.setJointPosition(setPoint);
+    intake.setJointPosition(setPoint, setpointF);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,17 +36,19 @@ public class AgitateIntake extends Command {
     if (intake.getJointPosition()<setPoint+deadband && intake.getJointPosition()>setPoint-deadband){
       if (setPoint == IntakeConstants.JointPickupPosition){
         setPoint = IntakeConstants.JointAgitatePosition;
+        setpointF = IntakeConstants.JointFAgitatePosition;
       } else {
         setPoint = IntakeConstants.JointPickupPosition;
+        setpointF = IntakeConstants.JointFPickupPosition;
       }
-      intake.setJointPosition(setPoint);
+      intake.setJointPosition(setPoint, setpointF);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.setJointPosition(IntakeConstants.JointPickupPosition);
+    intake.setJointPosition(IntakeConstants.JointPickupPosition, IntakeConstants.JointFPickupPosition);
   }
 
   // Returns true when the command should end.
