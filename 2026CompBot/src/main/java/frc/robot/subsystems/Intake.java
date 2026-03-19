@@ -117,6 +117,7 @@ public class Intake extends SubsystemBase {
     || jointFollow.getOutputCurrent() >Constants.BAD_CURRENT_550){
       jointLead.stopMotor();
       jointFollow.stopMotor();
+      System.out.println("Abort");
       abort = true;
     }
     if(rollers.getOutputCurrent() >Constants.BAD_CURRENT_Vortex){
