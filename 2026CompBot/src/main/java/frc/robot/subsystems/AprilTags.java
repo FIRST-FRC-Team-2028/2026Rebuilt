@@ -31,11 +31,11 @@ import frc.robot.Constants.CamConstants;
 
 public class AprilTags extends SubsystemBase {
   private final PhotonCamera camera;
-  //private final PhotonCamera camera2;
+  private final PhotonCamera camera2;
 
   AprilTagFieldLayout aprilTagFieldLayout;
   private final PhotonPoseEstimator poseEstimator;
-  //private final PhotonPoseEstimator poseEstimator2;
+  private final PhotonPoseEstimator poseEstimator2;
 
   PhotonPipelineResult cameraResult, cameraResult2;
   List<PhotonPipelineResult> cameraResults;
@@ -59,10 +59,10 @@ public class AprilTags extends SubsystemBase {
    */
   public AprilTags() {
     camera = new PhotonCamera(CamConstants.camera_name);
-    //camera2 = new PhotonCamera(CamConstants.camera_name2);
+    camera2 = new PhotonCamera(CamConstants.camera_name2);
     aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
     poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, Constants.CamConstants.robot_to_camera);
-    //poseEstimator2 = new PhotonPoseEstimator(aprilTagFieldLayout, Constants.CamConstants.robot_to_camera2);
+    poseEstimator2 = new PhotonPoseEstimator(aprilTagFieldLayout, Constants.CamConstants.robot_to_camera2);
 
   }
 
@@ -80,24 +80,27 @@ public class AprilTags extends SubsystemBase {
         estimatedPoseTime = estimatedPose.get().timestampSeconds;
         estimatedPose3d = estimatedPose.get().estimatedPose;
         isEstimated=true;
-      } else isEstimated = false;
+    } else isEstimated = false;
+
     }
     //SmartDashboard.putNumber("Robot X Pos", estimatedPose3d.getX());
     //SmartDashboard.putNumber("Robot Y Pos", estimatedPose3d.getY());
 
-    /*for (var results2: camera2.getAllUnreadResults()){
+    for (var results2: camera2.getAllUnreadResults()){
        estimatedPose2 = poseEstimator2.estimateCoprocMultiTagPose(results2);
       if (estimatedPose2.isPresent()){
         estimatedPoseTime2 = estimatedPose2.get().timestampSeconds;
         estimatedPose3d2 = estimatedPose2.get().estimatedPose;
-        isEstimated2 = true;  TODO 2nd Camera?
-      } else if (estimatedPose2.isPresent()) {  //If multi tag isn't present, use average best targets
+        isEstimated2 = true;  
+      } else{  //If multi tag isn't present, use average best targets
         estimatedPose2 = poseEstimator2.estimateAverageBestTargetsPose(results2);
+        if (estimatedPose2.isPresent()){
         estimatedPoseTime2 = estimatedPose2.get().timestampSeconds;
         estimatedPose3d2 = estimatedPose2.get().estimatedPose;
+        }
         isEstimated2=true;
-      } else isEstimated2 = false;
-    }*/
+      } if (!estimatedPose2.isPresent()) isEstimated2 = false;
+    }
     
   }
   /** Gets the boolean to determine if a pose is estimated
@@ -105,6 +108,12 @@ public class AprilTags extends SubsystemBase {
    */
   public boolean isPoseEstimated(){
     return isEstimated;
+  }
+  /** Gets the boolean to determine if a pose is estimated
+   * @return If a pose is estimated
+   */
+  public boolean isPoseEstimated2(){
+    return isEstimated2;
   }
 
   /** Gets the Pose3d of the position estimated by the pose estimator
@@ -120,12 +129,12 @@ public class AprilTags extends SubsystemBase {
   public double getTimeStamp(){
     return estimatedPoseTime;
   }
-  /*public Pose3d getEstimatedPose3d2(){
+  public Pose3d getEstimatedPose3d2(){
     return estimatedPose3d2;
   }
-  public double getTimeStamp2(){  TODO 2nd Camera?
+  public double getTimeStamp2(){  
     return estimatedPoseTime2;
-  }*/
+  }
   
   /** Gets the magnitude of the distance vector with the X, Y, and Z components
    * @param target the target that the distance is found

@@ -158,10 +158,10 @@ public class Intake extends SubsystemBase {
   /** Sets the position of the Joint in degrees
    * where positive is retracted, negative is deployed
    */
-  public void setJointPosition(double position){
+  public void setJointPosition(double position, double positionF){
     if (!abort){
       joint_Controller.setSetpoint(position, ControlType.kPosition);
-      jointF_Controller.setSetpoint(position, ControlType.kPosition);
+      jointF_Controller.setSetpoint(positionF, ControlType.kPosition);
     }
   }  
   /**Returns the joint position in degrees */
@@ -241,8 +241,8 @@ public class Intake extends SubsystemBase {
     return new InstantCommand(()->rollers(speed));
     }
   }
-  public Command moveintake(double degrees){
-    return new InstantCommand(()->setJointPosition(degrees));
+  public Command moveintake(double degrees, double degreesF){
+    return new InstantCommand(()->setJointPosition(degrees, degreesF));
   }
 
   /** Stops the rollers
@@ -257,13 +257,17 @@ public class Intake extends SubsystemBase {
      && getJointPosition2() > IntakeConstants.JointUpPosition-deadband 
      && getJointPosition()  < IntakeConstants.JointUpPosition+deadband 
      && getJointPosition2() < IntakeConstants.JointUpPosition+deadband)*/if (!intakeout){
-      return new InstantCommand(()->setJointPosition(IntakeConstants.JointPickupPosition));
-    } else return new InstantCommand(()->setJointPosition(IntakeConstants.JointUpPosition));
+      return new InstantCommand(()->setJointPosition(IntakeConstants.JointPickupPosition, IntakeConstants.JointFPickupPosition));
+    } else return new InstantCommand(()->setJointPosition(IntakeConstants.JointUpPosition, IntakeConstants.JointFUpPosition));
   }
 
   public void resetJointEncoder(){
     joint_Encoder.setPosition(IntakeConstants.jointForwardSoftLimit);
     jointF_Encoder.setPosition(IntakeConstants.jointFForwardSoftLimit);
+  }
+
+  public void resetAbort(){
+    abort = false;
   }
 
 }

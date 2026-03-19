@@ -52,18 +52,18 @@ public class MoveClimber extends Command {
     intakeout = intake.getIntakeOut();
     if (!auto){
       if (endGame && intakeout && loopcounter==0){
-        intake.setJointPosition(IntakeConstants.JointUpPosition);
+        intake.setJointPosition(IntakeConstants.JointUpPosition, IntakeConstants.JointFUpPosition);
         loopcounter = 1;
       }
       if (!startedClimb && !intakeout && endGame) switchClimberPose();
 
       if (climblevel == ClimberConstants.climbLevel2 && !intakeout
           && climber.getClimberPosition()>ClimberConstants.sendOutIntakePose-deadband && climber.getClimberPosition()<ClimberConstants.sendOutIntakePose+deadband){
-          intake.setJointPosition(IntakeConstants.JointClimbPosition);
+          intake.setJointPosition(IntakeConstants.JointClimbPosition, IntakeConstants.JointFClimbPosition);
       } 
     } else{
       if (intakeout && loopcounter==0){
-        intake.setJointPosition(IntakeConstants.JointUpPosition);
+        intake.setJointPosition(IntakeConstants.JointUpPosition, IntakeConstants.JointFUpPosition);
         loopcounter = 1;
       }
       if (!startedClimb && !intakeout) switchClimberPose();

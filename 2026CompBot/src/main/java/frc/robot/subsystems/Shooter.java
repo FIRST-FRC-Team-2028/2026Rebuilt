@@ -100,6 +100,7 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     //SmartDashboard.putNumber("voltage", centerShooter.getAppliedOutput());
     SmartDashboard.putNumber("Shooter Speed", center_Encoder.getVelocity());
+    SmartDashboard.putNumber("Conveyor Current", conveyor.getOutputCurrent());
     if (conveyor.getOutputCurrent() > Constants.BAD_CURRENT_550) {
       abortR=true;
       conveyor.stopMotor();
@@ -172,6 +173,9 @@ public class Shooter extends SubsystemBase {
     return voltages;
   }
 
+  public void resetAbort(){
+    abortR = false;
+  }
 
   //Shooter RPM Math
     /**

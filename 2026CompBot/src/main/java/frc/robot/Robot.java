@@ -246,11 +246,11 @@ public class Robot extends TimedRobot {
           m_robotContainer.getIntake().resetJointEncoder();
         }
         if (mechJoytick2.getRawButtonPressed(OIConstants.TEST_LOW_CONTROL)){
-          m_robotContainer.getIntake().setJointPosition(IntakeConstants.JointUpPosition);
+          m_robotContainer.getIntake().setJointPosition(IntakeConstants.JointUpPosition, IntakeConstants.JointFUpPosition);
           m_robotContainer.getIntake().setJointIdleMode(IdleMode.kBrake);
         }
         if (mechJoytick2.getRawButtonPressed(OIConstants.TEST_HIGH_CONTROL)){
-          m_robotContainer.getIntake().setJointPosition(IntakeConstants.JointPickupPosition);
+          m_robotContainer.getIntake().setJointPosition(IntakeConstants.JointPickupPosition, IntakeConstants.JointFPickupPosition);
           m_robotContainer.getIntake().setJointIdleMode(IdleMode.kCoast);
         }
         double testP = SmartDashboard.getNumber("testP",0.);
