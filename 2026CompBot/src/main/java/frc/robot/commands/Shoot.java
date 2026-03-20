@@ -32,7 +32,7 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterSpeed(speed+1.75*velocityIncrease);
+    shooter.setShooterSpeed(speed+2*velocityIncrease);
 
     shotCount = 0;
     shooting = false;

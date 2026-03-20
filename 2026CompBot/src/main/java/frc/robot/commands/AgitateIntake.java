@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.Intake;
@@ -14,6 +15,7 @@ public class AgitateIntake extends Command {
   double deadband = 5; //Degrees
   double setPoint = IntakeConstants.JointPickupPosition;
   double setpointF = IntakeConstants.JointFPickupPosition;
+  Timer timer;
   /** Shake hopper
    * <p> Presumes this Command is controlled by holding a button,
    * and ends when button is released.
@@ -21,13 +23,15 @@ public class AgitateIntake extends Command {
    */
   public AgitateIntake(Intake intake) {
     this.intake = intake;
-    //addRequirements(intake);
+    addRequirements(intake);
+    timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     intake.setJointPosition(setPoint, setpointF);
+    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,11 +41,16 @@ public class AgitateIntake extends Command {
       if (setPoint == IntakeConstants.JointPickupPosition){
         setPoint = IntakeConstants.JointAgitatePosition;
         setpointF = IntakeConstants.JointFAgitatePosition;
+        if(timer.hasElapsed(4)){
+          setPoint=setPoint+15;
+          setpointF=setpointF+15;
+        }
       } else {
         setPoint = IntakeConstants.JointPickupPosition;
         setpointF = IntakeConstants.JointFPickupPosition;
       }
-      intake.setJointPosition(setPoint, setpointF);
+      intake.setJointPosition(setPoint, setpointF); 
+      
     }
   }
 
