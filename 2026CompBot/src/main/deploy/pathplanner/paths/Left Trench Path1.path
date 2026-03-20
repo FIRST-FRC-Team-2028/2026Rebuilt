@@ -33,31 +33,15 @@
     {
       "anchor": {
         "x": 8.304356060606061,
-        "y": 4.3489615384615385
+        "y": 4.639666666666667
       },
       "prevControl": {
-        "x": 8.366284334094356,
-        "y": 4.591169896993524
+        "x": 8.554346354010372,
+        "y": 4.637463667886417
       },
       "nextControl": {
-        "x": 8.242427787117766,
-        "y": 4.106753179929553
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.037410256410258,
-        "y": 4.3489615384615385
-      },
-      "prevControl": {
-        "x": 7.795357598221554,
-        "y": 4.357623793796525
-      },
-      "nextControl": {
-        "x": 5.033306721056723,
-        "y": 4.326057498057498
+        "x": 5.665282051282053,
+        "y": 4.662923076923078
       },
       "isLocked": false,
       "linkedName": null
@@ -68,12 +52,12 @@
         "y": 7.344633838378112
       },
       "prevControl": {
-        "x": 6.861401515151515,
-        "y": 6.898005050505051
+        "x": 7.130435897435898,
+        "y": 7.116474358974359
       },
       "nextControl": {
-        "x": 5.724381265169753,
-        "y": 7.48147596824753
+        "x": 5.69715443540185,
+        "y": 7.403485259434878
       },
       "isLocked": false,
       "linkedName": null
@@ -84,24 +68,24 @@
         "y": 7.46
       },
       "prevControl": {
-        "x": 5.372638888883163,
-        "y": 7.516414141408415
+        "x": 5.351320512820514,
+        "y": 7.674628205128204
       },
       "nextControl": {
-        "x": 2.956841178366144,
-        "y": 7.403075724130162
+        "x": 3.856358628310178,
+        "y": 7.402975421692496
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9219065656565664,
-        "y": 6.050555555555556
+        "x": 2.9093974358974375,
+        "y": 7.344633838378112
       },
       "prevControl": {
-        "x": 3.2883712121212123,
-        "y": 6.898005050505052
+        "x": 2.82396167012576,
+        "y": 7.579582194250221
       },
       "nextControl": null,
       "isLocked": false,
@@ -118,17 +102,34 @@
       "rotationDegrees": -90.0
     },
     {
-      "waypointRelativePos": 5.0,
+      "waypointRelativePos": 3.336842105263117,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 4.08,
       "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.774834437086086,
-      "maxWaypointRelativePos": 3.3841059602648977,
+      "minWaypointRelativePos": 1.05,
+      "maxWaypointRelativePos": 2.25,
       "constraints": {
-        "maxVelocity": 2.0,
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 2.37,
+      "maxWaypointRelativePos": 2.82,
+      "constraints": {
+        "maxVelocity": 1.0,
         "maxAcceleration": 3.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -137,10 +138,28 @@
       }
     }
   ],
-  "pointTowardsZones": [],
-  "eventMarkers": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 5.4,
+        "y": 4.7
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 2.369878183831673,
+      "maxWaypointRelativePos": 2.8239202657807367,
+      "name": "Point Towards Zone"
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 3.5,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -149,7 +168,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -50.0
+    "rotation": -63.0
   },
   "reversed": false,
   "folder": "Trench Paths",

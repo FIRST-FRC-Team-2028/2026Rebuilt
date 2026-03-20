@@ -232,18 +232,6 @@ public class Drivetrain extends SubsystemBase {
     //SmartDashboard.putNumber("Module Turnin Target", desiredStates[0].angle.getRotations());
   }
 
-  /**Updates the odometry location using swerve module position */
-  public void updateOdometry() {
-    m_odometry.update(
-        m_gyro.getRotation2d(),
-        new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_backLeft.getPosition(),
-          m_backRight.getPosition()
-        });
-  }
-
   /**Update the estimate of the robot Pose 
    * based on odometry
    * and any detectable April tags
@@ -290,15 +278,6 @@ public class Drivetrain extends SubsystemBase {
     };
   }
   
-  /** Position of robot with x and y in meters */
-  public Pose2d getOdomentryPose() {
-    return m_odometry.getPoseMeters();
-  }
-  public void resetOdomentryPose(Pose2d pose) {
-    //System.out.println(pose);
-    m_odometry.resetPosition(getHeading(), getModulePositions(), pose);
-  } 
-
   public Pose2d getPoseEstimatorPose() {
     return m_poseEstimator.getEstimatedPosition();
   }
