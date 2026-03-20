@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 8.132575757575758,
-        "y": 1.0002146464646477
+        "x": 8.373068181818182,
+        "y": 0.8971464646464653
       },
       "prevControl": {
-        "x": 7.399646464646464,
-        "y": 0.4161616161616166
+        "x": 8.397944111573432,
+        "y": 0.648387167093968
       },
       "nextControl": {
-        "x": 8.848452699236526,
-        "y": 1.570679084350573
+        "x": 8.304611655247141,
+        "y": 1.5817117303568418
       },
       "isLocked": false,
       "linkedName": null
@@ -41,7 +41,7 @@
       },
       "nextControl": {
         "x": 8.306585932286728,
-        "y": 3.3140284575818213
+        "y": 3.3140284575818217
       },
       "isLocked": false,
       "linkedName": null
@@ -57,7 +57,7 @@
       },
       "nextControl": {
         "x": 5.441351010101011,
-        "y": 3.347878787878789
+        "y": 3.3478787878787895
       },
       "isLocked": false,
       "linkedName": null
@@ -73,7 +73,7 @@
       },
       "nextControl": {
         "x": 5.568177847604641,
-        "y": 0.6089081972951381
+        "y": 0.6089081972951382
       },
       "isLocked": false,
       "linkedName": null
@@ -96,12 +96,12 @@
     },
     {
       "anchor": {
-        "x": 2.727222222222222,
-        "y": 1.9736363636363636
+        "x": 2.3607575757575763,
+        "y": 3.622727272727273
       },
       "prevControl": {
-        "x": 2.5002323760971095,
-        "y": 1.8688718192709266
+        "x": 2.1337677296324635,
+        "y": 3.517962728361836
       },
       "nextControl": null,
       "isLocked": false,
@@ -114,8 +114,8 @@
       "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 1.25,
-      "rotationDegrees": 110.0
+      "waypointRelativePos": 2.3884514435695534,
+      "rotationDegrees": 90.0
     },
     {
       "waypointRelativePos": 5.0,
@@ -126,9 +126,9 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0.6688741721854299,
-      "maxWaypointRelativePos": 3.6887417218543015,
+      "maxWaypointRelativePos": 3.343049327354274,
       "constraints": {
-        "maxVelocity": 1.0,
+        "maxVelocity": 0.75,
         "maxAcceleration": 3.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -150,10 +150,16 @@
       "waypointRelativePos": 0.8013245033112681,
       "endWaypointRelativePos": null,
       "command": null
+    },
+    {
+      "name": "Start Shooter",
+      "waypointRelativePos": 5.8,
+      "endWaypointRelativePos": null,
+      "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 1.5,
     "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -161,8 +167,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 59.99999999999999
+    "velocity": 0.0,
+    "rotation": 8.0
   },
   "reversed": false,
   "folder": "Trench Paths",

@@ -225,7 +225,7 @@ public final class Constants {
     public static final double JointClimbPosition = -100;
     public static final double JointFPickupPosition = -90.; //Degrees //TODO change the numbers for the follower motor
     public static final double JointFUpPosition = 36.; //Degrees
-    public static final double JointFAgitatePosition = -50.; //Degrees
+    public static final double JointFAgitatePosition = -47.; //Degrees
     public static final double JointFClimbPosition = -100;
 
     //Rollers Speed
@@ -282,8 +282,8 @@ public final class Constants {
   public static class CANIDS { //as of 3/13/26
     //Intake
     public static final int roller = 60;
-    public static final int jointLead = 61;
-    public static final int jointFollow = 62;
+    public static final int jointLead = 61; //robot right
+    public static final int jointFollow = 62; //robot left
     //Shooter
     public static final int leftShooter = 52;
     public static final int centerShooter = 51;
