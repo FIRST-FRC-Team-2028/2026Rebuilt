@@ -20,44 +20,44 @@
         "y": 7.195757575757576
       },
       "prevControl": {
-        "x": 7.958362887697619,
-        "y": 7.665319738990463
+        "x": 8.276439899892313,
+        "y": 7.7783557123922575
       },
       "nextControl": {
-        "x": 8.785340909090909,
-        "y": 6.542992424242425
+        "x": 8.316512820512822,
+        "y": 6.942051282051282
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.544848484848485,
-        "y": 5.191654040404041
+        "x": 8.304356060606061,
+        "y": 4.3489615384615385
       },
       "prevControl": {
-        "x": 8.705176767676768,
-        "y": 5.672638888888889
+        "x": 8.366284334094356,
+        "y": 4.591169896993524
       },
       "nextControl": {
-        "x": 8.377164321059393,
-        "y": 4.6886015490367665
+        "x": 8.242427787117766,
+        "y": 4.106753179929553
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.3767424242424235,
-        "y": 4.080808080808081
+        "x": 7.037410256410258,
+        "y": 4.3489615384615385
       },
       "prevControl": {
-        "x": 8.134689766053718,
-        "y": 4.0894703361430675
+        "x": 7.795357598221554,
+        "y": 4.357623793796525
       },
       "nextControl": {
-        "x": 5.372638888888889,
-        "y": 4.057904040404041
+        "x": 5.033306721056723,
+        "y": 4.326057498057498
       },
       "isLocked": false,
       "linkedName": null
@@ -114,8 +114,8 @@
       "rotationDegrees": -90.0
     },
     {
-      "waypointRelativePos": 1.39107611548556,
-      "rotationDegrees": -110.0
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": -90.0
     },
     {
       "waypointRelativePos": 5.0,
@@ -138,30 +138,7 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Intake Out",
-      "waypointRelativePos": 0.5231788079470091,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Intake Out"
-        }
-      }
-    },
-    {
-      "name": "Run Intake",
-      "waypointRelativePos": 0.933774834437102,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Run Intake"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 3.5,

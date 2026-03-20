@@ -42,7 +42,7 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     if (!shooting){
-      if(shooter.getShooterVelocity()> speed+1.75*velocityIncrease-shootSpeedDeadband){
+      if(shooter.getShooterVelocity()> speed+2*velocityIncrease-shootSpeedDeadband){
         timer.start();
         shooter.setConveyorSpeed(ShooterConstants.conveyorShootSpeed);
       shooting = true;

@@ -58,6 +58,8 @@ public class AgitateIntake extends Command {
   @Override
   public void end(boolean interrupted) {
     intake.setJointPosition(IntakeConstants.JointPickupPosition, IntakeConstants.JointFPickupPosition);
+    timer.stop();
+    timer.reset();
   }
 
   // Returns true when the command should end.

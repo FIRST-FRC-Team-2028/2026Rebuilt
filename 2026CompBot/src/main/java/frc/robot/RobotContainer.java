@@ -33,6 +33,7 @@ import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.AdvancedShoot;
 import frc.robot.commands.AgitateIntake;
+import frc.robot.commands.AimCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveToRangeAndShoot;
 import frc.robot.commands.MoveClimber;
@@ -80,6 +81,8 @@ public class RobotContainer {
     } else driveSubsystem = null;
 
     if (Constants.DRIVE_AVAILABLE){
+      NamedCommands.registerCommand("Aim Command", new AimCommand(driveSubsystem, alliance));
+      NamedCommands.registerCommand("TrenchShoot", new Shoot(shootingSubsystem, ShooterConstants.AutoShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
       NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true, 4));
       NamedCommands.registerCommand("PathfindToClimbLeftPath", driveSubsystem.pathfindToPath("Drive Left Climb"));
       NamedCommands.registerCommand("PathfindToClimbRightPath", driveSubsystem.pathfindToPath("Drive Right Path"));
@@ -98,8 +101,8 @@ public class RobotContainer {
       if (Constants.INTAKE_AVAILABLE){
         new EventTrigger("Intake Out").onTrue(new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition, IntakeConstants.JointFPickupPosition)));
         new EventTrigger("Intake In").onTrue(new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition, IntakeConstants.JointFUpPosition)));
-        new EventTrigger("Run Intake").onTrue(intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed));
-        new EventTrigger("Start Shooter").onTrue(new InstantCommand(() -> shootingSubsystem.setShooterSpeed(ShooterConstants.OptimalShootSpeed)));
+        new EventTrigger("Run Intake").onTrue(intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed+0.05));
+        new EventTrigger("Start Shooter").onTrue(new InstantCommand(() -> shootingSubsystem.setShooterSpeed(ShooterConstants.AutoShootSpeed)));
         NamedCommands.registerCommand("Intake Out", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointPickupPosition, IntakeConstants.JointFPickupPosition)));
         NamedCommands.registerCommand("Intake In", new InstantCommand(()->intakeSubsystem.setJointPosition(IntakeConstants.JointUpPosition, IntakeConstants.JointFUpPosition)));
         NamedCommands.registerCommand("Run Intake", intakeSubsystem.runIntake(IntakeConstants.IntakeSpeed));
@@ -180,7 +183,9 @@ public class RobotContainer {
     } */
     if (Constants.SHOOTER_AVAILABLE){
       new JoystickButton(mechJoytick2, 10)
-        .onTrue(new InstantCommand(() -> shootingSubsystem.setShooterSpeed(ShooterConstants.OptimalShootSpeed)));
+        .onTrue(new InstantCommand(() -> shootingSubsystem.setShooterSpeed(ShooterConstants.OptimalShootSpeed+100)));
+      new JoystickButton(mechJoytick2, 11)
+          .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.AutoShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
       if(Constants.INTAKE_AVAILABLE){
         new JoystickButton(mechJoytick2, 2)
           .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));

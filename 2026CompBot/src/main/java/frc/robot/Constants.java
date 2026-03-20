@@ -197,9 +197,9 @@ public final class Constants {
   public static final double kMaxRotationalVelocity = 5.0; // 2023 Competion Robot // max 5.0
   public static final double kRotateToZero = -2;
   public static final PIDConstants translationConstants = 
-    new PIDConstants(6.8, 1.6, 1);     //d:.475
+    new PIDConstants(6.85, 1.5, 0.1);     //6.85, 1.6, 1
   public static final PIDConstants rotationConstants = 
-    new PIDConstants(2.9,0.,0.);       
+    new PIDConstants(2.9,0.25,0.);       
 
   }
 
@@ -219,13 +219,13 @@ public final class Constants {
     public static final double JointPastFramePosition = 0;
     public static final double kRampRate = 0.5;
     //Joint Positions
-    public static final double JointPickupPosition = -100.; //Degrees
+    public static final double JointPickupPosition = -93.; //Degrees
     public static final double JointUpPosition = 36.; //Degrees
     public static final double JointAgitatePosition = -55.; //Degrees
     public static final double JointClimbPosition = -100;
-    public static final double JointFPickupPosition = -90.; //Degrees //TODO change the numbers for the follower motor
+    public static final double JointFPickupPosition = -93.; //Degrees //TODO change the numbers for the follower motor
     public static final double JointFUpPosition = 36.; //Degrees
-    public static final double JointFAgitatePosition = -47.; //Degrees
+    public static final double JointFAgitatePosition = -55.; //Degrees
     public static final double JointFClimbPosition = -100;
 
     //Rollers Speed
@@ -243,7 +243,7 @@ public final class Constants {
     public static final double conveyorD = 0;
     public static final double conveyorVelocityConversionFactor = 1;
 
-
+    public static final double AutoShootSpeed = 3250;
     public static final double shooterShootSpeed = 2500.; //RPM
     public static final double OptimalShootSpeed = 2485;
     public static final double conveyorShootSpeed = .95; //.95 vbus
@@ -375,12 +375,12 @@ public final class Constants {
                                                         Units.inchesToMeters(-10.25), //-10.25
                                                         Units.inchesToMeters(-11.5),//-11.5
                                                         Units.inchesToMeters(0.),//18.75
-                                                        new Rotation3d(0.0,0.,0.0)); //TODO: Add the real numbers
+                                                        new Rotation3d(0.0,Units.degreesToRadians(18),0.0)); //TODO: Add the real numbers
       public static final Transform3d robot_to_camera2 = new Transform3d(
                                                         Units.inchesToMeters(-12.325),
                                                         Units.inchesToMeters(11.25),
                                                         0,
-                                                        new Rotation3d(.0,0.0,0));
+                                                        new Rotation3d(.0,Units.degreesToRadians(11),Units.degreesToRadians(180)));
 
       public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
       public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);

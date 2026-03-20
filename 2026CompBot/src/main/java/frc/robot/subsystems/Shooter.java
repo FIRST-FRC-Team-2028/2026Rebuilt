@@ -101,10 +101,10 @@ public class Shooter extends SubsystemBase {
     //SmartDashboard.putNumber("voltage", centerShooter.getAppliedOutput());
     SmartDashboard.putNumber("Shooter Speed", center_Encoder.getVelocity());
     SmartDashboard.putNumber("Conveyor Current", conveyor.getOutputCurrent());
-    if (conveyor.getOutputCurrent() > Constants.BAD_CURRENT_550) {
+    /*if (conveyor.getOutputCurrent() > Constants.BAD_CURRENT_550) {
       abortR=true;
       conveyor.stopMotor();
-    }
+    }*/
   }
   /** Set the speed for the shooter using VBUS - test control */
   public void setShooterVbus(double Speed){
