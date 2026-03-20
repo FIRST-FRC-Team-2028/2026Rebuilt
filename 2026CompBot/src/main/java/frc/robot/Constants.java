@@ -246,7 +246,7 @@ public final class Constants {
 
     public static final double shooterShootSpeed = 2500.; //RPM
     public static final double OptimalShootSpeed = 2485;
-    public static final double conveyorShootSpeed = .95; // vbus
+    public static final double conveyorShootSpeed = .95; //.95 vbus
     
     public static final double OptimalRange =Units.feetToMeters(4);  //feet
     //public static final double MinRange = 1.5;      //Meters
@@ -377,10 +377,10 @@ public final class Constants {
                                                         Units.inchesToMeters(0.),//18.75
                                                         new Rotation3d(0.0,0.,0.0)); //TODO: Add the real numbers
       public static final Transform3d robot_to_camera2 = new Transform3d(
-                                                        -12.325,
-                                                        11.25,
+                                                        Units.inchesToMeters(-12.325),
+                                                        Units.inchesToMeters(11.25),
                                                         0,
-                                                        new Rotation3d(.0,0.0,0.0));
+                                                        new Rotation3d(.0,0.0,0));
 
       public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
       public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
