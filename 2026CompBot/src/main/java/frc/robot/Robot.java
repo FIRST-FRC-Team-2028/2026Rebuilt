@@ -137,11 +137,12 @@ public class Robot extends TimedRobot {
     } */
    if(HubTracker.timeRemainingInCurrentShift().isPresent()){
     SmartDashboard.putNumber("Time Until Shift", Math.round(HubTracker.timeRemainingInCurrentShift().get().abs(Seconds)*100)/100); //Rounds to 2 decimal places
+    if (!HubTracker.isActive()) if(HubTracker.timeRemainingInCurrentShift().get().abs(Seconds)<5) m_robotContainer.getShoot().setShooterSpeed(ShooterConstants.OptimalShootSpeed);
    }
     if (HubTracker.getCurrentShift().isPresent()) if ( HubTracker.getCurrentShift().get().equals(HubTracker.Shift.ENDGAME)) Elastic.selectTab("EndGame");
     SmartDashboard.putNumber("MatchTime", Math.round((160-HubTracker.getMatchTime())*100)/100); //Rounds to 2 decimal places
     SmartDashboard.putBoolean("HubActive", HubTracker.isActive());
-     
+   
   }
 
   @Override

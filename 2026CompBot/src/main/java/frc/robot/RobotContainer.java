@@ -83,7 +83,7 @@ public class RobotContainer {
     if (Constants.DRIVE_AVAILABLE){
       NamedCommands.registerCommand("Aim Command", new AimCommand(driveSubsystem, alliance));
       NamedCommands.registerCommand("TrenchShoot", new Shoot(shootingSubsystem, ShooterConstants.AutoShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
-      NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true, 4));
+      NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true, 7.5, ShooterConstants.OptimalRange, ShooterConstants.shooterShootSpeed));
       NamedCommands.registerCommand("PathfindToClimbLeftPath", driveSubsystem.pathfindToPath("Drive Left Climb"));
       NamedCommands.registerCommand("PathfindToClimbRightPath", driveSubsystem.pathfindToPath("Drive Right Path"));
       NamedCommands.registerCommand("PathfindToLeftPathfindToCenter", driveSubsystem.pathfindToPath("Left Pathfind To Center"));
@@ -109,7 +109,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Stop Intake", intakeSubsystem.stopIntake());
         if (Constants.SHOOTER_AVAILABLE){
           NamedCommands.registerCommand("Shoot Sequence", new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
-          NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true, 10));
+          NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true, 7.5, ShooterConstants.OptimalRange,ShooterConstants.shooterShootSpeed));
           //NamedCommands.registerCommand("Advanced Shoot Sequence", new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
         }
       }
@@ -140,7 +140,9 @@ public class RobotContainer {
             driveSubsystem.getTorange(alliance, ShooterConstants.OptimalRange, ShooterConstants.MinRange), 0), Set.of(driveSubsystem)));*/
         if(Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
           new JoystickButton(driverJoytick, OIConstants.kDriveToShootRange)
-            .whileTrue(new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, false, 4));
+            .whileTrue(new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, false, 4, ShooterConstants.OptimalRange, ShooterConstants.shooterShootSpeed));
+          new JoystickButton(driverJoytick, 2)
+            .whileTrue(new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, false, 4, ShooterConstants.TrenchShoot, ShooterConstants.AutoShootSpeed));
         }
         new JoystickButton(driverJoytick, OIConstants.kDriveToMechPose)
           .whileTrue(Commands.defer(()->driveSubsystem.pathfindToPoseOrPath(mechTargetPose, 0, mechPathName), Set.of(driveSubsystem)));
@@ -182,7 +184,7 @@ public class RobotContainer {
     } */
     if (Constants.SHOOTER_AVAILABLE){
       new JoystickButton(mechJoytick2, 10)
-        .onTrue(new InstantCommand(() -> shootingSubsystem.setShooterSpeed(ShooterConstants.OptimalShootSpeed+100)));
+        .onTrue(new InstantCommand(() -> shootingSubsystem.setShooterSpeed(ShooterConstants.AutoShootSpeed)));
       new JoystickButton(mechJoytick2, 11)
           .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.AutoShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
       if(Constants.INTAKE_AVAILABLE){

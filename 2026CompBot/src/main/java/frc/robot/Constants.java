@@ -213,9 +213,9 @@ public final class Constants {
     public static final double JointFPositionConversionFactor =110./41.857;//103.8/31.8; //in -20, target in -20| out -15.76, target out 90
     // We found that the encoder range is more negative out than in, but we cannot set this in the conversion factor
     public static final double jointForwardSoftLimit = 36.;
-    public static final double jointReverseSoftLimit = -100.;
+    public static final double jointReverseSoftLimit = -95.;
     public static final double jointFForwardSoftLimit = 36.; // TODO Have you tested and verified the conversion factor?
-    public static final double jointFReverseSoftLimit = -100.;
+    public static final double jointFReverseSoftLimit = -95.;
     public static final double JointPastFramePosition = 0;
     public static final double kRampRate = 0.5;
     //Joint Positions
@@ -223,7 +223,7 @@ public final class Constants {
     public static final double JointUpPosition = 36.; //Degrees
     public static final double JointAgitatePosition = -55.; //Degrees
     public static final double JointClimbPosition = -100;
-    public static final double JointFPickupPosition = -93.; //Degrees //TODO change the numbers for the follower motor
+    public static final double JointFPickupPosition = -90.; //Degrees //TODO change the numbers for the follower motor
     public static final double JointFUpPosition = 36.; //Degrees
     public static final double JointFAgitatePosition = -55.; //Degrees
     public static final double JointFClimbPosition = -100;
@@ -243,11 +243,12 @@ public final class Constants {
     public static final double conveyorD = 0;
     public static final double conveyorVelocityConversionFactor = 1;
 
-    public static final double AutoShootSpeed = 3250;
+    public static final double AutoShootSpeed = 3275;
     public static final double shooterShootSpeed = 2500.; //RPM
     public static final double OptimalShootSpeed = 2485;
     public static final double conveyorShootSpeed = .95; //.95 vbus
     
+    public static final double TrenchShoot = Units.inchesToMeters(136);
     public static final double OptimalRange =Units.feetToMeters(4);  //feet
     //public static final double MinRange = 1.5;      //Meters
 

@@ -160,13 +160,13 @@ public class Drivetrain extends SubsystemBase {
     //SmartDashboard.putNumber("front Left Velocity", m_frontLeft.getVelocity());
     
     //SmartDashboard.putNumber("front left abs", m_frontLeft.getAbsTurningPosition(0.1).getDegrees());
-    //SmartDashboard.putNumber("front left rel", m_frontLeft.getRelativeTurningPosition().getDegrees());
+    SmartDashboard.putNumber("front left rel", m_frontLeft.getRelativeTurningPosition().getDegrees());
     //SmartDashboard.putNumber("front right abs", m_frontRight.getAbsTurningPosition(0.1).getDegrees());
-    //SmartDashboard.putNumber("front right rel", m_frontRight.getRelativeTurningPosition().getDegrees());
+    SmartDashboard.putNumber("front right rel", m_frontRight.getRelativeTurningPosition().getDegrees());
     //SmartDashboard.putNumber("back left abs", m_backLeft.getAbsTurningPosition(0.1).getDegrees());
-    //SmartDashboard.putNumber("back left rel", m_backLeft.getRelativeTurningPosition().getDegrees());
+    SmartDashboard.putNumber("back left rel", m_backLeft.getRelativeTurningPosition().getDegrees());
     //SmartDashboard.putNumber("back right abs", m_backRight.getAbsTurningPosition(0.1).getDegrees());
-    //SmartDashboard.putNumber("back right rel", m_backRight.getRelativeTurningPosition().getDegrees());
+    SmartDashboard.putNumber("back right rel", m_backRight.getRelativeTurningPosition().getDegrees());
     // This method will be called once per scheduler run
   }
 

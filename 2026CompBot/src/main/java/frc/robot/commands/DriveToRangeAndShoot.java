@@ -23,24 +23,24 @@ import frc.robot.subsystems.Shooter;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveToRangeAndShoot extends SequentialCommandGroup {
   /** Creates a new DriveToRangeAndShoot. */
-  public DriveToRangeAndShoot(Drivetrain drive, Shooter shooter, Intake intake, Optional<Alliance> alliance, boolean auto, double time) {
+  public DriveToRangeAndShoot(Drivetrain drive, Shooter shooter, Intake intake, Optional<Alliance> alliance, boolean auto, double time, double distnace, double shooterspeed) {
     
     addCommands(
                Commands.parallel(
-                  Commands.defer(()->drive.pathfindToPose(drive.getTorange(alliance, ShooterConstants.OptimalRange), 0), Set.of(drive))
+                  Commands.defer(()->drive.pathfindToPose(drive.getTorange(alliance, distnace), 0), Set.of(drive))
                   ,new WaitUntilCommand(()->drive.distToGo()<1)  //Waits until 1 meter away from the target to start spinning the shooter wheels
-                  .andThen(new InstantCommand(()->shooter.setShooterSpeed(ShooterConstants.shooterShootSpeed)))
+                  .andThen(new InstantCommand(()->shooter.setShooterSpeed(shooterspeed)))
                 ),
                   new AimCommand(drive, alliance),      
                 Commands.race(
                   new WaitCommand(time), //Gives 4 seconds to shoot (Estimate)
                   Commands.parallel(
-                    new Shoot(shooter, ShooterConstants.OptimalShootSpeed),
+                    new Shoot(shooter, shooterspeed),
                     new AgitateIntake(intake)
                   )
                 ).onlyIf(()->auto),
                 Commands.parallel(
-                    new Shoot(shooter, ShooterConstants.OptimalShootSpeed),
+                    new Shoot(shooter, shooterspeed),
                     new AgitateIntake(intake)
                   ).onlyIf(()->!auto)
 

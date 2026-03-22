@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter;
+import frc.robot.util.HubTracker;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
@@ -59,7 +60,13 @@ public class Shoot extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.stopShooting();
+    if (HubTracker.getCurrentShift().isPresent()){
+      if (HubTracker.isActive()){
+        shooter.setShooterSpeed(2000);
+        shooter.setConveyorSpeed(0);
+      }
+    } else shooter.stopShooting();
+
     timer.stop();
     timer.reset();
   }

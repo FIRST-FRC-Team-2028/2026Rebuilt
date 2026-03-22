@@ -92,14 +92,14 @@ public class AprilTags extends SubsystemBase {
         estimatedPoseTime2 = estimatedPose2.get().timestampSeconds;
         estimatedPose3d2 = estimatedPose2.get().estimatedPose;
         isEstimated2 = true;  
-      } else{  //If multi tag isn't present, use average best targets
+      } /*else{  //If multi tag isn't present, use average best targets
         estimatedPose2 = poseEstimator2.estimateAverageBestTargetsPose(results2);
         if (estimatedPose2.isPresent()){
         estimatedPoseTime2 = estimatedPose2.get().timestampSeconds;
         estimatedPose3d2 = estimatedPose2.get().estimatedPose;
         }
         isEstimated2=true;
-      } if (!estimatedPose2.isPresent()) isEstimated2 = false;
+      }*/ if (!estimatedPose2.isPresent()) isEstimated2 = false;
     }
     
   }

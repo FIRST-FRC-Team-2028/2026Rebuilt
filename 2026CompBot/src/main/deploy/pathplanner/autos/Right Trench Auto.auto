@@ -5,47 +5,73 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "PathfindToRightTrenchPath1"
-                }
-              },
-              {
-                "type": "sequential",
+                "type": "parallel",
                 "data": {
                   "commands": [
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 1.0
+                        "name": "PathfindToRightTrenchPath1"
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "sequential",
                       "data": {
-                        "name": "Intake Out"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Run Intake"
+                        "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 1.0
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Intake Out"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Run Intake"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 11.0
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "Aim Command"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Aim Command"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              }
+            ]
           }
         },
         {
