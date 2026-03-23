@@ -1,5 +1,6 @@
 # 2026Rebuilt
-Competition code for playing the FRC 2026 Rebuilt 
+Competition code for playing the FRC 2026 Rebuilt Game
+
 Programing Team:
 * Ethan Meyers
 * Lyric Clark
