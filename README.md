@@ -7,4 +7,4 @@ Programing Team:
 
 Recipients of the [Autonomous Award](https://frc-events.firstinspires.org/2026/VAALE/awards) at the Chesapeake District Alexandria Event, March 8, 2026
 
-Recipients of the [Innovation in Control Award](https://frc-events.firstinspires.org/2026/awards?id=732) at the Chesapeake District Chesapeake Event, March 22, 2026
+Recipients of the [Innovation in Control Award](https://frc-events.firstinspires.org/2026/VACHE/awards) at the Chesapeake District Chesapeake Event, March 22, 2026
