@@ -83,7 +83,6 @@ public class RobotContainer {
     if (Constants.DRIVE_AVAILABLE){
       NamedCommands.registerCommand("Aim Command", new AimCommand(driveSubsystem, alliance));
       NamedCommands.registerCommand("TrenchShoot", new Shoot(shootingSubsystem, ShooterConstants.AutoShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
-      NamedCommands.registerCommand("Drive To Shoot", new DriveToRangeAndShoot(driveSubsystem, shootingSubsystem, intakeSubsystem, alliance, true, 7.5, ShooterConstants.OptimalRange, ShooterConstants.shooterShootSpeed));
       NamedCommands.registerCommand("PathfindToClimbLeftPath", driveSubsystem.pathfindToPath("Drive Left Climb"));
       NamedCommands.registerCommand("PathfindToClimbRightPath", driveSubsystem.pathfindToPath("Drive Right Path"));
       NamedCommands.registerCommand("PathfindToLeftPathfindToCenter", driveSubsystem.pathfindToPath("Left Pathfind To Center"));

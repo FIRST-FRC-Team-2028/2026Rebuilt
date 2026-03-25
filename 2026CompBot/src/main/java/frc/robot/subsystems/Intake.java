@@ -261,6 +261,10 @@ public class Intake extends SubsystemBase {
     } else return new InstantCommand(()->setJointPosition(IntakeConstants.JointUpPosition, IntakeConstants.JointFUpPosition));
   }
 
+  public Command SlowClose(){
+    return new InstantCommand(()->goJoint(IntakeConstants.SlowCloseVBusSpeed));
+  }
+
   public void resetJointEncoder(){
     joint_Encoder.setPosition(IntakeConstants.jointForwardSoftLimit);
     jointF_Encoder.setPosition(IntakeConstants.jointFForwardSoftLimit);

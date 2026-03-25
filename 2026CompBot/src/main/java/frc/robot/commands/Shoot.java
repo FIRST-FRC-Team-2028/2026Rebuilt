@@ -62,9 +62,9 @@ public class Shoot extends Command {
   public void end(boolean interrupted) {
     if (HubTracker.getCurrentShift().isPresent()){
       if (HubTracker.isActive()){
-        shooter.setShooterSpeed(2000);
+        shooter.setShooterSpeed(ShooterConstants.OptimalShootSpeed+2.1*velocityIncrease);
         shooter.setConveyorSpeed(0);
-      }
+      } else  shooter.stopShooting();
     } else shooter.stopShooting();
 
     timer.stop();

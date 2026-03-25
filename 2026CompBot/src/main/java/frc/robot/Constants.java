@@ -178,10 +178,10 @@ public final class Constants {
   public static final double kPhysicalMaxSpeedMetersPerSecond = 4.923;  //2026
   public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 4 * 3 * Math.PI;
 
-  public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond /1.5;
+  public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond /1.1;
   public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 
-                                     kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
-  public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
+                                     kPhysicalMaxAngularSpeedRadiansPerSecond / 2;
+  public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 4;
   public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 1.8;
 
   public static final double kFineControlSpeed = .3;
@@ -227,6 +227,8 @@ public final class Constants {
     public static final double JointFUpPosition = 36.; //Degrees
     public static final double JointFAgitatePosition = -55.; //Degrees
     public static final double JointFClimbPosition = -100;
+
+    public static final double SlowCloseVBusSpeed = 0.1;
 
     //Rollers Speed
     public static final double RollerVelocityConversionFactor = 1.;
