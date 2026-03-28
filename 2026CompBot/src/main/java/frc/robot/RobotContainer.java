@@ -33,6 +33,7 @@ import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.AdvancedShoot;
 import frc.robot.commands.AgitateIntake;
+import frc.robot.commands.AimAndDrive;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveToRangeAndShoot;
@@ -197,11 +198,9 @@ public class RobotContainer {
           .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed));
         if(Constants.DRIVE_AVAILABLE){
           if(Constants.INTAKE_AVAILABLE){
-            new JoystickButton(mechJoytick2, 8)
-            .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
-          } else
-            new JoystickButton(mechJoytick2, 8)
-              .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm())); 
+            /*new JoystickButton(mechJoytick2, 8)   TODO Test driving around while shooting
+            .whileTrue(new AimAndDrive(driveSubsystem, alliance, driverJoytick).alongWith(new AdvancedShoot(shootingSubsystem, driveSubsystem)).alongWith(new AgitateIntake(intakeSubsystem)));*/
+          }
         }
         new JoystickButton(mechJoytick2, 3)
           .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(50)));
