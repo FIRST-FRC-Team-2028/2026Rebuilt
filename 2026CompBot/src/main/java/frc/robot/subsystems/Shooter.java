@@ -190,11 +190,19 @@ public class Shooter extends SubsystemBase {
   public double shiftRPM(double omega, double robotXVelocity){
     return omega*(1+(60*robotXVelocity)/(2*Math.PI*ShooterConstants.wheel_diameter_meter/2));
   }
-
+  /**
+   * 
+   * @param shooterRPM The RPM the shooter is set to
+   * @return The velocity of the ball exiting the shooter
+   */
   public double rpmToBallVelocity(double shooterRPM){
     return 2*Math.PI*shooterRPM*(ShooterConstants.wheel_diameter_meter/2)/60;
   }
-
+  /**
+   * 
+   * @param shooterRPM The RPM the shooter is set to
+   * @return The time the ball should be in the air
+   */
   public double ballAirTime(double shooterRPM){
     double v = rpmToBallVelocity(shooterRPM);
     double phi = ShooterConstants.shooter_angle_rad;
