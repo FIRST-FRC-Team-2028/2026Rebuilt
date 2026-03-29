@@ -41,7 +41,7 @@ public class ShootOnTheMove extends Command {
   double velocityIncrease = 200;
   double velocity; 
   Timer timer;
-  /** Creates a new AimAndDrive. */
+  /** Creates a new ShootOnTheMove */
   public ShootOnTheMove(Drivetrain drive, Optional<Alliance> alliance, Joystick driverJoytick, Shooter shooter) {
     this.drive = drive;
     this.alliance = alliance;
@@ -50,14 +50,15 @@ public class ShootOnTheMove extends Command {
     timer = new Timer();
     this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
+    controller = new PIDController(kP, kI, kD);
+
     addRequirements(drive, shooter);
-    // Use addRequirements() here to declare subsystem dependencies.
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    controller = new PIDController(kP, kI, kD);
     velocity = shooter.shiftRPM(shooter.getRPM(), xSpeed);
     shooter.setShooterSpeed(velocity+2*velocityIncrease);
     shooting = false;
@@ -79,11 +80,11 @@ public class ShootOnTheMove extends Command {
     xSpeed = smoothedXSpeed;
     ySpeed = smoothedYSpeed;
     //Turning to face the hub
-    offsetY = ySpeed*shooter.ballAirTime(velocity);
+    offsetY = ySpeed*shooter.ballAirTime(velocity); //Accounts for movement left and right of the hub (Y direction)
     diff = drive.getVecToHub(alliance);
     targetTheta = Units.radiansToDegrees(Math.atan(diff.Y()+offsetY/diff.X()));
     theta = drive.getPoseEstimatorPose().getRotation().getDegrees();
-    turningSpeed = controller.calculate(theta, targetTheta);
+    turningSpeed = (controller.calculate(theta, targetTheta));
     
     if(driverJoytick.getRawButtonPressed(OIConstants.kDriverRobotOrientedButton)) robotOrient=!robotOrient;
     if (!robotOrient) { //normal use

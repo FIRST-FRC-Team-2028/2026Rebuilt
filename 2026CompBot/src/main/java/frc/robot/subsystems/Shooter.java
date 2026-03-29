@@ -201,7 +201,7 @@ public class Shooter extends SubsystemBase {
   /**
    * 
    * @param shooterRPM The RPM the shooter is set to
-   * @return The time the ball should be in the air
+   * @return The time the ball should be in the air.
    */
   public double ballAirTime(double shooterRPM){
     double v = rpmToBallVelocity(shooterRPM);
