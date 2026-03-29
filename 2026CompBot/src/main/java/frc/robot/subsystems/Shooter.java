@@ -181,6 +181,27 @@ public class Shooter extends SubsystemBase {
     //stand in because i didn't sync the main code with github
     return 0;
   }
+  /**
+   * 
+   * @param omega Rotations Per Minute of the Shooter based on distance (Before accounting for robot velocity)
+   * @param robotXVelocity Robot velocity in M/s
+   * @return Rotations Per Minute of the Shooter accounting for robots velocity
+   */
+  public double shiftRPM(double omega, double robotXVelocity){
+    return omega*(1+(60*robotXVelocity)/(2*Math.PI*ShooterConstants.wheel_diameter_meter/2));
+  }
+
+  public double rpmToBallVelocity(double shooterRPM){
+    return 2*Math.PI*shooterRPM*(ShooterConstants.wheel_diameter_meter/2)/60;
+  }
+
+  public double ballAirTime(double shooterRPM){
+    double v = rpmToBallVelocity(shooterRPM);
+    double phi = ShooterConstants.shooter_angle_rad;
+    double g = ShooterConstants.gravity;
+    return (v*Math.sin(phi)+Math.sqrt(Math.pow(v*Math.sin(phi), 2)-2*g*(ShooterConstants.delta_H)))/g;
+
+  }
 
   //Shooter RPM Math
     /**

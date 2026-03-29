@@ -262,6 +262,7 @@ public final class Constants {
     public static final double wheel_diameter_meter = Units.inchesToMeters(4.25);  
     public static final double max_shooting_distance_meters = Units.feetToMeters(35); //TODO find max shooting distance
     public static final double velocity_fudge_factor = 2.2; //Typical range for foam: 1.3–1.40
+    public static final double shooter_angle_rad = Units.degreesToRadians(shooter_angle_deg);
 
   }
 
