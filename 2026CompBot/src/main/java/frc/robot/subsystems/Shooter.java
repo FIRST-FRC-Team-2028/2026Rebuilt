@@ -186,7 +186,7 @@ public class Shooter extends SubsystemBase {
    * @return Rotations Per Minute of the Shooter accounting for robots velocity
    */
   public double shiftRPM(double omega, double robotXVelocity){
-    return omega*(1+(60*robotXVelocity)/(2*Math.PI*ShooterConstants.wheel_diameter_meter/2)*Math.sin(ShooterConstants.shooter_angle_rad));
+    return omega+(60*robotXVelocity)/(2*Math.PI*ShooterConstants.wheel_diameter_meter/2)*Math.sin(ShooterConstants.shooter_angle_rad);
   }
   /**
    * 
