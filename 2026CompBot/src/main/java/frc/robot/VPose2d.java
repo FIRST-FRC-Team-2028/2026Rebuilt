@@ -112,6 +112,16 @@ public class VPose2d
     public double cross(VPose2d posee) {
         return x[0]*posee.Y() - x[1]*posee.X();
     }
+        
+   /** transform to a rotated coordinate system 
+     * @param angle of the new coordinate system, radians, positive counter-clockwise
+     * @return VPose2d of the vector in the rotated coord system
+    */
+    public VPose2d rotateby(double angle){
+        return new VPose2d(x[0]*Math.cos(angle) + x[1]*Math.sin(angle),
+                           x[1]*Math.cos(angle) - x[0]*Math.sin(angle),
+                           x[2]-angle);
+    }
 
     /** transform (not done yet)
     public VPose2d transform(Matrix<N3,N3> trans){
