@@ -33,6 +33,7 @@ import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.AdvancedShoot;
 import frc.robot.commands.AgitateIntake;
+import frc.robot.commands.ShootOnTheMove;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveToRangeAndShoot;
@@ -198,10 +199,8 @@ public class RobotContainer {
         if(Constants.DRIVE_AVAILABLE){
           if(Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
             new JoystickButton(mechJoytick2, 8)
-            .whileTrue(Commands.defer(()->new Shoot(shootingSubsystem, shootingSubsystem.shooterRPM(Units.metersToInches(driveSubsystem.getVecToHub(alliance).norm()))), Set.of(shootingSubsystem))
-            .alongWith(new AimCommand(driveSubsystem, alliance))
-            .alongWith(new AgitateIntake(intakeSubsystem)));
-          }  
+              .whileTrue(new ShootOnTheMove(driveSubsystem, alliance, driverJoytick, shootingSubsystem).alongWith(new AgitateIntake(intakeSubsystem)));
+          }
         }
         new JoystickButton(mechJoytick2, 3)
           .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(50)));

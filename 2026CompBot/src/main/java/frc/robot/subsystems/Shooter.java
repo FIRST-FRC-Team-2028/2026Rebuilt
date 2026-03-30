@@ -177,6 +177,36 @@ public class Shooter extends SubsystemBase {
     abortR = false;
   }
 
+  /**
+   * 
+   * @param omega Rotations Per Minute of the Shooter based on distance (Before accounting for robot velocity)
+   * @param robotXVelocity Robot velocity in M/s
+   * @return Rotations Per Minute of the Shooter accounting for robots velocity
+   */
+  public double shiftRPM(double omega, double robotXVelocity){
+    return omega*(1+(60*robotXVelocity)/(2*Math.PI*ShooterConstants.wheel_diameter_meter/2));
+  }
+  /**
+   * 
+   * @param shooterRPM The RPM the shooter is set to
+   * @return The velocity of the ball exiting the shooter
+   */
+  public double rpmToBallVelocity(double shooterRPM){
+    return 2*Math.PI*shooterRPM*(ShooterConstants.wheel_diameter_meter/2)/60;
+  }
+  /**
+   * 
+   * @param shooterRPM The RPM the shooter is set to
+   * @return The time the ball should be in the air.
+   */
+  public double ballAirTime(double shooterRPM){
+    double v = rpmToBallVelocity(shooterRPM);
+    double phi = ShooterConstants.shooter_angle_rad;
+    double g = ShooterConstants.gravity;
+    return (v*Math.sin(phi)+Math.sqrt(Math.pow(v*Math.sin(phi), 2)-2*g*(ShooterConstants.delta_H)))/g;
+
+  }
+
 
   //Shooter RPM F(x) x = distance
   double a =0.000715379, b=-0.170759, c=22.72466, d=1520.19431;
@@ -188,23 +218,6 @@ public class Shooter extends SubsystemBase {
     System.out.println(x);
     System.out.println(rpm);
     return rpm; 
-  }
-
-  //Shooter RPM Table
-  public double CalculateShooterRPM(double distanceToHub){
-    double[] measurements = ShooterConstants.robotCenter_To_HubCenter_Inches;
-    int closest = 0;
-    double minDistance = Math.abs(distanceToHub - measurements[0]);
-    double currentDistance;
-    for (int i = 1; i< measurements.length;){
-      currentDistance = Math.abs(distanceToHub - measurements[i]);
-      if (currentDistance<minDistance){
-        minDistance=currentDistance;
-        closest = i;
-      } 
-       i++;
-    }
-    return ShooterConstants.shooterRPM[closest];
   }
 
   //Shooter RPM Math
@@ -227,7 +240,7 @@ public class Shooter extends SubsystemBase {
  * @return Shooter wheel speed in RPM, or {@code Double.NaN} if wheel diameter
  *         has not yet been configured
  */
-    public double getShooterRPM(double distanceMeters) {
+    /*public double getShooterRPM(double distanceMeters) {
 
         // Clamp distance to something physically possible
         double minDistance = ShooterConstants.delta_H / Math.tan(Math.toRadians(ShooterConstants.shooter_angle_deg)) + 0.05;
@@ -263,7 +276,7 @@ public class Shooter extends SubsystemBase {
  * @param distanceMeters Horizontal distance to the target in meters
  * @return Required exit velocity in meters per second
  */
-  private double calculateExitVelocity(double distanceMeters) {
+  /*private double calculateExitVelocity(double distanceMeters) {
 
     double thetaRad = Math.toRadians(ShooterConstants.shooter_angle_deg);
 
@@ -292,7 +305,7 @@ public class Shooter extends SubsystemBase {
  * @return Shooter wheel speed in RPM, or {@code Double.NaN} if wheel diameter
  *         is undefined
  */
-  private double velocityToRPM(double velocityMetersPerSecond) {
+  /*private double velocityToRPM(double velocityMetersPerSecond) {
     double wheelRadius = ShooterConstants.wheel_diameter_meter / 2.0;
 
     if (wheelRadius <= 0.0) {
@@ -301,5 +314,5 @@ public class Shooter extends SubsystemBase {
     }
     // v = ωr → RPM conversion
      return (velocityMetersPerSecond * 60.0) / (2.0 * Math.PI * wheelRadius);
-    }
+    }*/
 }
