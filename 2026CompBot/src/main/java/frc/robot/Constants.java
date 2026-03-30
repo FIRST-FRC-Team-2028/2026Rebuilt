@@ -263,6 +263,11 @@ public final class Constants {
     public static final double max_shooting_distance_meters = Units.feetToMeters(35); //TODO find max shooting distance
     public static final double velocity_fudge_factor = 2.2; //Typical range for foam: 1.3–1.40
 
+    //Shooter Speed Tables +28.75
+    public static final double[] robotCenter_To_HubCenter_Inches = {19, 35, 61, 92, 122, 146}; //These values corrispond to the shooterRPM values
+    public static final double[] shooterRPM = {2300, 2450, 2700, 3050, 3500, 4100};
+    
+
   }
 
   public static class ClimberConstants {

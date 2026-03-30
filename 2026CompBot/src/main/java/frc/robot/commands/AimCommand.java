@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.VPose2d;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Drivetrain;
 
@@ -19,7 +20,8 @@ public class AimCommand extends Command {
   private final Drivetrain drive;
   private Optional<Alliance> alliance;
   private PIDController controller;
-  double targetTheta, kP=1./10., kI, kD, theta, speed, deadband = 4;
+  double targetTheta, kP=1.9/10., kI, kD, theta, speed, deadband = 1., donecount = 0;
+  VPose2d diff;
   /** Creates a new AimCommand. */
   public AimCommand(Drivetrain drive, Optional<Alliance> alliance) {
     this.drive = drive;
@@ -31,9 +33,10 @@ public class AimCommand extends Command {
   @Override
   public void initialize() {
     theta = drive.getPoseEstimatorPose().getRotation().getDegrees();
-    targetTheta = drive.getTorange(alliance, ShooterConstants.OptimalRange).getRotation().getDegrees();
+    diff = drive.getVecToHub(alliance);
+    targetTheta =  Units.radiansToDegrees(Math.atan(diff.Y()/diff.X()));
     controller = new PIDController(kP, kI, kD);
-
+    donecount = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,12 +50,16 @@ public class AimCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("DoneAim");
     drive.drive(new ChassisSpeeds(0,0,0));
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(targetTheta-theta) < deadband;
+    if(Math.abs(targetTheta-theta) < deadband){
+      donecount++;
+    }
+    return donecount>25;
   }
 }

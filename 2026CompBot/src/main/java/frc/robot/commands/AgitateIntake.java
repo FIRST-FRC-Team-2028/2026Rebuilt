@@ -42,8 +42,8 @@ public class AgitateIntake extends Command {
         setPoint = IntakeConstants.JointAgitatePosition;
         setpointF = IntakeConstants.JointFAgitatePosition;
         if(timer.hasElapsed(4)){
-          setPoint=setPoint+15;
-          setpointF=setpointF+15;
+          setPoint=setPoint+30;
+          setpointF=setpointF+30;
         }
       } else {
         setPoint = IntakeConstants.JointPickupPosition;

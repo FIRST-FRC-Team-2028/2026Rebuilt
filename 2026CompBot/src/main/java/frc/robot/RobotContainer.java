@@ -196,12 +196,12 @@ public class RobotContainer {
         new JoystickButton(mechJoytick2, 4)
           .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed));
         if(Constants.DRIVE_AVAILABLE){
-          if(Constants.INTAKE_AVAILABLE){
+          if(Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
             new JoystickButton(mechJoytick2, 8)
-            .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()).alongWith(new AgitateIntake(intakeSubsystem)));
-          } else
-            new JoystickButton(mechJoytick2, 8)
-              .onTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm())); 
+            .whileTrue(Commands.defer(()->new Shoot(shootingSubsystem, shootingSubsystem.shooterRPM(Units.metersToInches(driveSubsystem.getVecToHub(alliance).norm()))), Set.of(shootingSubsystem))
+            .alongWith(new AimCommand(driveSubsystem, alliance))
+            .alongWith(new AgitateIntake(intakeSubsystem)));
+          }  
         }
         new JoystickButton(mechJoytick2, 3)
           .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(50)));

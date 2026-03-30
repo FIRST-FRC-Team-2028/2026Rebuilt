@@ -177,6 +177,36 @@ public class Shooter extends SubsystemBase {
     abortR = false;
   }
 
+
+  //Shooter RPM F(x) x = distance
+  double a =0.000715379, b=-0.170759, c=22.72466, d=1520.19431;
+  /**@param x distance to hub.
+   * @return RPM to set the Shooter to.
+   */
+  public double shooterRPM(double x){
+    double rpm = a*Math.pow(x, 3) + b*Math.pow(x, 2) + c*x + d;
+    System.out.println(x);
+    System.out.println(rpm);
+    return rpm; 
+  }
+
+  //Shooter RPM Table
+  public double CalculateShooterRPM(double distanceToHub){
+    double[] measurements = ShooterConstants.robotCenter_To_HubCenter_Inches;
+    int closest = 0;
+    double minDistance = Math.abs(distanceToHub - measurements[0]);
+    double currentDistance;
+    for (int i = 1; i< measurements.length;){
+      currentDistance = Math.abs(distanceToHub - measurements[i]);
+      if (currentDistance<minDistance){
+        minDistance=currentDistance;
+        closest = i;
+      } 
+       i++;
+    }
+    return ShooterConstants.shooterRPM[closest];
+  }
+
   //Shooter RPM Math
     /**
  * Computes the desired shooter wheel speed in RPM based on horizontal distance

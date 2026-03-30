@@ -14,7 +14,7 @@ import frc.robot.util.HubTracker;
 public class Shoot extends Command {
   private final Shooter shooter;
   Timer timer;
-  double shootSpeedDeadband = 100;
+  double shootSpeedDeadband = 50;
   boolean shooting = false;
   double shotCount = 0;
   double velocityIncrease = 200, speed;
@@ -33,7 +33,7 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterSpeed(speed+2*velocityIncrease);
+    shooter.setShooterSpeed(speed/*+2*velocityIncrease*/);
 
     shotCount = 0;
     shooting = false;
@@ -43,7 +43,7 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     if (!shooting){
-      if(shooter.getShooterVelocity()> speed+2*velocityIncrease-shootSpeedDeadband){
+      if(shooter.getShooterVelocity()> speed+/*2*velocityIncrease*/-shootSpeedDeadband){
         timer.start();
         shooter.setConveyorSpeed(ShooterConstants.conveyorShootSpeed);
       shooting = true;

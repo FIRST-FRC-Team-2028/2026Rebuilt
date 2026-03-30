@@ -12,6 +12,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot {
   private final RobotContainer m_robotContainer;
   Joystick driverJoytick, mechJoytick1, mechJoytick2;
   private Elastic.Notification notification = new Elastic.Notification();
+  
   public Robot() {
     m_robotContainer = new RobotContainer();
     this.driverJoytick = m_robotContainer.getDriverJoystick();

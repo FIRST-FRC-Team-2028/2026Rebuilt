@@ -36,6 +36,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -53,6 +54,7 @@ public class Drivetrain extends SubsystemBase {
   static double kMaxAngularSpeed = Constants.DriveConstants.kMaxRotationalVelocity;
   private final SwerveDriveKinematics m_kinematics = DriveConstants.kDriveKinematics;
   private AprilTags aprilSubsystem;
+  Field2d field = new Field2d();
 
   private final SwerveModule m_frontLeft =
       new SwerveModule(
@@ -157,16 +159,11 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
 
     updatePoseEstimator();
+    field.setRobotPose(getPoseEstimatorPose());
+    SmartDashboard.putData("Field", field);
     //SmartDashboard.putNumber("front Left Velocity", m_frontLeft.getVelocity());
     
-    //SmartDashboard.putNumber("front left abs", m_frontLeft.getAbsTurningPosition(0.1).getDegrees());
-    SmartDashboard.putNumber("front left rel", m_frontLeft.getRelativeTurningPosition().getDegrees());
-    //SmartDashboard.putNumber("front right abs", m_frontRight.getAbsTurningPosition(0.1).getDegrees());
-    SmartDashboard.putNumber("front right rel", m_frontRight.getRelativeTurningPosition().getDegrees());
-    //SmartDashboard.putNumber("back left abs", m_backLeft.getAbsTurningPosition(0.1).getDegrees());
-    SmartDashboard.putNumber("back left rel", m_backLeft.getRelativeTurningPosition().getDegrees());
-    //SmartDashboard.putNumber("back right abs", m_backRight.getAbsTurningPosition(0.1).getDegrees());
-    SmartDashboard.putNumber("back right rel", m_backRight.getRelativeTurningPosition().getDegrees());
+    
     // This method will be called once per scheduler run
   }
 
