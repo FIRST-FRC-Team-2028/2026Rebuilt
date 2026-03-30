@@ -17,6 +17,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -184,7 +186,7 @@ public class Shooter extends SubsystemBase {
    * @return Rotations Per Minute of the Shooter accounting for robots velocity
    */
   public double shiftRPM(double omega, double robotXVelocity){
-    return omega*(1+(60*robotXVelocity)/(2*Math.PI*ShooterConstants.wheel_diameter_meter/2));
+    return omega*(1+(60*robotXVelocity)/(2*Math.PI*ShooterConstants.wheel_diameter_meter/2)*Math.sin(ShooterConstants.shooter_angle_rad));
   }
   /**
    * 
@@ -203,21 +205,26 @@ public class Shooter extends SubsystemBase {
     double v = rpmToBallVelocity(shooterRPM);
     double phi = ShooterConstants.shooter_angle_rad;
     double g = ShooterConstants.gravity;
-    return (v*Math.sin(phi)+Math.sqrt(Math.pow(v*Math.sin(phi), 2)-2*g*(ShooterConstants.delta_H)))/g;
+    double t = (v*Math.sin(phi)+Math.sqrt(Math.pow(v*Math.sin(phi), 2)-2*g*(ShooterConstants.delta_H)))/g;
+    return t; //fudge for perfect transfer from th rpm to the ball
 
   }
 
 
   //Shooter RPM F(x) x = distance
-  double a =0.000715379, b=-0.170759, c=22.72466, d=1520.19431;
-  /**@param x distance to hub.
+  double a1 =0.000715379, b1=-0.170759, c1=22.72466, d1=1520.19431;
+  /**@param x distance to hub in M.
    * @return RPM to set the Shooter to.
    */
   public double shooterRPM(double x){
-    double rpm = a*Math.pow(x, 3) + b*Math.pow(x, 2) + c*x + d;
-    System.out.println(x);
-    System.out.println(rpm);
+    x = Units.metersToInches(x);
+    double rpm = a1*Math.pow(x, 3) + b1*Math.pow(x, 2) + c1*x + d1;
     return rpm; 
+  }
+  double a2 =0.0021123, b2=-0.529309, c2=53.26353, d2=855.25406;
+  public double getIncreasedShooterRPM(double x){
+    x = Units.metersToInches(x);
+    return a2*Math.pow(x, 3) + b2*Math.pow(x, 2) + c2*x + d2;
   }
 
   //Shooter RPM Math

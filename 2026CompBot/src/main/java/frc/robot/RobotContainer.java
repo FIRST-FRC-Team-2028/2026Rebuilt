@@ -163,8 +163,6 @@ public class RobotContainer {
         .onTrue(new InstantCommand(()->mechPathName=FieldConstants.NeutralToAllianceTrenchL));
       new JoystickButton(mechJoytick1, OIConstants.kDriveToAllianceRight) // Alliance Zone Right
         .onTrue(new InstantCommand(()->mechPathName=FieldConstants.NeutralToAllianceTrenchR));
-      /* if (Constants.CLIMBER_AVAILABLE) new JoystickButton(mechJoytick1, 5) //Climb
-        .onTrue(new InstantCommand(()->mechPathName=climberSubsystem.getWhereToClimb())); */
       new JoystickButton(mechJoytick1, OIConstants.kDriveToOutpost) //Outpost
         .onTrue(new InstantCommand(()->mechPathName=FieldConstants.OutpostPath));
     }
@@ -186,16 +184,16 @@ public class RobotContainer {
       new JoystickButton(mechJoytick2, 10)
         .onTrue(new InstantCommand(() -> shootingSubsystem.setShooterSpeed(ShooterConstants.AutoShootSpeed)));
       new JoystickButton(mechJoytick2, 11)
-          .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.AutoShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
+          .onTrue(new InstantCommand(()->shootingSubsystem.setConveyorSpeed(.95))) 
+          .onFalse(new InstantCommand(()->shootingSubsystem.setConveyorSpeed(0)));
       if(Constants.INTAKE_AVAILABLE){
         new JoystickButton(mechJoytick2, 2)
-          .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed).alongWith(new AgitateIntake(intakeSubsystem)));
+          .whileTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem, alliance).alongWith(new AgitateIntake(intakeSubsystem)).alongWith(new AimCommand(driveSubsystem, alliance)));
       } else 
         new JoystickButton(mechJoytick2, 2)
-          .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed));
-  
+          .whileTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem, alliance).alongWith(new AimCommand(driveSubsystem, alliance)));
         new JoystickButton(mechJoytick2, 4)
-          .whileTrue(new Shoot(shootingSubsystem, ShooterConstants.OptimalShootSpeed));
+          .whileTrue(new Shoot(shootingSubsystem, driveSubsystem.getVecToHub(alliance).norm()));
         if(Constants.DRIVE_AVAILABLE){
           if(Constants.INTAKE_AVAILABLE && Constants.SHOOTER_AVAILABLE){
             new JoystickButton(mechJoytick2, 8)
@@ -208,7 +206,9 @@ public class RobotContainer {
           .onTrue(new InstantCommand(()-> shootingSubsystem.incrementShootSpeed(-50)));
         //new JoystickButton(mechJoytick2, 5)
         //  .onTrue(new Shoot(shootingSubsystem, 4250));
-      }
+        new JoystickButton(mechJoytick1, 5)
+          .whileTrue(new AdvancedShoot(shootingSubsystem, driveSubsystem, alliance).alongWith(new AgitateIntake(intakeSubsystem)).alongWith(new AimCommand(driveSubsystem, alliance)));
+        }
     
     
   }

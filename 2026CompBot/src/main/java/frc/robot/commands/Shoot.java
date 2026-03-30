@@ -17,15 +17,15 @@ public class Shoot extends Command {
   double shootSpeedDeadband = 50;
   boolean shooting = false;
   double shotCount = 0;
-  double velocityIncrease = 200, speed;
+  double velocityIncrease = 100, distance;
   /** Runs procedure to Shoot
    * <p> Presumes non-negligible time for shooter wheels to get to speed.
    * <p> Presumes this Command is controlled by holding a button, 
    * and ends when button is released.
    */
-  public Shoot(Shooter shooter, double speed) {
+  public Shoot(Shooter shooter, double distance) {
     this.shooter = shooter;
-    this.speed = speed;
+    this.distance = distance;
     timer = new Timer();
     addRequirements(shooter);
   }
@@ -33,7 +33,7 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterSpeed(speed/*+2*velocityIncrease*/);
+    shooter.setShooterSpeed(shooter.getIncreasedShooterRPM(distance));
 
     shotCount = 0;
     shooting = false;
@@ -43,13 +43,17 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     if (!shooting){
-      if(shooter.getShooterVelocity()> speed+/*2*velocityIncrease*/-shootSpeedDeadband){
+      if(shooter.getShooterVelocity()> shooter.getIncreasedShooterRPM(distance)-shootSpeedDeadband){
         timer.start();
         shooter.setConveyorSpeed(ShooterConstants.conveyorShootSpeed);
-      shooting = true;
+      
       }
+    if (timer.hasElapsed(.75)){
+      shooter.setShooterSpeed(shooter.shooterRPM(distance));
+      shooting = true;
     }
-    if (timer.hasElapsed(.75))shooter.setShooterSpeed(speed);
+    }
+    
 
     /*if (shooting && shooter.getShooterVelocity() < ShooterConstants.shooterShootSpeed-shootSpeedDeadband){
       shotCount++;

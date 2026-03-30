@@ -80,6 +80,8 @@ public class Robot extends TimedRobot {
     if (Constants.CLIMBER_AVAILABLE){
       m_robotContainer.getClimber().MoveClimber(ClimberConstants.travelPosition);
     }
+    if (m_robotContainer.getAlliance().get()==Alliance.Blue)m_robotContainer.getDrivetrain().setGyro(m_robotContainer.getDrivetrain().getPoseEstimatorPose().getRotation().getDegrees());
+    if (m_robotContainer.getAlliance().get()==Alliance.Red)m_robotContainer.getDrivetrain().setGyro(m_robotContainer.getDrivetrain().getPoseEstimatorPose().getRotation().getDegrees()+180);
   }
 
   boolean hubActive = true;

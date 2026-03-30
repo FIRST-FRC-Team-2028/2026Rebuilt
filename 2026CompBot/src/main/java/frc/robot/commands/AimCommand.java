@@ -20,7 +20,7 @@ public class AimCommand extends Command {
   private final Drivetrain drive;
   private Optional<Alliance> alliance;
   private PIDController controller;
-  double targetTheta, kP=1.9/10., kI, kD, theta, speed, deadband = 1., donecount = 0;
+  double targetTheta, kP=1.7/10., kI, kD, theta, speed, deadband = 1., donecount = 0;
   VPose2d diff;
   /** Creates a new AimCommand. */
   public AimCommand(Drivetrain drive, Optional<Alliance> alliance) {
@@ -60,6 +60,6 @@ public class AimCommand extends Command {
     if(Math.abs(targetTheta-theta) < deadband){
       donecount++;
     }
-    return donecount>25;
+    return donecount>40;
   }
 }

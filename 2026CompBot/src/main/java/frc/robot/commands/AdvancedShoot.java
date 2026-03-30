@@ -5,7 +5,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+
+import java.util.Optional;
+
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.VPose2d;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
@@ -15,12 +20,14 @@ import frc.robot.util.HubTracker;
 public class AdvancedShoot extends Command {
   private final Shooter shooter;
   private final Drivetrain drive;
-  double shootSpeedDeadband = 100;
+  double shootSpeedDeadband = 35;
   boolean shooting = false;
   double shotCount = 0;
-  double velocityIncrease = 200;
+  double velocityIncrease = 100;
   double velocity; 
   Timer timer;
+  VPose2d diff;
+  Optional<Alliance> alliance;
   /** Controls process to shoot.
    * <p> Delays feeding until shooting wheels are up to speed.
    * <p> Computes Wheel Speed based on distance from Tower.
@@ -29,10 +36,11 @@ public class AdvancedShoot extends Command {
    * @param shooter
    * @param distance in meters
    */
-  public AdvancedShoot(Shooter shooter, Drivetrain drive) {
+  public AdvancedShoot(Shooter shooter, Drivetrain drive, Optional<Alliance> alliance) {
     this.shooter = shooter;
     this.drive = drive;
     timer = new Timer();
+    this.alliance = alliance;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
   }
@@ -40,23 +48,28 @@ public class AdvancedShoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterSpeed(shooter.getRPM()+2*velocityIncrease);
+    diff = drive.getVecToHub(alliance);
+    shooter.setShooterSpeed(shooter.getIncreasedShooterRPM(drive.getVecToHub(alliance).norm()));
     shooting = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    velocity = shooter.getRPM();
+    diff = drive.getVecToHub(alliance);
+    velocity = shooter.shooterRPM(diff.norm());
   if (!shooting){
-    shooter.setShooterSpeed(velocity+2*velocityIncrease);
-    if(shooter.getShooterVelocity()> velocity+2*velocityIncrease-shootSpeedDeadband){
+    velocity = shooter.getIncreasedShooterRPM(diff.norm());
+    shooter.setShooterSpeed(velocity);
+    if(shooter.getShooterVelocity()> velocity-shootSpeedDeadband){
     timer.start();
     shooter.setConveyorSpeed(ShooterConstants.conveyorShootSpeed);
-    shooting = true;
       }
     }
-    if (timer.hasElapsed(.75))shooter.setShooterSpeed(velocity);
+    if (timer.hasElapsed(.75)){
+    shooter.setShooterSpeed(velocity);
+    shooting = true;
+    }
     /*if (!shooting){
       if(shooter.getShooterVelocity()> velocity-shootSpeedDeadband){
         shooter.setConveyorSpeed(ShooterConstants.conveyorShootSpeed);
