@@ -37,7 +37,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
  */
 public final class Constants {
   public static final boolean DRIVE_AVAILABLE = true;
-  public static final boolean CAMERA_AVAILABLE = true;
+  public static final boolean CAMERA_AVAILABLE = false;
   public static final boolean SHOOTER_AVAILABLE = true;
   public static final boolean INTAKE_AVAILABLE = true;
   public static final boolean CLIMBER_AVAILABLE = false;
@@ -178,11 +178,11 @@ public final class Constants {
   public static final double kPhysicalMaxSpeedMetersPerSecond = 4.923;  //2026
   public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 4 * 3 * Math.PI;
 
-  public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond /1.1;
+  public static final double kTeleDriveMaxSpeedMetersPerSecond = 2.;
   public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 
-                                     kPhysicalMaxAngularSpeedRadiansPerSecond / 2;
-  public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 4;
-  public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 1.8;
+                                     kPhysicalMaxAngularSpeedRadiansPerSecond / 6;
+  public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 2;
+  public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = Math.PI/2.;
 
   public static final double kFineControlSpeed = .3;
   public static final double kFasterSpeed = .4;

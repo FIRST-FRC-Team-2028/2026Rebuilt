@@ -16,7 +16,7 @@ import frc.robot.subsystems.Drivetrain;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveCommand extends Command {
   private SlewRateLimiter xLimiter, yLimiter, turningLimiter;
-  double smoothedXSpeed, smoothedYSpeed, smoothedTurningSpeed;
+  double smoothedXSpeed, smoothedYSpeed, smoothedTurningSpeed, xSpeed, ySpeed, turningSpeed;
   boolean robotOrient = false;
   private final Joystick driverJoytick;
   Drivetrain drivetrain;
@@ -37,16 +37,17 @@ public class DriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+ 
     double xSpeed = xLimiter.calculate(MathUtil.applyDeadband(-driverJoytick.getRawAxis(OIConstants.kDriverXAxis), OIConstants.kDeadband))*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond; // Negative values go forward
     double ySpeed = yLimiter.calculate(MathUtil.applyDeadband(-driverJoytick.getRawAxis(OIConstants.kDriverYAxis), OIConstants.kDeadband))*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
     double turningSpeed = turningLimiter.calculate(MathUtil.applyDeadband(-driverJoytick.getRawAxis(OIConstants.kDriverRotAxis), OIConstants.kDeadband))*DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-    xSpeed *= 1. - (DriveConstants.kFineControlSpeed * driverJoytick.getRawAxis(OIConstants.kFineControlAxis))
-                    + (DriveConstants.kFasterSpeed * driverJoytick.getRawAxis(OIConstants.kFastControlAxis));
-    ySpeed *= 1. - (DriveConstants.kFineControlSpeed * driverJoytick.getRawAxis(OIConstants.kFineControlAxis))
-                    + (DriveConstants.kFasterSpeed * driverJoytick.getRawAxis(OIConstants.kFastControlAxis));
-    turningSpeed *= 1.
+    xSpeed *= (1. - (DriveConstants.kFineControlSpeed * driverJoytick.getRawAxis(OIConstants.kFineControlAxis))
+                    + (DriveConstants.kFasterSpeed * driverJoytick.getRawAxis(OIConstants.kFastControlAxis)))/3.;
+    ySpeed *= (1. - (DriveConstants.kFineControlSpeed * driverJoytick.getRawAxis(OIConstants.kFineControlAxis))
+                    + (DriveConstants.kFasterSpeed * driverJoytick.getRawAxis(OIConstants.kFastControlAxis)))/3.;
+    turningSpeed *= (1.
                     - (DriveConstants.kFineControlSpeed * driverJoytick.getRawAxis(OIConstants.kFineControlAxis))
-                    + (DriveConstants.kFasterSpeed * driverJoytick.getRawAxis(OIConstants.kFastControlAxis));
+                    + (DriveConstants.kFasterSpeed * driverJoytick.getRawAxis(OIConstants.kFastControlAxis)))/3.;
     smoothedXSpeed = smoothedXSpeed + (xSpeed - smoothedXSpeed) * .18;
     smoothedYSpeed = smoothedYSpeed + (ySpeed - smoothedYSpeed) * .18;
     smoothedTurningSpeed = smoothedTurningSpeed + (turningSpeed - smoothedTurningSpeed) * .35;
@@ -54,7 +55,7 @@ public class DriveCommand extends Command {
     xSpeed = smoothedXSpeed;
     ySpeed = smoothedYSpeed;
     turningSpeed = smoothedTurningSpeed;
-    
+  
     ChassisSpeeds chassisSpeeds;
     if(driverJoytick.getRawButtonPressed(OIConstants.kDriverRobotOrientedButton)) robotOrient=!robotOrient;
     if (!robotOrient) { //normal use
